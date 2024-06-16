@@ -17,9 +17,10 @@ void whileLoops();
 void forLoops();
 void arrays();
 void multidimensionalArrays();
+void switchCase();
 
 int main() {
-  multidimensionalArrays();
+  switchCase();
   return 0;
 }
 
@@ -180,5 +181,32 @@ void multidimensionalArrays() {
   for (int i = 0; i < 10; i++) {
     cout << multiplicationFactor << " x " << i + 1 << " = "
          << multiplicationFactor * (i + 1) << endl;
+  }
+
+  // totalSize = type size * 2 * 2
+  // 32 * 2 * 2
+  cout << "-------" << endl;
+  string names[][2] = {{"churros", "shoyou"}, {"gui", "isa"}};
+  for (int i = 0; i < sizeof(names) / sizeof(names[0]); i++) {
+    for (int j = 0; j < sizeof(names[0]) / sizeof(string); j++) {
+      cout << names[i][j] << " " << flush;
+    }
+    cout << endl;
+  }
+}
+
+void switchCase() {
+  int value = 1;
+  switch (value) {
+  case 1: {
+    cout << "it is 1" << endl;
+    break;
+  }
+  case 4:
+  case 5:
+    cout << "it is correct" << endl;
+    break;
+  default:
+    cout << "none of them" << endl;
   }
 }
