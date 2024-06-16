@@ -12,9 +12,11 @@ void integers();
 void floats();
 void booleans();
 void conditions();
+void whileLoops();
+void forLoops();
 
 int main() {
-  booleans();
+  forLoops();
   return 0;
 }
 
@@ -70,4 +72,62 @@ void booleans() {
   cout << "------" << endl;
   cout << (int)oneByte1 << endl;
   cout << (char)55 << endl;
+}
+
+void conditions() {
+  float vFloat = 5.5;
+  float v2Float = 5.6;
+
+  if (vFloat == v2Float) {
+    cout << "equals" << endl;
+  } else {
+    cout << "not equals" << endl;
+  }
+  cout << setw(20) << "test" << endl;
+
+  int value1 = 7;
+  int value2 = 8;
+
+  if ((value2 != 8 && value1 == 10) || value1 < 10) {
+    cout << "Condition: true" << endl;
+  } else {
+    cout << "Condition: false" << endl;
+  }
+}
+
+void whileLoops() {
+  int i = 0;
+  while (i < 10) {
+    // cout << i << " " << flush;
+    i++;
+  }
+
+  int y = 0;
+  int j = 0;
+  do {
+    j = ++y;
+    cout << "y: " << y << " | j: " << j << endl;
+  } while (y < 10);
+
+  const string password = "hello";
+  string input;
+
+  do {
+    cout << "Type the password > " << flush;
+    cin >> input;
+
+    if (input != password)
+      cout << "Invalid password. Try again." << endl;
+  } while (input != password);
+
+  cout << "Logged in!" << endl;
+}
+
+void forLoops() {
+  for (int i = 0; i < 10; ++i) {
+    if (i == 5) {
+      continue;
+    }
+    cout << i << endl;
+  }
 }
