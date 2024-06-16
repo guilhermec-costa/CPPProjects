@@ -1,26 +1,19 @@
+#include "functions.h"
 #include <climits>
 #include <iomanip>
 #include <ios>
 #include <iostream>
 #include <ostream>
 #include <string>
-
 using namespace std;
 
-void variables();
-void inputText();
-void integers();
-void floats();
-void booleans();
-void conditions();
-void whileLoops();
-void forLoops();
-void arrays();
-void multidimensionalArrays();
-void switchCase();
-
 int main() {
-  switchCase();
+  int valueX = 5;
+  int valueY = 5;
+  cout << &valueX << endl;
+  cout << &valueY << endl;
+  cout << "---------" << endl;
+  passingValues(valueX, valueY);
   return 0;
 }
 
@@ -209,4 +202,16 @@ void switchCase() {
   default:
     cout << "none of them" << endl;
   }
+}
+
+int factorial(int value) {
+  if (value == 1 || value == 0)
+    return 1;
+
+  return value * factorial(value - 1);
+}
+
+void passingValues(int valueAsValue, int &valueAsReference) {
+  cout << &valueAsValue << endl;
+  cout << &valueAsReference << endl;
 }
