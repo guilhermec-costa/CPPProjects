@@ -4,6 +4,7 @@
 #include <iostream>
 #include <ostream>
 #include <string>
+
 using namespace std;
 
 void variables();
@@ -14,9 +15,11 @@ void booleans();
 void conditions();
 void whileLoops();
 void forLoops();
+void arrays();
+void multidimensionalArrays();
 
 int main() {
-  forLoops();
+  multidimensionalArrays();
   return 0;
 }
 
@@ -31,6 +34,7 @@ void variables() {
   string dogLastname = "augusto";
   int *pNumberX = &numberX;
   numberX += 2;
+
   cout << "Hello world!" << endl;
   cout << numberX + numberY << endl;
   cout << *pNumberX << endl;
@@ -129,5 +133,52 @@ void forLoops() {
       continue;
     }
     cout << i << endl;
+  }
+}
+
+void arrays() {
+  int values[5];
+  values[0] = 1;
+  values[1] = 2;
+  cout << values[0] << endl;
+  cout << values[1] << endl;
+  cout << values[2] << endl;
+
+  // an array is a reference to the memory address of the first element
+  int iValues[3] = {1, 2, 3};
+  for (int i = 0; i < sizeof(iValues) / sizeof(typeof(iValues[0])); i++) {
+    cout << iValues[i] << endl;
+  }
+
+  cout << &iValues << endl;
+  cout << &iValues[0] << endl;
+  cout << *iValues << " | " << iValues[0] << endl;
+  cout << "-------" << endl;
+  // each element is initialize as 0
+  int valuesX[6] = {};
+  cout << valuesX[3] << valuesX[5] << endl;
+
+  string names1[] = {"churros", "shoyou"};
+  string names2[3];
+  string names3[2] = {};
+  string names4[1] = {"churros"};
+}
+
+void multidimensionalArrays() {
+  int values[2][3] = {{1, 2, 3}, {4, 5, 6}};
+  for (int i = 0; i < 2; i++) {
+    for (int j = 0; j < 3; j++) {
+      cout << values[i][j] << endl;
+    }
+    cout << "-------" << endl;
+  }
+
+  int multiplicationFactor;
+  cout << "Type a number to see multiplication table > " << flush;
+  cin >> multiplicationFactor;
+
+  for (int i = 0; i < 10; i++) {
+    cout << multiplicationFactor << " x " << i + 1 << " = "
+         << multiplicationFactor * (i + 1) << endl;
   }
 }
