@@ -1,19 +1,19 @@
 // pre-processor directives
 // runs before any code by a pre-processor
 #include "Machine.h"
+#include "Pointers.h"
 #include "functions.h"
 #include <climits>
 #include <iomanip>
 #include <ios>
 #include <iostream>
 #include <ostream>
+#include <sstream>
 #include <string>
 using namespace std;
 
 int main() {
-  Machine *machine = new Machine("ryzen7700x");
-  machine->start();
-  cout << machine->getCpu() << endl;
+  Pointers::init();
   return 0;
 }
 
@@ -214,4 +214,12 @@ int factorial(int value) {
 void passingValues(int valueAsValue, int &valueAsReference) {
   cout << &valueAsValue << endl;
   cout << &valueAsReference << endl;
+}
+
+void stringStreams() {
+  int age = 32;
+  string dog = "Churros";
+  stringstream info;
+  info << "name: " << dog << "; age: " << age << endl;
+  cout << info.str() << endl;
 }

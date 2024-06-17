@@ -2,6 +2,16 @@
 #include <iostream>
 using namespace std;
 
+Machine::Machine() {
+  this->isOn = true;
+  cout << "Machine created" << endl;
+}
+
+// a variable lives the long its scope lives
+Machine::~Machine() { cout << "Machine destroyed" << endl; }
+Machine::Machine(std::string cpu, std::string gpu, int RAM)
+    : cpu(cpu), gpu(gpu), RAM(RAM){};
+
 // member operator
 void Machine::start() {
   isOn = true;
@@ -9,5 +19,5 @@ void Machine::start() {
 }
 
 bool Machine::getState() { return isOn; }
-Machine::Machine(string cpu) { this->cpu = cpu; }
 std::string Machine::getCpu() { return cpu; }
+std::string Machine::getGPU() { return this->gpu; }

@@ -18,5 +18,6 @@ void multidimensionalArrays();
 void switchCase();
 int factorial(int value);
 void passingValues(int valueAsValue, int &valueAsReference);
+void stringStreams();
 
 #endif
