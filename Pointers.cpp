@@ -3,14 +3,17 @@
 using namespace std;
 
 void Pointers::init() {
-  int nValue = 10;
-
   // A pointer stores a memory address of another variable
   // so, the value of a pointer is a memory address
   // The pointer itself has its own memory address as well
-  int *pnValue = &nValue;
-  cout << pnValue << " | " << &nValue << endl;
-  cout << "value via pointer: " << *pnValue << endl;
+  /* int value = 5; */
+  /* int *pValue = &value; */
+  /* Pointers::manipulateViaValue(value); */
+  /* cout << value << endl; */
+  /**/
+  /* Pointers::manipulateViaReference(&value); */
+  /* cout << value << endl; */
+  Pointers::pointersAndArrays();
 };
 
 void Pointers::manipulateViaValue(int value) {
@@ -27,4 +30,37 @@ void Pointers::manipulateViaReference(int *value) {
   // In this case, no extra memory is allocated, because no copy is created
   *value = 10;
   // value = 10. this would change the memory address of the variable
+}
+
+void Pointers::pointersAndArrays() {
+  int values[] = {1, 2, 3, 4};
+  // arrays are pretty similar to pointers
+  // the only difference basically is that arrays knows how much data it
+  // contains. Pointers don't
+  // pNames = names = &names[0]
+
+  const int ARRAY_SIZE = sizeof(values) / sizeof(int);
+  int *pValues = values;
+
+  cout << "iterating with the array itself" << endl;
+  for (int i = 0; i < ARRAY_SIZE; i++) {
+    cout << "name: " << values[i] << " | memory address: " << &values[i]
+         << endl;
+  }
+
+  cout << "---------" << endl;
+  cout << "iterating with the pointer" << endl;
+  cout << pValues << endl;
+  for (int i = 0; i < ARRAY_SIZE; i++, pValues++) {
+    cout << "name: " << *pValues << " | memory address: " << pValues << endl;
+    // increments the pointer position in memory in "x * bytes",
+    // depending on the type of the array
+  }
+  cout << "---------" << endl;
+
+  // it is also possible to access indexes in pointers, as if it was with arrays
+  int *pValuesNew = pValues - ARRAY_SIZE;
+  cout << &pValuesNew[0] << endl;
+  cout << &pValuesNew[1] << endl;
+  return;
 }

@@ -13,6 +13,7 @@ public:
   static void init();
   static void manipulateViaValue(int value);
   static void manipulateViaReference(int *value);
+  static void pointersAndArrays();
 };
 
 #endif

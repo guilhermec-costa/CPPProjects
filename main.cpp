@@ -13,14 +13,7 @@
 using namespace std;
 
 int main() {
-  int value = 5;
-  int *pValue = &value;
-  Pointers::manipulateViaValue(value);
-  cout << value << endl;
-
-  Pointers::manipulateViaReference(&value);
-  cout << value << endl;
-  cout << enumTest::ENUM_CONSTANT_4 << endl;
+  Pointers::init();
   return 0;
 }
 
@@ -134,6 +127,24 @@ void forLoops() {
       continue;
     }
     cout << i << endl;
+  }
+}
+
+void arithmetic() {
+  int nValue1 = 6 / 3;
+  int nValue2 = 7.0;      // implicit cast
+  int nValue3 = (int)7.0; // explicit cast
+  double nValue4 = 7 / (double)2;
+  int nValue5 = 7 / 3.5; // implicit cast
+
+  cout << nValue4 << endl;
+  cout << sizeof(int) << endl;
+
+  for (int i = 1; i <= 10000; i++) {
+    cout << "." << flush;
+    if (i % 100 == 0 && i > 0) {
+      cout << endl;
+    }
   }
 }
 
