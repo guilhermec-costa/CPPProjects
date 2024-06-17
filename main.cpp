@@ -13,7 +13,14 @@
 using namespace std;
 
 int main() {
-  Pointers::init();
+  int value = 5;
+  int *pValue = &value;
+  Pointers::manipulateViaValue(value);
+  cout << value << endl;
+
+  Pointers::manipulateViaReference(&value);
+  cout << value << endl;
+  cout << enumTest::ENUM_CONSTANT_4 << endl;
   return 0;
 }
 
