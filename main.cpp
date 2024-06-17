@@ -1,3 +1,6 @@
+// pre-processor directives
+// runs before any code by a pre-processor
+#include "Machine.h"
 #include "functions.h"
 #include <climits>
 #include <iomanip>
@@ -8,12 +11,9 @@
 using namespace std;
 
 int main() {
-  int valueX = 5;
-  int valueY = 5;
-  cout << &valueX << endl;
-  cout << &valueY << endl;
-  cout << "---------" << endl;
-  passingValues(valueX, valueY);
+  Machine *machine = new Machine("ryzen7700x");
+  machine->start();
+  cout << machine->getCpu() << endl;
   return 0;
 }
 

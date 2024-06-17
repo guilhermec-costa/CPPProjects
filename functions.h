@@ -1,3 +1,7 @@
+// more pre-processor directives
+// defines the prototypes only once, if they are not defined
+// so that they can be included in cpp files without recreating the same
+// prototypes
 #ifndef FUNCTIONS_H_
 #define FUNCTIONS_H_
 
