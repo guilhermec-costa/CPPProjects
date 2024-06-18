@@ -3,7 +3,7 @@
 using namespace std;
 
 Machine::Machine() {
-  this->isOn = true;
+  this->start();
   cout << "Machine created" << endl;
 }
 
@@ -18,6 +18,7 @@ void Machine::start() {
   cout << "Machine is on" << endl;
 }
 
-bool Machine::getState() { return isOn; }
+// const makes that any variable can not be modified
+bool Machine::getState() const { return this->isOn; }
 std::string Machine::getCpu() { return cpu; }
-std::string Machine::getGPU() { return this->gpu; }
+std::string Machine::getGPU() const { return this->gpu; }

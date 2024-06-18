@@ -19,6 +19,7 @@ public:
   static void reverseString();
   static void references();
   static void changeValueViaReference(int& cur, int _new);
+  static void constness();
 };
 
 static const int simpleValue = 5;

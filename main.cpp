@@ -13,7 +13,7 @@
 using namespace std;
 
 int main() {
-  Pointers::references();
+  copyConstructors();
   return 0;
 }
 
@@ -251,5 +251,17 @@ void charArrays() {
   for(int i=0; i < sizeof(words); i++) {
     cout << i << ": " << words[i] << endl;
   }
+}
+
+void copyConstructors() {
+  Machine machine1("ryzen7700x");
+
+  //copy constructor called implicitly
+  Machine machine2 = machine1;
+  cout << "--------" << endl;
+  cout << "machine 1 address out of method: "<< &machine1 << endl;
+  cout << &machine2 << endl;
+  Machine::withCopy(machine1);
+  cout << "machine2 cpu: " << machine2.getCpu() << endl;
 }
 

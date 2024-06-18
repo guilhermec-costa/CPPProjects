@@ -22,5 +22,7 @@ void stringStreams();
 void arithmetic();
 void charArrays();
 void reversingString();
+void copyConstructors();
+void newOperator();
 
 #endif

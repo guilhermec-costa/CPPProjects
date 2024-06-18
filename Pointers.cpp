@@ -1,6 +1,7 @@
 #include "Pointers.h"
 #include <functional>
 #include <iostream>
+#include <unordered_map>
 using namespace std;
 
 void Pointers::init() {
@@ -112,6 +113,9 @@ void Pointers::reverseString() {
 void Pointers::references() {
   int value1 = 123;
   int& value2 = value1;
+  cout << "value 1: " << value1 << " value 2: " << value2 << endl;
+  value2 = 700;
+  cout << "value 1: " << value1 << " value 2: " << value2 << endl;
   // value2 is a reference to value 1, they are the same thing
   // no new variable is created
 
@@ -133,9 +137,23 @@ void Pointers::changeValueViaReference(int &cur, int _new) {
 
 void Pointers::constness() {
   int valueX = 10;
-  int valueY = 10;
-  // it is not possible to alter the int value via the pointer
-  const int *pValueX = &valueX;
-  int const *pValueY = &valueX;
-  pValueY++;
+  int valueY = 9;
+  int valueZ = 8;
+  int valueA = 7;
+  int *pValueX = &valueX;
+  *pValueX = 6;
+  pValueX = &valueY;
+
+  // pointer to an int that is constant
+  // can not change the int value via the pointer
+  const int *pValueY = &valueY;
+  
+  // constant pointer to an int
+  // can not change the pointer address
+  int *const pValueZ = &valueZ;
+  
+  // constant pointer to a constant int
+  // can not change both int value via the pointer and the pointer address
+  const int *const pValueA = &valueA;
 }
+
