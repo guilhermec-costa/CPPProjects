@@ -1,4 +1,5 @@
 #include "Pointers.h"
+#include <functional>
 #include <iostream>
 using namespace std;
 
@@ -16,12 +17,12 @@ void Pointers::manipulateViaValue(int value) {
   // value, which will kept allocated until the scope of the function has gone.
   value = 10;
 }
-void Pointers::manipulateViaReference(int *value) {
+void Pointers::changeValueViaPointer(int *value, int _new) {
   // here, the compiler manipulates directly the variables,
   // because what is passed is a reference to the original value
   // in some memory address.
   // In this case, no extra memory is allocated, because no copy is created
-  *value = 10;
+  *value = _new;
   // value = 10. this would change the memory address of the variable
 }
 
@@ -88,4 +89,53 @@ void Pointers::pointersArithmetic() {
   cout << (long)(pWordsEnd - pWordsStart) << endl;
   pWordsStart+=ARRAY_LENGTH/2;
   cout << *pWordsStart << endl;
+}
+
+void Pointers::reverseString() {
+  char text[] = "guilherme";
+  const int nChars = sizeof(text) - 1;
+  char* pStart = text;
+  char* pEnd = &text[nChars - 1];
+
+  while(pStart < pEnd) {
+    char checkpoint = *pStart;
+    //swaps the memory address value
+    *pStart = *pEnd;
+    *pEnd = checkpoint;
+
+    pStart++;
+    pEnd--;
+  }
+  cout << text << endl;
+}
+
+void Pointers::references() {
+  int value1 = 123;
+  int& value2 = value1;
+  // value2 is a reference to value 1, they are the same thing
+  // no new variable is created
+
+  int value3 = 123;
+  int *pValue3 = &value3;
+  
+  changeValueViaReference(value2, 500);
+  changeValueViaPointer(pValue3, 700);
+
+  cout << value1 << endl;
+  cout << value3 << endl;
+
+}
+
+void Pointers::changeValueViaReference(int &cur, int _new) {
+  cur = _new;
+}
+
+
+void Pointers::constness() {
+  int valueX = 10;
+  int valueY = 10;
+  // it is not possible to alter the int value via the pointer
+  const int *pValueX = &valueX;
+  int const *pValueY = &valueX;
+  pValueY++;
 }

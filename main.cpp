@@ -13,7 +13,7 @@
 using namespace std;
 
 int main() {
-  reversingString();
+  Pointers::references();
   return 0;
 }
 
@@ -253,20 +253,3 @@ void charArrays() {
   }
 }
 
-void reversingString() {
-  char text[] = "guilherme";
-  const int nChars = sizeof(text) - 1;
-  char* pStart = text;
-  char* pEnd = &text[nChars - 1];
-
-  while(pStart < pEnd) {
-    char checkpoint = *pStart;
-    //swaps the memory address value
-    *pStart = *pEnd;
-    *pEnd = checkpoint;
-
-    pStart++;
-    pEnd--;
-  }
-  cout << text << endl;
-}
