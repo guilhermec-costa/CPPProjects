@@ -24,5 +24,8 @@ void charArrays();
 void reversingString();
 void copyConstructors();
 void newOperator();
+void returningObjects();
+void allocatingMemory();
+void arrysAndFunctions();
 
 #endif

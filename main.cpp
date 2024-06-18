@@ -4,6 +4,7 @@
 #include "Pointers.h"
 #include "functions.h"
 #include <climits>
+#include <cstddef>
 #include <iomanip>
 #include <ios>
 #include <iostream>
@@ -13,10 +14,9 @@
 using namespace std;
 
 int main() {
-  copyConstructors();
+  allocatingMemory();
   return 0;
 }
-
 
 void variables() {
   /*
@@ -248,7 +248,7 @@ void charArrays() {
   // it is a virtual character that indicates where the strings terminates
   char words[] = "churros";
   char *pWords = words;
-  for(int i=0; i < sizeof(words); i++) {
+  for (int i = 0; i < sizeof(words); i++) {
     cout << i << ": " << words[i] << endl;
   }
 }
@@ -256,12 +256,56 @@ void charArrays() {
 void copyConstructors() {
   Machine machine1("ryzen7700x");
 
-  //copy constructor called implicitly
+  // copy constructor called implicitly
   Machine machine2 = machine1;
   cout << "--------" << endl;
-  cout << "machine 1 address out of method: "<< &machine1 << endl;
+  cout << "machine 1 address out of method: " << &machine1 << endl;
   cout << &machine2 << endl;
   Machine::withCopy(machine1);
   cout << "machine2 cpu: " << machine2.getCpu() << endl;
+}
+
+void newOperator() {
+  // new: allocates memory mannualy on the heap
+  Machine *machine = new Machine();
+  // memory allocated with new, MUST BE deallocated mannually as well
+  machine->setCpu("Intel Corei9 9900");
+  std::string cpu = machine->getCpu();
+  cout << "cpu: " << cpu << endl;
+  // dot operator has higher precedence then the star operator
+  // this is why "pointerVariable.method" does not work
+  // so, (*pointerVariable).method == pointerVariable->method
+  cout << "cpu: " << (*machine).getCpu() << endl;
+  delete machine; // in this case, call the destructor
+
+  // pointing to nowhere
+  Machine *machine2 = NULL;
+  // dont call delete on null pointer. CRASH WARNING
+  cout << machine2 << endl;
+}
+
+void returningObjects() {
+  Machine *machine = Machine::createWithPointer();
+  machine->setCpu("ryzen7700x");
+  cout << machine->getCpu() << endl;
+  delete machine;
+}
+
+void allocatingMemory() {
+  int *pInt = new int;
+  delete pInt;
+
+  Machine *pMachine = new Machine[7];
+  pMachine[4].setCpu("Ryzen4400x");
+  cout << pMachine[4].getCpu() << endl;
+  delete []pMachine;
+  
+  char *pChar = new char[100];
+  delete [] pChar;
+
+
+  string name(10, 'a');
+  cout << name << endl;
+  cout<< (char)97 << endl;
 }
 

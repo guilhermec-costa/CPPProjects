@@ -17,7 +17,7 @@ public:
     this->cpu = cpu;
     this->start();
   }
-  // constructor initialization
+  // constructor base initialization
   Machine(std::string cpu, std::string gpu) : gpu(gpu), cpu(cpu){};
   Machine(std::string cpu, std::string gpu, int RAM);
   Machine(const Machine &other): cpu(other.cpu), gpu(other.gpu) {
@@ -29,12 +29,17 @@ public:
   static void withCopy(Machine &machine) {
     std::cout << "machine address in the method: " << &machine << std::endl;
   };
+
+  static Machine& create();
+  static Machine* createWithPointer();
+  static Machine createWithCopyContructor();
   ~Machine();
   void start();
   void stop() { this->isOn = false; };
   bool getState() const;
   std::string getGPU() const;
-  std::string getCpu();
+  std::string getCpu() const;
+  void setCpu(const std::string cpu) { this->cpu = cpu; }
   int RAM;
 };
 #endif
