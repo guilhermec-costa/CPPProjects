@@ -20,5 +20,7 @@ int factorial(int value);
 void passingValues(int valueAsValue, int &valueAsReference);
 void stringStreams();
 void arithmetic();
+void charArrays();
+void reversingString();
 
 #endif

@@ -6,14 +6,7 @@ void Pointers::init() {
   // A pointer stores a memory address of another variable
   // so, the value of a pointer is a memory address
   // The pointer itself has its own memory address as well
-  /* int value = 5; */
-  /* int *pValue = &value; */
-  /* Pointers::manipulateViaValue(value); */
-  /* cout << value << endl; */
-  /**/
-  /* Pointers::manipulateViaReference(&value); */
-  /* cout << value << endl; */
-  Pointers::pointersAndArrays();
+  Pointers::pointersArithmetic();
 };
 
 void Pointers::manipulateViaValue(int value) {
@@ -59,8 +52,40 @@ void Pointers::pointersAndArrays() {
   cout << "---------" << endl;
 
   // it is also possible to access indexes in pointers, as if it was with arrays
+  // it will get the value on that index of the array, but via the pointer
+  // than, to access the memory address of that position: &pointer
   int *pValuesNew = pValues - ARRAY_SIZE;
-  cout << &pValuesNew[0] << endl;
-  cout << &pValuesNew[1] << endl;
+  for (int i = 0; i < ARRAY_SIZE; i++) {
+    cout << "name: " << pValuesNew[i] << " | memory address: " << &pValuesNew[i]
+         << endl;
+  }
+
+  cout << "---------" << endl;
+  int *pFirstPosition = values;
+  int *pLastPosition = &values[ARRAY_SIZE - 1];
+  while (pFirstPosition <= pLastPosition) {
+    cout << "name: " << pFirstPosition << " | memory address: " << pFirstPosition << endl;
+    pFirstPosition++;
+  }
   return;
+}
+
+void Pointers::pointersArithmetic() {
+  string words[] = { 
+    "one", 
+    "two", 
+    "three", 
+    "four",  
+    "five"
+  };
+  const int ARRAY_LENGTH = sizeof(words) / sizeof(string);
+  const string *pWordsEnd = &words[ARRAY_LENGTH - 1];
+  for(int i=0; i < ARRAY_LENGTH; i++, pWordsEnd--) {
+    cout << *pWordsEnd << endl;
+  }
+  pWordsEnd = &words[ARRAY_LENGTH];
+  string *pWordsStart = words;
+  cout << (long)(pWordsEnd - pWordsStart) << endl;
+  pWordsStart+=ARRAY_LENGTH/2;
+  cout << *pWordsStart << endl;
 }

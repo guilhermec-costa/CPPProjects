@@ -14,6 +14,8 @@ public:
   static void manipulateViaValue(int value);
   static void manipulateViaReference(int *value);
   static void pointersAndArrays();
+  static void pointersArithmetic();
 };
 
+static const int simpleValue = 5;
 #endif

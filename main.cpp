@@ -13,9 +13,10 @@
 using namespace std;
 
 int main() {
-  Pointers::init();
+  reversingString();
   return 0;
 }
+
 
 void variables() {
   /*
@@ -240,4 +241,32 @@ void stringStreams() {
   stringstream info;
   info << "name: " << dog << "; age: " << age << endl;
   cout << info.str() << endl;
+}
+
+void charArrays() {
+  // null string terminator
+  // it is a virtual character that indicates where the strings terminates
+  char words[] = "churros";
+  char *pWords = words;
+  for(int i=0; i < sizeof(words); i++) {
+    cout << i << ": " << words[i] << endl;
+  }
+}
+
+void reversingString() {
+  char text[] = "guilherme";
+  const int nChars = sizeof(text) - 1;
+  char* pStart = text;
+  char* pEnd = &text[nChars - 1];
+
+  while(pStart < pEnd) {
+    char checkpoint = *pStart;
+    //swaps the memory address value
+    *pStart = *pEnd;
+    *pEnd = checkpoint;
+
+    pStart++;
+    pEnd--;
+  }
+  cout << text << endl;
 }
