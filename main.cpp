@@ -18,7 +18,7 @@ using namespace std;
 using namespace gmcc;
 
 int main() {
-  namespaces();
+  constructorInheritance();
   return 0;
 }
 
@@ -360,3 +360,19 @@ void namespaces() {
   delete pCatGmcc;
   delete pCatGcc;
 };
+
+void inheritance() {
+  GoingToInherit *p_rand_class = new GoingToInherit();
+  p_rand_class->do_something();
+}
+
+void encapsulation() {
+  Machine *const pMachine = new Machine();
+  delete pMachine;
+}
+
+void constructorInheritance() {
+  GoingToInherit *const p_g_inherit = new GoingToInherit();
+  std::string description = p_g_inherit->describe();
+  cout << description << endl;
+}

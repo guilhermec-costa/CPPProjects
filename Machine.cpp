@@ -4,7 +4,7 @@ using namespace std;
 
 Machine::Machine() {
   cout << "Machine created" << endl;
-  this->start();
+  this->_start();
 }
 
 // a variable lives the long its scope lives
@@ -31,7 +31,7 @@ Machine* Machine::createWithPointer() {
   return pMachine;
 }
 // member operator
-void Machine::start() {
+void Machine::_start() {
   isOn = true;
   cout << "Machine is on" << endl;
 }
@@ -40,3 +40,4 @@ void Machine::start() {
 bool Machine::getState() const { return this->isOn; }
 std::string Machine::getCpu() const { return cpu; }
 std::string Machine::getGPU() const { return this->gpu; }
+int Machine::getRAM() const { return this->RAM; }

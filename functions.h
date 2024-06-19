@@ -4,6 +4,9 @@
 // prototypes
 #ifndef FUNCTIONS_H_
 #define FUNCTIONS_H_
+#include <iostream>
+#include <sstream>
+#include <string>
 
 void variables();
 void inputText();
@@ -28,5 +31,31 @@ void returningObjects();
 void allocatingMemory();
 void arraysAndFunctions();
 void namespaces();
+void inheritance();
+void encapsulation();
+void constructorInheritance();
+
+class GoingToBeInherited {
+private:
+  int random_member;
+public:
+  GoingToBeInherited(): random_member(0) {
+    std::cout << "no-argument constructor from \"GoingToBeInherited\"" << std::endl;
+  };
+  void do_something() { std::cout << "doing something" << std::endl; };
+  int get_random_member() const { return this->random_member; };
+  std::string describe() const {
+    std::stringstream description;
+    description << "random member: " << this->random_member << std::endl;
+    return description.str();
+  }
+};
+
+class GoingToInherit : public GoingToBeInherited {
+public:
+  GoingToInherit() {
+    std::cout << "no-argument constructor from \"GoingToInherit\"" << std::endl;
+  };
+};
 
 #endif
