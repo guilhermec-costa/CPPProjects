@@ -26,6 +26,7 @@ void copyConstructors();
 void newOperator();
 void returningObjects();
 void allocatingMemory();
-void arrysAndFunctions();
+void arraysAndFunctions();
+void namespaces();
 
 #endif

@@ -1,6 +1,8 @@
 // pre-processor directives
 // runs before any code by a pre-processor
 #include "Machine.h"
+#include "NS.h"
+#include "Cat.h"
 #include "Pointers.h"
 #include "functions.h"
 #include <climits>
@@ -12,9 +14,11 @@
 #include <sstream>
 #include <string>
 using namespace std;
+// it is necessary to include the .h where the namespace is defined
+using namespace gmcc;
 
 int main() {
-  allocatingMemory();
+  namespaces();
   return 0;
 }
 
@@ -298,14 +302,61 @@ void allocatingMemory() {
   Machine *pMachine = new Machine[7];
   pMachine[4].setCpu("Ryzen4400x");
   cout << pMachine[4].getCpu() << endl;
-  delete []pMachine;
-  
-  char *pChar = new char[100];
-  delete [] pChar;
+  delete[] pMachine;
 
+  char *pChar = new char[100];
+  delete[] pChar;
 
   string name(10, 'a');
   cout << name << endl;
-  cout<< (char)97 << endl;
+  cout << (char)97 << endl;
 }
 
+void show(string words[], int size) {
+  // losts the array size. Get only pointer size
+  for (int i = 0; i < size; i++) {
+    cout << words[i] << endl;
+  }
+}
+
+void showViaPointer(string *words, int size) {
+  // losts the array size. Get only pointer size
+  for (int i = 0; i < size; i++) {
+    cout << words[i] << endl;
+  }
+}
+
+void showViaArray(string (&words)[3]) {
+  for (int i = 0; i < (sizeof(words) / sizeof(string)); i++) {
+    cout << words[i] << endl;
+  }
+}
+
+string *getArray() {
+  string *numbers = new string[3] {"one", "two", "three"};
+  // new allocates memory. So, this memory is not going to be diallocated until do it manually
+  return numbers;
+}
+
+void arraysAndFunctions() {
+  string fruits[] = {"apple", "banana", "pineapple"};
+  show(fruits, sizeof(fruits) / sizeof(string));
+  cout << "-----" << endl;
+  showViaPointer(fruits, sizeof(fruits) / sizeof(string));
+  cout << "-----" << endl;
+  showViaArray(fruits);
+  cout << "-----" << endl;
+  string *array = getArray();
+  delete [] array;
+}
+
+void namespaces() {
+  gmcc::Cat *const pCatGmcc = new gmcc::Cat();
+  gcc::Cat *const pCatGcc = new gcc::Cat();
+  pCatGmcc->speak();
+  pCatGcc->speak();
+  
+  cout << gcc::global_something << endl;
+  delete pCatGmcc;
+  delete pCatGcc;
+};
