@@ -1,25 +1,43 @@
 // pre-processor directives
 // runs before any code by a pre-processor
+#include "particle/main.h"
+#include "Cat.h"
 #include "Machine.h"
 #include "NS.h"
-#include "Cat.h"
-#include "Pointers.h"
 #include "functions.h"
 #include <climits>
 #include <cstddef>
-#include <exception>
 #include <iomanip>
 #include <ios>
 #include <iostream>
 #include <ostream>
 #include <sstream>
 #include <string>
+
+// build process:
+// preprocessing ->
+// compilation(.o) ->
+// linking(links all .o, including .o from libraries) and produces executable
+//
+//
+// DYNAMIC LIBRARIES: code that the program finds during runtime, not during
+// linking
+//      -> unix: libcode.so
+//      -> windows: code.dll
+// STATIC LIBRAIES: code compiled into a binary file, and linked during build
+//      -> unix: libcode.a
+//      -> windows: code.lib
+//      -> can instruct to load code from dynamic library
+//
+//  header files + static library file to link with + dinamic library files to
+//  execute at runtime called by the static library
 using namespace std;
 // it is necessary to include the .h where the namespace is defined
 using namespace gmcc;
+using namespace particle;
 
 int main() {
-  constructorInheritance();
+  particle::run();
   return 0;
 }
 
@@ -334,8 +352,9 @@ void showViaArray(string (&words)[3]) {
 }
 
 string *getArray() {
-  string *numbers = new string[3] {"one", "two", "three"};
-  // new allocates memory. So, this memory is not going to be diallocated until do it manually
+  string *numbers = new string[3]{"one", "two", "three"};
+  // new allocates memory. So, this memory is not going to be diallocated until
+  // do it manually
   return numbers;
 }
 
@@ -348,7 +367,7 @@ void arraysAndFunctions() {
   showViaArray(fruits);
   cout << "-----" << endl;
   string *array = getArray();
-  delete [] array;
+  delete[] array;
 }
 
 void namespaces() {
@@ -356,7 +375,7 @@ void namespaces() {
   gcc::Cat *const pCatGcc = new gcc::Cat();
   pCatGmcc->speak();
   pCatGcc->speak();
-  
+
   cout << gcc::global_something << endl;
   delete pCatGmcc;
   delete pCatGcc;
@@ -374,11 +393,13 @@ void encapsulation() {
 
 void constructorInheritance() {
   // in C++, constructors are not inherited
-  // in other words: it is not possible to call a super class constructor when instanciating a subclass
-  // but, in the moment of the creation of the instance, c++ will automatically calls super constructors.
-  // it is also possible to specify which direct super constructor to call for each subclass
+  // in other words: it is not possible to call a super class constructor when
+  // instanciating a subclass but, in the moment of the creation of the
+  // instance, c++ will automatically calls super constructors. it is also
+  // possible to specify which direct super constructor to call for each
+  // subclass
   //
-  
+
   GoingToInherit *const p_g_inherit1 = new GoingToInherit();
   // all the constructor hierarquy is called
   std::string description = p_g_inherit1->describe();
