@@ -7,6 +7,7 @@
 #include "functions.h"
 #include <climits>
 #include <cstddef>
+#include <exception>
 #include <iomanip>
 #include <ios>
 #include <iostream>
@@ -372,7 +373,27 @@ void encapsulation() {
 }
 
 void constructorInheritance() {
-  GoingToInherit *const p_g_inherit = new GoingToInherit();
-  std::string description = p_g_inherit->describe();
+  // in C++, constructors are not inherited
+  // in other words: it is not possible to call a super class constructor when instanciating a subclass
+  // but, in the moment of the creation of the instance, c++ will automatically calls super constructors.
+  // it is also possible to specify which direct super constructor to call for each subclass
+  //
+  
+  GoingToInherit *const p_g_inherit1 = new GoingToInherit();
+  // all the constructor hierarquy is called
+  std::string description = p_g_inherit1->describe();
   cout << description << endl;
+  cout << "------------" << endl;
+  GoingToInherit *const p_g_inherit2 = new GoingToInherit(10);
+  std::string description2 = p_g_inherit2->describe();
+  cout << description2 << endl;
+  cout << "------------" << endl;
+  // it is already deleted
+  GoingToInherit *const p_g_inherit6 = new GoingToInherit(11);
+  GoingToInherit *const p_g_inherit7 = new GoingToInherit();
+  GoingToInherit *const p_g_inherit8 = new GoingToInherit();
+  GoingToInherit *const p_g_inherit9 = new GoingToInherit();
+  GoingToInherit *const p_g_inherit10 = new GoingToInherit();
+  GoingToInherit *const p_g_inherit11 = new GoingToInherit();
+  cout << GoingToInherit::get_n_members() << endl;
 }

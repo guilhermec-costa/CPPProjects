@@ -38,24 +38,46 @@ void constructorInheritance();
 class GoingToBeInherited {
 private:
   int random_member;
+  static int n_members;
 public:
+  // it is shared across all the objects
+  static int const MAX_N_MEMBERS = 10;
   GoingToBeInherited(): random_member(0) {
-    std::cout << "no-argument constructor from \"GoingToBeInherited\"" << std::endl;
+    std::cout << "no-argument constructor from \"GoingToBeInherited\" called" << std::endl;
+    n_members++;
+  };
+  GoingToBeInherited(int n) {
+    this->random_member = n; 
+    std::cout << "with-argument constructor from \"GoingToBeInherited\" called" << std::endl;
+    n_members++;
   };
   void do_something() { std::cout << "doing something" << std::endl; };
   int get_random_member() const { return this->random_member; };
   std::string describe() const {
     std::stringstream description;
-    description << "random member: " << this->random_member << std::endl;
+    description << "random member: " << this->random_member;
     return description.str();
   }
+
+  static int get_n_members() { return n_members; }
 };
 
 class GoingToInherit : public GoingToBeInherited {
 public:
   GoingToInherit() {
-    std::cout << "no-argument constructor from \"GoingToInherit\"" << std::endl;
+    std::cout << "no-argument constructor from \"GoingToInherit\" called" << std::endl;
   };
+  
+  // constructor inheritance called intentionally
+  // it is not possible to call indirect super class constructors. Only direct constructors
+  GoingToInherit(int n): GoingToBeInherited(n) {
+    if(n > GoingToBeInherited::MAX_N_MEMBERS) {
+      std::cout << "Creation of the instance would exceed limit" << std::endl;
+      delete this;
+      return;
+    }
+    std::cout << "with-argument constructor from \"GoingToInherit\" called" << std::endl;
+  }
 };
 
 #endif
