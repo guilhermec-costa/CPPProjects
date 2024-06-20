@@ -34,10 +34,9 @@
 using namespace std;
 // it is necessary to include the .h where the namespace is defined
 using namespace gmcc;
-using namespace particle;
 
 int main() {
-  particle::run();
+  gmcc::run();
   return 0;
 }
 
