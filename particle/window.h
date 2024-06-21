@@ -37,6 +37,7 @@ public:
   bool init();
   void terminate();
   bool manage_events();
+  void set_pixel_color(int x, int y, Uint8 red, Uint8 green, Uint8 blue);
   void update();
 };
 } // namespace gmcc

@@ -417,3 +417,21 @@ void constructorInheritance() {
   GoingToInherit *const p_g_inherit11 = new GoingToInherit();
   cout << GoingToInherit::get_n_members() << endl;
 }
+
+void bit_shifiting() {
+  // 0xFF123456
+  unsigned char alpha = 0xff;
+  unsigned char _red = 0x12;
+  unsigned char _green = 0x34;
+  unsigned char _blue = 0x56;
+  unsigned int _color = alpha;
+
+  // move 1 byte to the left
+  _color <<= 8;
+  _color += _red;
+  _color <<= 8;
+  _color += _green;
+  _color <<= 8;
+  _color += _blue;
+  cout << setfill('0') << setw(8) << hex << _color << endl;
+}

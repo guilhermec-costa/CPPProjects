@@ -34,6 +34,7 @@ void namespaces();
 void inheritance();
 void encapsulation();
 void constructorInheritance();
+void bit_shifiting();
 
 class GoingToBeInherited {
 private:

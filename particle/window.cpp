@@ -68,14 +68,6 @@ bool Window::init() {
   if(!init_renderer()) return false;
   if(!init_texture()) return false;
   init_buffer();
-  for(int i=0; i<WIN_WIDTH * WIN_HEIGHT; i++) {
-    m_buffer[i] = 0xFFFF00FF;
-  }
-  // accessing a single Uint32 memory slot, which contains 4 bytes, one byte for each color,
-  // one byte being from 0 to 255 in int
-  for(int i=200000; i<WIN_WIDTH * WIN_HEIGHT; i++) {
-    m_buffer[i] = 0xFF00FFFF;
-  }
   return true;
 }
 
@@ -99,6 +91,19 @@ bool Window::manage_events() {
     }
   }
   return true;
+}
+
+void Window::set_pixel_color(int x, int y, Uint8 red, Uint8 green, Uint8 blue) {
+  Uint32 color = 0;
+  color += red;
+  color <<= 8;
+  color += green;
+  color <<= 8;
+  color += blue;
+  color <<= 8;
+  // alpha value 
+  color += 0xFF;
+  m_buffer[(y * WIN_WIDTH) + x] = color;
 }
 
 void Window::terminate() {

@@ -17,8 +17,14 @@ int run() {
   };
 
   while(true) {
-    if(!window->manage_events()) break;
+    for(int y=0; y<Window::WIN_HEIGHT; y++) {
+      for(int x=0; x < Window::WIN_WIDTH; x++) {
+        window->set_pixel_color(x, y, 255, 0, 0);
+      }
+    }
+    window->set_pixel_color(400, 300, 255, 255, 255);
     window->update();
+    if(!window->manage_events()) break;
   }
   
   window->terminate();
