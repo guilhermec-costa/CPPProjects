@@ -11,6 +11,8 @@ set(SOURCE_FILES
     functions.cpp 
     particle/main.cpp
     particle/window.cpp
+    particle/particle.cpp
+    particle/particle_orchestrator.cpp
 )
 # Adicionar o executável
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
