@@ -8,7 +8,7 @@ private:
   Particle *m_p_particles;
   int last_iteration_time;
 public:
-  static const int N_PARTICLES = 5000;
+  static const int N_PARTICLES = 5500;
 
 public:
   Particle_Orchestrator();

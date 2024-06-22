@@ -28,8 +28,8 @@ private:
   void init_buffer();
 
 public:
-  const static int WIN_WIDTH = 1360;
-  const static int WIN_HEIGHT = 768;
+  const static int WIN_WIDTH = 800;
+  const static int WIN_HEIGHT = 600;
 
 public:
   Window();

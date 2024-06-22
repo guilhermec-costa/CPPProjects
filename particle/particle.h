@@ -8,10 +8,12 @@ struct Particle {
   double m_speed;
   double m_direction;
 
-public:
   Particle();
   virtual ~Particle();
   void move(const int &interval);
+
+private:
+  void init();
 };
 } // namespace gmcc
 #endif
