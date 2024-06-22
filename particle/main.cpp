@@ -16,10 +16,12 @@ int run() {
   };
 
   Particle_Orchestrator particle_orchestrator;
-
+  const double HALF_SCREEN_WIDTH = Window::WIN_WIDTH/2.0;
+  const double HALF_SCREEN_HEIGHT = Window::WIN_HEIGHT/2.0;
+   
   while(true) {
     const int elapsed = SDL_GetTicks();
-    particle_orchestrator.move_particles();
+    particle_orchestrator.move_particles_based_on_elapsed(elapsed);
     window->clear_pixels();
     unsigned char red = (unsigned char)((1 + cos(elapsed * 0.001)) * 128);
     unsigned char green = (unsigned char)((1 + sin(elapsed * 0.0021)) * 128);
@@ -33,8 +35,8 @@ int run() {
     const Particle *const p_particle = particle_orchestrator.get_particles();
     for(int i=0; i<Particle_Orchestrator::N_PARTICLES; i++) {
       Particle particle = p_particle[i];
-      int x = (particle.m_x + 1) * Window::WIN_WIDTH/2;
-      int y = (particle.m_y + 1) * Window::WIN_HEIGHT/2;
+      int x = (particle.m_x + 1) * HALF_SCREEN_WIDTH;
+      int y = particle.m_y * HALF_SCREEN_WIDTH + HALF_SCREEN_HEIGHT;
       if(window->contains_pixel(x, y)) {
         window->set_pixel_color(x, y, red, green, blue);
       }
