@@ -435,3 +435,28 @@ void bit_shifiting() {
   _color += _blue;
   cout << setfill('0') << setw(8) << hex << _color << endl;
 }
+
+void bitwise_and() {
+  int color = 0x123456;
+  unsigned char red = (color & 0xFF0000) >> 16;
+  unsigned char green = (color & 0x00FF00) >> 8;
+  unsigned char blue = (color & 0x0000FF);
+  // &: compares each bit of both values
+  // color= 000100100011010001010110
+  // 0xFF = 111111110000000000000000 (mask)
+  //result= 000100100000000000000000 
+  // 1 && 1 = 1
+  // 0 && 0 = 0
+  // 1 && 0 = 0
+
+  // gets the red value
+  std::cout << hex << (int)red << std::endl;
+  std::cout << hex << (int)green << std::endl;
+  std::cout << hex << (int)blue << std::endl;
+  unsigned char red_again = color >> 16;
+  std::cout << hex << (int)red << std::endl;
+
+  // bitwise or: | (if one of them is one, so the result is one)
+  // bitwise and: & (if both of them are one, so the result is one)
+  // bitwise xor: & (if both are equal, so the result is 0, otherwise, is 1)
+}

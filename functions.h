@@ -35,6 +35,7 @@ void inheritance();
 void encapsulation();
 void constructorInheritance();
 void bit_shifiting();
+void bitwise_and();
 
 class GoingToBeInherited {
 private:

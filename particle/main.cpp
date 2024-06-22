@@ -22,7 +22,6 @@ int run() {
   while(true) {
     const int elapsed = SDL_GetTicks();
     particle_orchestrator.move_particles_based_on_elapsed(elapsed);
-    window->clear_pixels();
     unsigned char red = (unsigned char)((1 + cos(elapsed * 0.001)) * 128);
     unsigned char green = (unsigned char)((1 + sin(elapsed * 0.0021)) * 128);
     unsigned char blue= (unsigned char)((1 + sin(elapsed * 0.0031)) * 128);
@@ -41,6 +40,7 @@ int run() {
         window->set_pixel_color(x, y, red, green, blue);
       }
     }
+    window->box_blur();
     window->update();
     if(!window->manage_events()) break;
   }

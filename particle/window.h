@@ -17,6 +17,7 @@ private:
   SDL_Renderer *m_renderer;
   SDL_Texture *m_texture;
   Uint32 *m_buffer;
+  Uint32 *m_blur_buffer;
   SDL_Event *m_event;
   const char *p_title;
 
@@ -41,6 +42,7 @@ public:
   bool contains_pixel(int x, int y);
   bool contains_pixel_xaxis(int x);
   bool contains_pixel_yaxis(int y);
+  void box_blur();
   void update();
   void clear_pixels();
 };

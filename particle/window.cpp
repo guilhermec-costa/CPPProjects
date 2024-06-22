@@ -13,8 +13,13 @@ const win_states Window::check_win_integrity(const SDL_Window *win) {
 }
 
 Window::Window()
-    : m_window(NULL), m_texture(NULL), m_renderer(NULL), m_buffer(NULL),
-      p_title(NULL), m_event(NULL) {}
+    : m_window(NULL), 
+      m_texture(NULL), 
+      m_renderer(NULL), 
+      m_buffer(NULL),
+      m_blur_buffer(NULL),
+      p_title(NULL),
+      m_event(NULL) {}
 
 Window::Window(const char *title) { p_title = title; }
 bool Window::init_window() {
@@ -74,8 +79,10 @@ bool Window::init() {
 
 void Window::init_buffer() {
   m_buffer = new Uint32[WIN_WIDTH * WIN_HEIGHT];
+  m_blur_buffer = new Uint32[WIN_WIDTH * WIN_HEIGHT];
   // sets value for each byte
   memset(m_buffer, 0, WIN_WIDTH * WIN_HEIGHT * sizeof(Uint32));
+  memset(m_blur_buffer, 0, WIN_WIDTH * WIN_HEIGHT * sizeof(Uint32));
 }
 
 void Window::update() {
@@ -122,6 +129,50 @@ bool Window::contains_pixel_yaxis(int y) {
 
 void Window::clear_pixels() {
   memset(m_buffer, 0, WIN_WIDTH * WIN_HEIGHT * sizeof(Uint32));
+  memset(m_blur_buffer, 0, WIN_WIDTH * WIN_HEIGHT * sizeof(Uint32));
+}
+
+void Window::box_blur() {
+  Uint32 *pixel_checkpoint = m_buffer;
+  m_buffer = m_blur_buffer;
+  m_blur_buffer = pixel_checkpoint;
+
+  for(int y=0; y<WIN_HEIGHT; y++) {
+    for(int x=0; x<WIN_WIDTH; x++) {
+
+      int total_red_shade = 0;
+      int total_green_shade = 0;
+      int total_blue_shade = 0;
+
+      for(int pixel_surrounding_row=-1; pixel_surrounding_row<=1; pixel_surrounding_row++) {
+        for(int pixel_surrounding_col=-1; pixel_surrounding_col<=1; pixel_surrounding_col++) {
+          int current_x = x + pixel_surrounding_col;
+          int current_y = y + pixel_surrounding_row;
+
+          if(this->contains_pixel(current_x, current_y)) {
+            Uint32 current_pixel_color = m_blur_buffer[( current_y * WIN_WIDTH) + current_x];
+            Uint8 pixel_color_red_shade = (current_pixel_color & 0xFF000000) >> 24;
+            Uint8 pixel_color_green_shade = (current_pixel_color & 0x00FF0000) >> 16;
+            Uint8 pixel_color_blue_shade = (current_pixel_color & 0x0000FF00) >> 8;
+
+            total_red_shade += pixel_color_red_shade;
+            total_green_shade += pixel_color_green_shade;
+            total_blue_shade += pixel_color_blue_shade;
+          }
+        }
+      }
+      Uint8 box_red_shade_mean= total_red_shade/9;
+      Uint8 box_green_shade_mean = total_green_shade/9;
+      Uint8 box_blue_shade_mean = total_blue_shade/9;
+
+      set_pixel_color(
+        x, y,
+        box_red_shade_mean,
+        box_green_shade_mean,
+        box_blue_shade_mean
+      );
+    }
+  }
 }
 
 void Window::terminate() {
