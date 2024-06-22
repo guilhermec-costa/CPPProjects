@@ -27,8 +27,8 @@ private:
   void init_buffer();
 
 public:
-  const static int WIN_WIDTH = 800;
-  const static int WIN_HEIGHT = 600;
+  const static int WIN_WIDTH = 1360;
+  const static int WIN_HEIGHT = 768;
 
 public:
   Window();
@@ -38,7 +38,11 @@ public:
   void terminate();
   bool manage_events();
   void set_pixel_color(int x, int y, Uint8 red, Uint8 green, Uint8 blue);
+  bool contains_pixel(int x, int y);
+  bool contains_pixel_xaxis(int x);
+  bool contains_pixel_yaxis(int y);
   void update();
+  void clear_pixels();
 };
 } // namespace gmcc
 

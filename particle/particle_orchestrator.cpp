@@ -6,4 +6,10 @@ Particle_Orchestrator::Particle_Orchestrator() {
 }
 
 Particle_Orchestrator::~Particle_Orchestrator() { delete[] m_p_particles; }
+
+void Particle_Orchestrator::move_particles() {
+  for(int i=0; i<N_PARTICLES; i++) {
+    m_p_particles[i].move();
+  }
+}
 } // namespace gmcc

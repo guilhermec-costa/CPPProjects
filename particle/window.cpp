@@ -1,6 +1,7 @@
 #include "window.h"
 #include <SDL2/SDL_events.h>
 #include <cstddef>
+#include <cstring>
 
 namespace gmcc {
 
@@ -104,6 +105,23 @@ void Window::set_pixel_color(int x, int y, Uint8 red, Uint8 green, Uint8 blue) {
   // alpha value 
   color += 0xFF;
   m_buffer[(y * WIN_WIDTH) + x] = color;
+}
+
+bool Window::contains_pixel(int x, int y) {
+  if(x < 0 || x >= WIN_WIDTH || y < 0 || y >= WIN_HEIGHT) return false;
+  return true;
+}
+
+bool Window::contains_pixel_xaxis(int x) {
+  return (x < 0 || x >= WIN_WIDTH) ? false : true;
+}
+
+bool Window::contains_pixel_yaxis(int y) {
+  return (y < 0 || y >= WIN_HEIGHT) ? false : true;
+}
+
+void Window::clear_pixels() {
+  memset(m_buffer, 0, WIN_WIDTH * WIN_HEIGHT * sizeof(Uint32));
 }
 
 void Window::terminate() {
