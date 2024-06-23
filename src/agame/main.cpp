@@ -12,7 +12,10 @@ int main() {
   game.start();
   while (game.get_state()) {
     game.treat_events();
+    game.update();
   }
+
+  game.finish();
   return 0;
 }
 } // namespace sdlgame

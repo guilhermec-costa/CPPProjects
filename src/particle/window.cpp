@@ -148,7 +148,6 @@ void Window::box_blur() {
         for(int pixel_surrounding_col=-1; pixel_surrounding_col<=1; pixel_surrounding_col++) {
           int current_x = x + pixel_surrounding_col;
           int current_y = y + pixel_surrounding_row;
-
           if(this->contains_pixel(current_x, current_y)) {
             Uint32 current_pixel_color = m_blur_buffer[( current_y * WIN_WIDTH) + current_x];
             Uint8 pixel_color_red_shade = (current_pixel_color & 0xFF000000) >> 24;

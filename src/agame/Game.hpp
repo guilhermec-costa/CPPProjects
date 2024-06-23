@@ -17,12 +17,14 @@ private:
 public:
   Game();
   virtual ~Game();
-  void start();
-  void stop();
+  bool start();
+  void finish();
   bool create_window();
   bool create_window(const char* title, Uint32 , Uint32 ypos, Uint32 width, Uint32 height);
   bool create_window(const char* title, Uint32 width, Uint32 height);
   bool create_window(const char* title);
+  bool create_renderer();
+  void update();
   void treat_events();
   bool get_state() const { return is_running; };
 };
