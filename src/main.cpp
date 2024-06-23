@@ -35,10 +35,10 @@
 using namespace std;
 // it is necessary to include the .h where the namespace is defined
 using namespace gmcc;
-using namespace agame;
+using namespace sdlgame;
 
 int main() {
-  agame::main();
+  sdlgame::main();
   return 0;
 }
 

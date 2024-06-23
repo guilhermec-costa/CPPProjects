@@ -26,11 +26,6 @@ int run() {
     unsigned char green = (unsigned char)((1 + sin(elapsed * 0.0021)) * 128);
     unsigned char blue= (unsigned char)((1 + sin(elapsed * 0.0031)) * 128);
 
-    /* for(int y=0; y<Window::WIN_HEIGHT; y++) {
-      for(int x=0; x < Window::WIN_WIDTH; x++) {
-        window->set_pixel_color(x, y, red, green, blue);
-      }
-    } */
     const Particle *const p_particle = particle_orchestrator.get_particles();
     for(int i=0; i<Particle_Orchestrator::N_PARTICLES; i++) {
       Particle particle = p_particle[i];

@@ -1,11 +1,11 @@
-#include <iostream>
 #include <SDL2/SDL.h>
-namespace agame {
+#include <SDL2/SDL_events.h>
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_render.h>
+#include <SDL2/SDL_stdinc.h>
+#include <SDL2/SDL_video.h>
+#include <iostream>
+namespace sdlgame {
 int main() {
-  if(SDL_Init(SDL_INIT_VIDEO) < 0) {
-    std::cout << "failed to initialize sdl video subsystem" << std::endl;
-  }
-  std::cout << "agame" << std::endl;
-  return 0;
 }
-} // namespace agame
+} // namespace sdlgame 
