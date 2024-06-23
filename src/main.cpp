@@ -1,6 +1,7 @@
 // pre-processor directives
 // runs before any code by a pre-processor
 #include "particle/main.h"
+#include "agame/main.h"
 #include "Cat.h"
 #include "Machine.h"
 #include "NS.h"
@@ -34,9 +35,10 @@
 using namespace std;
 // it is necessary to include the .h where the namespace is defined
 using namespace gmcc;
+using namespace agame;
 
 int main() {
-  gmcc::run();
+  agame::main();
   return 0;
 }
 

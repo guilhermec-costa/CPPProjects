@@ -1,0 +1,3 @@
+namespace agame {
+int main();
+}
