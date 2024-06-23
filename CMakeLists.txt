@@ -1,21 +1,12 @@
 cmake_minimum_required(VERSION 3.29.0)
-# Nome do projeto
+
 project(cppIntro)
 
-set(SOURCE_FILES 
-    main.cpp 
-    Machine.cpp 
-    Pointers.cpp 
-    Cat.cpp 
-    NS.cpp 
-    functions.cpp 
-    particle/main.cpp
-    particle/window.cpp
-    particle/particle.cpp
-    particle/particle_orchestrator.cpp
-)
+set(source_dir "${PROJECT_SOURCE_DIR}")
+file (GLOB root_source_files "${source_dir}/src/*.cpp")
+file (GLOB sub_source_files "${source_dir}/src/**/*.cpp")
 # Adicionar o executável
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+add_executable(${PROJECT_NAME} ${root_source_files} ${sub_source_files}) 
 
 # Encontrar a biblioteca SDL2
 find_package(SDL2 REQUIRED)
