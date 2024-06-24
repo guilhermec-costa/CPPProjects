@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "texture_handler.hpp"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_events.h>
@@ -34,10 +35,7 @@ bool Game::start() {
     return false;
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
   is_running = true;
-  
-  SDL_Surface* surface = IMG_Load("/home/guichina/dev/CPP/src/agame/assets/player.png");
-  player_texture = SDL_CreateTextureFromSurface(renderer, surface);
-  SDL_FreeSurface(surface);
+  player_texture = TextureHandler::create_texture_from_surface("/home/guichina/dev/CPP/src/agame/assets/player.png", renderer);
   return true;
 }
 
