@@ -6,6 +6,7 @@
 #include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
+#include <iostream>
 namespace sdlgame {
 int main() {
   const int FPS = 60;
@@ -28,7 +29,6 @@ int main() {
     }
   }
 
-  game.finish();
   return 0;
 }
 } // namespace sdlgame
