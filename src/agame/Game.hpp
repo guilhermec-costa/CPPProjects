@@ -24,9 +24,11 @@ public:
   bool create_window(const char* title, Uint32 width, Uint32 height);
   bool create_window(const char* title);
   bool create_renderer();
+  void render();
   void update();
   void treat_events();
   bool get_state() const { return is_running; };
+  const static char* src_path;
 };
 } // namespace sdlgame
 #endif

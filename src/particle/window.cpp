@@ -1,5 +1,6 @@
 #include "window.h"
 #include <SDL2/SDL_events.h>
+#include <SDL2/SDL_video.h>
 #include <cstddef>
 #include <cstring>
 
@@ -28,7 +29,7 @@ bool Window::init_window() {
               SDL_WINDOWPOS_UNDEFINED,
               SDL_WINDOWPOS_UNDEFINED, 
               WIN_WIDTH, WIN_HEIGHT,
-              SDL_WINDOW_SHOWN
+              SDL_WINDOW_RESIZABLE 
   );
   if(!m_window) {
     SDL_Quit();

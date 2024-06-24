@@ -5,7 +5,6 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_video.h>
-#include <iostream>
 namespace sdlgame {
 int main() {
   Game game;
@@ -13,6 +12,7 @@ int main() {
   while (game.get_state()) {
     game.treat_events();
     game.update();
+    game.render();
   }
 
   game.finish();
