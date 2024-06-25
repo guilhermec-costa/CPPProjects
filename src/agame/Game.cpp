@@ -48,7 +48,6 @@ bool Game::start() {
   SDL_UpdateWindowSurface(window);
   rect.h = 64;
   rect.w = 64;
-
   return true;
 }
 
@@ -85,7 +84,7 @@ void Game::render() {
 
 void Game::treat_events() {
   mouse_buttons = SDL_GetMouseState(&xmouse, &ymouse);
-  const Uint8 *keyboard_state = SDL_GetKeyboardState(NULL);
+  keyboard_state = SDL_GetKeyboardState(NULL);
   while (SDL_PollEvent(m_event)) {
     switch (m_event->type) {
     case SDL_QUIT:
@@ -107,12 +106,11 @@ void Game::treat_events() {
     }
     if(m_event->button.button == SDL_BUTTON_LEFT) {
       SDL_LockSurface(screen_surface);
-      std::cout << "left button pressed" << std::endl;
-      // direct access to screen pixels
-      SDL_memset(screen_surface->pixels, 0xFFFF0000, screen_surface->h/3 * screen_surface->pitch);
-      SDL_UnlockSurface(screen_surface);
-      SDL_UpdateWindowSurface(window);
+      Uint8 *pixels = (Uint8*)screen_surface->pixels;
+      pixels[screen_surface->format->BytesPerPixel + 200] = 0xFF;
+      SDL_FreeSurface(screen_surface);
     }
+    SDL_UpdateWindowSurface(window);
   }
 }
 

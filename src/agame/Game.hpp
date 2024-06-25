@@ -15,6 +15,7 @@ private:
   SDL_Event* m_event;
   Uint32 mouse_buttons;
   int ymouse, xmouse;
+  const Uint8* keyboard_state;
   
 public:
   Game();
