@@ -6,7 +6,6 @@
 #include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
-#include <iostream>
 namespace sdlgame {
 int main() {
   const int FPS = 60;
@@ -28,6 +27,8 @@ int main() {
       SDL_Delay(ms_between_frame_update - render_frame_time);
     }
   }
+
+  game.finish();
 
   return 0;
 }

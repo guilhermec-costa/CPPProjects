@@ -4,6 +4,7 @@
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_scancode.h>
@@ -11,15 +12,19 @@
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
+#include <cstring>
 #include <iostream>
 
 namespace sdlgame {
 
 SDL_Texture *player_texture = nullptr;
 SDL_Rect rect;
+SDL_Surface *screen_surface = nullptr;
+SDL_Surface *image = nullptr;
+SDL_Texture *texture = nullptr;
 const char *Game::src_path = "/home/guichina/dev/CPP/src/agame/";
 
-Game::Game() : is_running(false), window(NULL), renderer(NULL), m_event(NULL) {}
+Game::Game() : is_running(false), window(nullptr), renderer(nullptr), m_event(nullptr) {}
 
 Game::~Game() {
   // TODO
@@ -34,10 +39,16 @@ bool Game::start() {
     return false;
   if (!create_renderer())
     return false;
-  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
   is_running = true;
   player_texture = TextureHandler::create_texture_from_surface(
       "/home/guichina/dev/CPP/src/agame/assets/player.png", renderer);
+  screen_surface = SDL_GetWindowSurface(window);
+  image = SDL_LoadBMP("/home/guichina/dev/CPP/src/agame/assets/player.bmp");
+  SDL_UpdateWindowSurface(window);
+  rect.h = 64;
+  rect.w = 64;
+
   return true;
 }
 
@@ -64,37 +75,43 @@ bool Game::create_renderer() {
 }
 
 void Game::update() {
-  rect.h = 64;
-  rect.w = 64;
 }
 
 void Game::render() {
-  SDL_RenderClear(renderer);
+  /* SDL_RenderClear(renderer);
   SDL_RenderCopy(renderer, player_texture, NULL, &rect);
-  SDL_RenderPresent(renderer);
+  SDL_RenderPresent(renderer); */
 }
 
 void Game::treat_events() {
+  mouse_buttons = SDL_GetMouseState(&xmouse, &ymouse);
+  const Uint8 *keyboard_state = SDL_GetKeyboardState(NULL);
   while (SDL_PollEvent(m_event)) {
     switch (m_event->type) {
     case SDL_QUIT:
-      this->finish();
+      is_running = false;
       break;
 
     case SDL_MOUSEMOTION:
-      std::cout << "mouse moved" << std::endl;
       break;
 
     case SDL_KEYDOWN:
       unsigned int key_pressed = m_event->key.keysym.sym;
-      std::cout << (char)key_pressed << std::endl;
-      std::cout << m_event->key.keysym.scancode << std::endl;
+      /* std::cout << (char)key_pressed << std::endl; */
+      /* std::cout << m_event->key.keysym.scancode << std::endl; */
       break;
     }
 
-    const Uint8 *keyboard_state = SDL_GetKeyboardState(NULL);
     if(keyboard_state[SDL_SCANCODE_W] && keyboard_state[SDL_SCANCODE_LCTRL]) {
-      std::cout << "ctrl + w pressed" << std::endl;
+      /* std::cout << "ctrl + w pressed" << std::endl; */
+    }
+    if(m_event->button.button == SDL_BUTTON_LEFT) {
+      SDL_LockSurface(screen_surface);
+      std::cout << "left button pressed" << std::endl;
+      // direct access to screen pixels
+      SDL_memset(screen_surface->pixels, 0xFFFF0000, screen_surface->h/3 * screen_surface->pitch);
+      SDL_UnlockSurface(screen_surface);
+      SDL_UpdateWindowSurface(window);
     }
   }
 }
@@ -103,8 +120,6 @@ void Game::finish() {
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
   SDL_Quit();
-  std::cout << "game finished" << std::endl;
-  is_running = false;
 }
 
 } // namespace sdlgame

@@ -13,7 +13,9 @@ private:
   SDL_Window* window;
   SDL_Renderer* renderer;
   SDL_Event* m_event;
-
+  Uint32 mouse_buttons;
+  int ymouse, xmouse;
+  
 public:
   Game();
   virtual ~Game();
