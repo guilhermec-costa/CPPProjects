@@ -1,6 +1,7 @@
 #include "Game.hpp"
 #include "texture_handler.hpp"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_blendmode.h>
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_image.h>
@@ -19,15 +20,17 @@
 namespace sdlAPI {
 
 SDL_Texture *player_texture = nullptr;
-Uint32 *pixels = nullptr;
 SDL_Rect rect;
 SDL_Rect a_rect;
-SDL_Rect rect2;
+SDL_Rect character_rect;
 SDL_Surface *screen_surface = nullptr;
 SDL_Surface *image = nullptr;
 SDL_Texture *img_texture = nullptr;
-SDL_Texture *rect2_texture = nullptr;
-SDL_Surface *test_surface;
+SDL_Rect filled_rectangle;
+SDL_Texture *texture_to_fill_rectangle;
+Uint32 *filled_rectangle_pixels;
+
+SDL_Rect rectangle2;
 const char *Game::src_path = "/home/guichina/dev/CPP/src/agame/";
 
 Game::Game() : is_running(false), window(nullptr), renderer(nullptr), m_event(nullptr) {}
@@ -45,20 +48,36 @@ bool Game::start() {
     return false;
   if (!create_renderer())
     return false;
-
   is_running = true;
   player_texture = TextureHandler::create_texture_from_surface(
       "/home/guichina/dev/CPP/src/agame/assets/player.png", renderer);
+  SDL_SetTextureBlendMode(player_texture, SDL_BLENDMODE_ADD);
   screen_surface = SDL_GetWindowSurface(window);
   image = SDL_LoadBMP("/home/guichina/dev/CPP/src/agame/assets/player.bmp");
   img_texture = SDL_CreateTextureFromSurface(renderer, image);
+
   SDL_FreeSurface(image);
-  pixels = new Uint32[400 * 300];
-  rect2_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, 300, 300);
   rect.h = 64;
   rect.w = 64;
   a_rect.h = 32;
   a_rect.w = 64;
+  character_rect.h = 64;
+  character_rect.w = 64;
+  character_rect.x = 105;
+  character_rect.y = 105;
+
+  
+  filled_rectangle.h = 200;
+  filled_rectangle.w = 200;
+  filled_rectangle.x = 100;
+  filled_rectangle.y = 100;
+
+  rectangle2.h = 200;
+  rectangle2.w = 200;
+  rectangle2.x = 450;
+  rectangle2.y = 300;
+  texture_to_fill_rectangle = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, 200, 200);
+  filled_rectangle_pixels = new Uint32[200 * 200];
 
   return true;
 }
@@ -91,19 +110,23 @@ void Game::update() {
 void Game::render() {
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(renderer);
-  
 
-  SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-  SDL_RenderDrawRect(renderer, &a_rect);
+  SDL_RenderDrawRect(renderer, &filled_rectangle);
+  for(int y=0; y<200; y++) {
+    for(int x=0; x<200; x++) {
+      filled_rectangle_pixels[(y * 200) + x] = 0xFF0000FF;
+    }
+  }
 
-  SDL_RenderCopy(renderer, img_texture, NULL, &a_rect);
+  SDL_UpdateTexture(texture_to_fill_rectangle, NULL, filled_rectangle_pixels, sizeof(Uint32) * 200);
+  SDL_RenderCopy(renderer, texture_to_fill_rectangle, NULL, &filled_rectangle);
+  SDL_RenderCopy(renderer, player_texture, NULL, &character_rect);
 
-  SDL_RenderDrawLine(renderer, 100, 100, 200, 100);
+  SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
+  SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+  SDL_RenderDrawLine(renderer, 120, 120, 150, 150);
 
-  /* pixels[200*150 + 200] = 0x0000FFFF;
-  SDL_UpdateTexture(rect2_texture, NULL, pixels, sizeof(Uint32) * 300);
-  SDL_RenderCopy(renderer, rect2_texture, NULL, NULL); */
-
+  SDL_RenderCopy(renderer, player_texture, NULL, &rectangle2);
   SDL_RenderPresent(renderer);
 }
 
@@ -136,6 +159,16 @@ void Game::treat_events() {
     if(m_event->button.button == SDL_BUTTON_LEFT) {
       /* set_pixel(screen_surface, 0, 255, 0); */
     }
+
+    if(m_event->button.button == SDL_BUTTON_LEFT) {
+      rectangle2.x = xmouse;
+      rectangle2.y = ymouse;
+    }
+
+    if(m_event->type == SDL_MOUSEWHEEL) {
+      std::cout << "mouse wheel" << std::endl;
+    }
+
     /* SDL_UpdateWindowSurface(window); */
   }
 }
