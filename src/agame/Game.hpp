@@ -30,6 +30,7 @@ public:
   void render();
   void update();
   void treat_events();
+  void set_pixel(SDL_Surface* surface, Uint8 red, Uint8 green, Uint8 blue);
   bool get_state() const { return is_running; };
   const static char* src_path;
 };
