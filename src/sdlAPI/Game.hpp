@@ -27,6 +27,7 @@ public:
   bool create_window(const char* title, Uint32 width, Uint32 height);
   bool create_window(const char* title);
   bool create_renderer();
+  void init_font_API();
   void render();
   void update();
   void treat_events();

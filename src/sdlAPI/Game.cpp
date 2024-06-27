@@ -14,12 +14,15 @@
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
+#include <SDL2/SDL_ttf.h>
 #include <cstring>
 #include <iostream>
 
 namespace sdlAPI {
 
 SDL_Texture *player_texture = nullptr;
+SDL_Rect srcRect;
+SDL_Rect dstRect;
 SDL_Rect rect;
 SDL_Rect a_rect;
 SDL_Rect character_rect;
@@ -29,7 +32,8 @@ SDL_Texture *img_texture = nullptr;
 SDL_Rect filled_rectangle;
 SDL_Texture *texture_to_fill_rectangle;
 Uint32 *filled_rectangle_pixels;
-
+SDL_Texture *font_texture;
+SDL_Rect title;
 SDL_Rect rectangle2;
 const char *Game::src_path = "/home/guichina/dev/CPP/src/agame/";
 
@@ -76,10 +80,42 @@ bool Game::start() {
   rectangle2.w = 200;
   rectangle2.x = 450;
   rectangle2.y = 300;
+
+  title.w = 400;
+  title.h = 100;
+  title.x = 200;
+  title.y = 300;
   texture_to_fill_rectangle = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, 200, 200);
   filled_rectangle_pixels = new Uint32[200 * 200];
 
+  init_font_API();
+  
+
+  // the rectangle that can represent a portion of a texture
+  srcRect.x = 0;      // x of the texture
+  srcRect.y = 0;      // y of the texrure
+  srcRect.w = 100;    // w of the portion from the texture
+  srcRect.h = 200;    // w of the portion from the texture
+  
+  // the destination rectangle. The rendering target
+  dstRect.x = 0;      
+  dstRect.y = 0;      
+  dstRect.w = 200;    
+  dstRect.h = 200;    
   return true;
+}
+
+void Game::init_font_API() {
+  if(TTF_Init() < 0) {
+    std::cout << "Failed to initialise fonts API" << std::endl;
+  }
+  TTF_Font *pixeledFont = TTF_OpenFont("/home/guichina/dev/CPP/src/sdlAPI/fonts/Daydream.ttf", 16);
+  SDL_Surface *text_sfc = TTF_RenderText_Solid(pixeledFont, "SNAKE GAME", {255, 255, 255});
+  if(text_sfc==nullptr) {
+    std::cout << TTF_GetError() << std::endl;
+  }
+  font_texture = SDL_CreateTextureFromSurface(renderer, text_sfc);
+  SDL_FreeSurface(text_sfc);
 }
 
 bool Game::create_window(const char *title, Uint32 width, Uint32 height) {
@@ -111,22 +147,27 @@ void Game::render() {
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(renderer);
 
-  SDL_RenderDrawRect(renderer, &filled_rectangle);
   for(int y=0; y<200; y++) {
     for(int x=0; x<200; x++) {
-      filled_rectangle_pixels[(y * 200) + x] = 0xFF0000FF;
+      if(y % 10 == 0) {
+        filled_rectangle_pixels[(y * 200) + x] = 0xFF0000FF;
+        continue;
+      }
+      filled_rectangle_pixels[(y * 200) + x] = 0x0000FFFF;
     }
   }
 
   SDL_UpdateTexture(texture_to_fill_rectangle, NULL, filled_rectangle_pixels, sizeof(Uint32) * 200);
-  SDL_RenderCopy(renderer, texture_to_fill_rectangle, NULL, &filled_rectangle);
-  SDL_RenderCopy(renderer, player_texture, NULL, &character_rect);
+  /* SDL_RenderCopy(renderer, player_texture, NULL, &character_rect); */
 
-  SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
-  SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-  SDL_RenderDrawLine(renderer, 120, 120, 150, 150);
+  /* SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255); */
+  /* SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255); */
+  /* SDL_RenderDrawLine(renderer, 120, 120, 150, 150); */
 
-  SDL_RenderCopy(renderer, player_texture, NULL, &rectangle2);
+  /* SDL_RenderCopy(renderer, player_texture, NULL, &rectangle2); */
+
+  SDL_RenderCopy(renderer, font_texture, NULL, &title);
+  SDL_RenderCopy(renderer, texture_to_fill_rectangle, &srcRect, &dstRect);
   SDL_RenderPresent(renderer);
 }
 
