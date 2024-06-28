@@ -16,6 +16,7 @@
 #include <SDL2/SDL_video.h>
 #include <SDL2/SDL_ttf.h>
 #include <cstring>
+#include <iomanip>
 #include <iostream>
 
 namespace sdlAPI {
@@ -52,7 +53,13 @@ bool Game::start() {
     return false;
   if (!create_renderer())
     return false;
-  is_running = true;
+  init_font_API();
+  init_image_API(); 
+
+  player_texture = TextureHandler::create_texture_from_surface(
+      "/home/guichina/dev/CPP/src/agame/assets/player.png", renderer);
+  player_texture = TextureHandler::create_texture_from_surface(
+      "/home/guichina/dev/CPP/src/agame/assets/player.png", renderer);
   player_texture = TextureHandler::create_texture_from_surface(
       "/home/guichina/dev/CPP/src/agame/assets/player.png", renderer);
   SDL_SetTextureBlendMode(player_texture, SDL_BLENDMODE_ADD);
@@ -88,8 +95,6 @@ bool Game::start() {
   texture_to_fill_rectangle = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, 200, 200);
   filled_rectangle_pixels = new Uint32[200 * 200];
 
-  init_font_API();
-  
 
   // the rectangle that can represent a portion of a texture
   srcRect.x = 0;      // x of the texture
@@ -102,6 +107,7 @@ bool Game::start() {
   dstRect.y = 0;      
   dstRect.w = 200;    
   dstRect.h = 200;    
+  is_running = true;
   return true;
 }
 
@@ -116,6 +122,15 @@ void Game::init_font_API() {
   }
   font_texture = SDL_CreateTextureFromSurface(renderer, text_sfc);
   SDL_FreeSurface(text_sfc);
+}
+
+void Game::init_image_API() {
+  int supported_formats = IMG_INIT_JPG | IMG_INIT_PNG;
+  int innited_bitmask = IMG_Init(supported_formats);
+  std::cout << std::setfill('0') << std::setw(32) << std::hex << (innited_bitmask & supported_formats) << std::endl;
+  if((innited_bitmask & supported_formats) != supported_formats) {
+    std::cout << "SDL2_image format not available" << std::endl;
+  }
 }
 
 bool Game::create_window(const char *title, Uint32 width, Uint32 height) {
@@ -158,14 +173,7 @@ void Game::render() {
   }
 
   SDL_UpdateTexture(texture_to_fill_rectangle, NULL, filled_rectangle_pixels, sizeof(Uint32) * 200);
-  /* SDL_RenderCopy(renderer, player_texture, NULL, &character_rect); */
-
-  /* SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255); */
-  /* SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255); */
-  /* SDL_RenderDrawLine(renderer, 120, 120, 150, 150); */
-
-  /* SDL_RenderCopy(renderer, player_texture, NULL, &rectangle2); */
-
+  SDL_RenderCopy(renderer, player_texture, NULL, NULL);
   SDL_RenderCopy(renderer, font_texture, NULL, &title);
   SDL_RenderCopy(renderer, texture_to_fill_rectangle, &srcRect, &dstRect);
   SDL_RenderPresent(renderer);
@@ -225,6 +233,7 @@ void Game::set_pixel(SDL_Surface *surface, Uint8 red, Uint8 green, Uint8 blue) {
 }
 
 void Game::finish() {
+  IMG_Quit();
   SDL_DestroyTexture(img_texture);
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);

@@ -28,6 +28,7 @@ public:
   bool create_window(const char* title);
   bool create_renderer();
   void init_font_API();
+  void init_image_API();
   void render();
   void update();
   void treat_events();

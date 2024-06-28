@@ -184,9 +184,9 @@ void arrays() {
 
   // an array is a reference to the memory address of the first element
   int iValues[3] = {1, 2, 3};
-  for (int i = 0; i < sizeof(iValues) / sizeof(typeof(iValues[0])); i++) {
+  /* for (int i = 0; i < sizeof(iValues) / sizeof(typeof(iValues[0])); i++) {
     cout << iValues[i] << endl;
-  }
+  } */
 
   cout << &iValues << endl;
   cout << &iValues[0] << endl;
