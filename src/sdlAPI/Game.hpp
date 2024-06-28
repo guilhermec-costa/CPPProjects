@@ -5,6 +5,7 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_stdinc.h>
+#include "resource_manager.h"
 
 namespace sdlAPI {
 class Game {
@@ -15,6 +16,7 @@ private:
   SDL_Event* m_event;
   Uint32 mouse_buttons;
   int ymouse, xmouse;
+  Resource_Manager* resource_manager;
   const Uint8* keyboard_state;
   
 public:

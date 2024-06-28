@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "resource_manager.h"
 #include "texture_handler.hpp"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_blendmode.h>
@@ -36,6 +37,8 @@ Uint32 *filled_rectangle_pixels;
 SDL_Texture *font_texture;
 SDL_Rect title;
 SDL_Rect rectangle2;
+SDL_Texture* pixel_player_texture;
+SDL_Rect pixel_player_rect = {200, 200, 128, 128};
 const char *Game::src_path = "/home/guichina/dev/CPP/src/agame/";
 
 Game::Game() : is_running(false), window(nullptr), renderer(nullptr), m_event(nullptr) {}
@@ -53,15 +56,15 @@ bool Game::start() {
     return false;
   if (!create_renderer())
     return false;
+  resource_manager = Resource_Manager::get_instance();
   init_font_API();
   init_image_API(); 
 
-  player_texture = TextureHandler::create_texture_from_surface(
-      "/home/guichina/dev/CPP/src/agame/assets/player.png", renderer);
-  player_texture = TextureHandler::create_texture_from_surface(
-      "/home/guichina/dev/CPP/src/agame/assets/player.png", renderer);
-  player_texture = TextureHandler::create_texture_from_surface(
-      "/home/guichina/dev/CPP/src/agame/assets/player.png", renderer);
+  SDL_Surface* player_pixel_sfc = resource_manager->get_surface("/home/guichina/dev/CPP/src/sdlAPI/assets/player.bmp");
+  player_pixel_sfc = resource_manager->get_surface("/home/guichina/dev/CPP/src/sdlAPI/assets/player.bmp");
+  player_pixel_sfc = resource_manager->get_surface("/home/guichina/dev/CPP/src/sdlAPI/assets/player.bmp");
+  std::cout << SDL_GetError() << std::endl;
+  pixel_player_texture = SDL_CreateTextureFromSurface(renderer, player_pixel_sfc);
   SDL_SetTextureBlendMode(player_texture, SDL_BLENDMODE_ADD);
   screen_surface = SDL_GetWindowSurface(window);
   image = SDL_LoadBMP("/home/guichina/dev/CPP/src/agame/assets/player.bmp");
@@ -176,6 +179,7 @@ void Game::render() {
   SDL_RenderCopy(renderer, player_texture, NULL, NULL);
   SDL_RenderCopy(renderer, font_texture, NULL, &title);
   SDL_RenderCopy(renderer, texture_to_fill_rectangle, &srcRect, &dstRect);
+  SDL_RenderCopy(renderer, pixel_player_texture, NULL, &pixel_player_rect);
   SDL_RenderPresent(renderer);
 }
 
@@ -210,8 +214,8 @@ void Game::treat_events() {
     }
 
     if(m_event->button.button == SDL_BUTTON_LEFT) {
-      rectangle2.x = xmouse;
-      rectangle2.y = ymouse;
+      pixel_player_rect.x = xmouse;
+      pixel_player_rect.y = ymouse;
     }
 
     if(m_event->type == SDL_MOUSEWHEEL) {
