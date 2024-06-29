@@ -4,12 +4,15 @@
 namespace sdlAPI {
 class Animated_Sprite {
 public:
-  Animated_Sprite(const char *const sprite_path);
+  Animated_Sprite(SDL_Texture* spritesheet);
   virtual ~Animated_Sprite();
-  void render();
-  void render(SDL_Rect& src, SDL_Rect&dst);
+  void set_sprite_dst_rect(SDL_Rect& rect);
+  void select_sprite(SDL_Rect& rect);
+  /* void render();
+  void render(SDL_Rect& src, SDL_Rect&dst); */
 private:
-  SDL_Texture* complete_texture;
-  const char* sprite_path;
+  SDL_Rect m_cur_frame_rect;
+  SDL_Rect m_dst_rect; 
+  SDL_Texture* m_spritsheet;
 };
 }

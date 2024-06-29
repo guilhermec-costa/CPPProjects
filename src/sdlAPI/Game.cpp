@@ -1,6 +1,7 @@
 #include "Game.hpp"
+#include "animated_sprite.h"
 #include "resource_manager.h"
-#include "texture_handler.hpp"
+#include "resource_managers/sprite_resource_manager.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_blendmode.h>
 #include <SDL2/SDL_error.h>
@@ -29,7 +30,6 @@ SDL_Rect rect;
 SDL_Rect a_rect;
 SDL_Rect character_rect;
 SDL_Surface *screen_surface = nullptr;
-SDL_Surface *image = nullptr;
 SDL_Rect filled_rectangle;
 SDL_Texture *texture_to_fill_rectangle = nullptr;
 Uint32 *filled_rectangle_pixels;
@@ -45,8 +45,6 @@ const char *Game::src_path = "/home/guichina/dev/CPP/src/agame/";
 
 Game::Game() : is_running(false), window(nullptr), renderer(nullptr), m_event(nullptr) {
   resource_manager = Resource_Manager::get_instance();
-  init_font_API();
-  init_image_API(); 
 }
 
 Game::~Game() {
@@ -58,28 +56,25 @@ bool Game::start() {
     std::cout << "Failed to initialise SDL subsystems" << std::endl;
   }
   m_event = new SDL_Event();
-  if (!create_window("my game", 800, 600))
-    return false;
-  if (!create_renderer())
-    return false;
+  if (!create_window("my game", 800, 600)) return false;
+  if (!create_renderer()) return false;
+  m_sprite_resource_manager = new Sprite_Resource_Manager(renderer);
+
+  init_font_API();
+  init_image_API(); 
 
   screen_surface = SDL_GetWindowSurface(window);
 
   SDL_Surface* player_pixel_sfc = resource_manager->get_surface("/home/guichina/dev/CPP/src/sdlAPI/assets/player.bmp");
-  player_pixel_sfc = resource_manager->get_surface("/home/guichina/dev/CPP/src/sdlAPI/assets/player.bmp");
-  player_pixel_sfc = resource_manager->get_surface("/home/guichina/dev/CPP/src/sdlAPI/assets/player.bmp");
   pixel_player_texture = SDL_CreateTextureFromSurface(renderer, player_pixel_sfc);
   SDL_SetTextureBlendMode(player_texture, SDL_BLENDMODE_ADD);
-
-  SDL_Surface* sprite_sfc = resource_manager->get_surface("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.bmp");
-  SDL_SetColorKey(sprite_sfc, SDL_TRUE, SDL_MapRGB(sprite_sfc->format, 0xFF, 0x00, 0xCD));
-  spritesheet = SDL_CreateTextureFromSurface(renderer, sprite_sfc);
+  
   SDL_SetTextureBlendMode(spritesheet, SDL_BLENDMODE_ADD);
-  SDL_FreeSurface(sprite_sfc);
+  m_sprite_resource_manager->aloc_resource("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.bmp", true);
+  spritesheet = m_sprite_resource_manager->get_texture("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.bmp");
+  Animated_Sprite animated_sprite(spritesheet);
+  animated_sprite.set_dst_rect(new SDL_Rect())
 
-  image = SDL_LoadBMP("/home/guichina/dev/CPP/src/agame/assets/player.bmp");
-
-  SDL_FreeSurface(image);
   SDL_FreeSurface(player_pixel_sfc);
   rect.h = 64;
   rect.w = 64;
@@ -245,6 +240,8 @@ void Game::set_pixel(SDL_Surface *surface, Uint8 red, Uint8 green, Uint8 blue) {
 }
 
 void Game::finish() {
+  delete m_sprite_resource_manager;
+  delete resource_manager;
   IMG_Quit();
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
