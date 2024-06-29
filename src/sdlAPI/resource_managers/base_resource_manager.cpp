@@ -12,7 +12,7 @@ void Base_Resource_Manager::aloc_resource(const char *rsc_path, const bool consi
   
   SDL_Texture* texture;
   if(consider_colorkey) {
-    texture = TextureHandler::create_texture_from_surface_with_colorkey(rsc_path, m_renderer, 0xFF00CDFF);
+    texture = TextureHandler::create_texture_from_surface_with_colorkey(rsc_path, m_renderer, 0xEF00FFFF);
   } else {
     texture = TextureHandler::create_texture_from_surface(rsc_path, m_renderer);
   }

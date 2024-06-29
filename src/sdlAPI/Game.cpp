@@ -41,6 +41,7 @@ SDL_Rect pixel_player_rect = {200, 200, 128, 128};
 SDL_Rect src_sprite_rect = {1, 1, 31, 31};
 SDL_Rect dst_sprite_rect = {200, 200, 128, 128};
 SDL_Texture* spritesheet = nullptr;
+Animated_Sprite *animated_sprite = nullptr;
 const char *Game::src_path = "/home/guichina/dev/CPP/src/agame/";
 
 Game::Game() : is_running(false), window(nullptr), renderer(nullptr), m_event(nullptr) {
@@ -67,15 +68,16 @@ bool Game::start() {
 
   SDL_Surface* player_pixel_sfc = resource_manager->get_surface("/home/guichina/dev/CPP/src/sdlAPI/assets/player.bmp");
   pixel_player_texture = SDL_CreateTextureFromSurface(renderer, player_pixel_sfc);
+  SDL_FreeSurface(player_pixel_sfc);
   SDL_SetTextureBlendMode(player_texture, SDL_BLENDMODE_ADD);
   
-  SDL_SetTextureBlendMode(spritesheet, SDL_BLENDMODE_ADD);
-  m_sprite_resource_manager->aloc_resource("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.bmp", true);
-  spritesheet = m_sprite_resource_manager->get_texture("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.bmp");
-  Animated_Sprite animated_sprite(spritesheet);
-  animated_sprite.set_dst_rect(new SDL_Rect())
+  m_sprite_resource_manager->aloc_resource("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png", true);
+  spritesheet = m_sprite_resource_manager->get_texture("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png");
+  animated_sprite = new Animated_Sprite(spritesheet);
 
-  SDL_FreeSurface(player_pixel_sfc);
+  SDL_Rect sprite_dst_rect = { 800/2 - 256, 600/2 - 300, 512, 512};
+  animated_sprite->set_sprite_dst_rect(sprite_dst_rect);
+
   rect.h = 64;
   rect.w = 64;
   a_rect.h = 32;
@@ -96,25 +98,14 @@ bool Game::start() {
   rectangle2.x = 450;
   rectangle2.y = 300;
 
-  title.w = 400;
+  title.w = 600;
   title.h = 100;
-  title.x = 200;
-  title.y = 300;
+  title.x = 100;
+  title.y = 80;
   texture_to_fill_rectangle = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, 200, 200);
   filled_rectangle_pixels = new Uint32[200 * 200];
 
 
-  // the rectangle that can represent a portion of a texture
-  srcRect.x = 0;      // x of the texture
-  srcRect.y = 0;      // y of the texrure
-  srcRect.w = 100;    // w of the portion from the texture
-  srcRect.h = 200;    // w of the portion from the texture
-  
-  // the destination rectangle. The rendering target
-  dstRect.x = 0;      
-  dstRect.y = 0;      
-  dstRect.w = 200;    
-  dstRect.h = 200;    
   is_running = true;
   return true;
 }
@@ -124,7 +115,7 @@ void Game::init_font_API() {
     std::cout << "Failed to initialise fonts API" << std::endl;
   }
   TTF_Font *pixeledFont = TTF_OpenFont("/home/guichina/dev/CPP/src/sdlAPI/fonts/Daydream.ttf", 16);
-  SDL_Surface *text_sfc = TTF_RenderText_Solid(pixeledFont, "SNAKE GAME", {255, 255, 255});
+  SDL_Surface *text_sfc = TTF_RenderText_Solid(pixeledFont, "A NAKED MAN", {255, 255, 255});
   if(text_sfc==nullptr) {
     std::cout << TTF_GetError() << std::endl;
   }
@@ -135,7 +126,6 @@ void Game::init_font_API() {
 void Game::init_image_API() {
   int supported_formats = IMG_INIT_JPG | IMG_INIT_PNG;
   int innited_bitmask = IMG_Init(supported_formats);
-  std::cout << std::setfill('0') << std::setw(32) << std::hex << (innited_bitmask & supported_formats) << std::endl;
   if((innited_bitmask & supported_formats) != supported_formats) {
     std::cout << "SDL2_image format not available" << std::endl;
   }
@@ -170,22 +160,32 @@ void Game::render() {
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(renderer);
 
-  for(int y=0; y<200; y++) {
-    for(int x=0; x<200; x++) {
-      if(y % 10 == 0) {
-        filled_rectangle_pixels[(y * 200) + x] = 0xFF0000FF;
-        continue;
-      }
-      filled_rectangle_pixels[(y * 200) + x] = 0x0000FFFF;
-    }
-  }
-
-  SDL_UpdateTexture(texture_to_fill_rectangle, NULL, filled_rectangle_pixels, sizeof(Uint32) * 200);
-  SDL_RenderCopy(renderer, player_texture, NULL, NULL);
+  /* for(int y=0; y<200; y++) { */
+  /*   for(int x=0; x<200; x++) { */
+  /*     if(y % 10 == 0) { */
+  /*       filled_rectangle_pixels[(y * 200) + x] = 0xFF0000FF; */
+  /*       continue; */
+  /*     } */
+  /*     filled_rectangle_pixels[(y * 200) + x] = 0x0000FFFF; */
+  /*   } */
+  /* } */
+  /**/
+  /* SDL_UpdateTexture(texture_to_fill_rectangle, NULL, filled_rectangle_pixels, sizeof(Uint32) * 200); */
+  /* SDL_RenderCopy(renderer, player_texture, NULL, NULL); */
   SDL_RenderCopy(renderer, font_texture, NULL, &title);
-  SDL_RenderCopy(renderer, texture_to_fill_rectangle, &srcRect, &dstRect);
-  SDL_RenderCopy(renderer, pixel_player_texture, NULL, &pixel_player_rect);
-  SDL_RenderCopy(renderer, spritesheet, &src_sprite_rect, &dst_sprite_rect);
+  /* SDL_RenderCopy(renderer, texture_to_fill_rectangle, &srcRect, &dstRect); */
+  /* SDL_RenderCopy(renderer, pixel_player_texture, NULL, &pixel_player_rect); */
+  
+  static int cur_frame = 0;
+  SDL_Rect spritesheet_portion = {0, 0, 32, 32};
+  animated_sprite->select_sprite(spritesheet_portion, cur_frame);
+  animated_sprite->render(renderer);
+  cur_frame++;
+  SDL_Delay(100);
+  if(cur_frame % 22 == 0) {
+    cur_frame = 0;
+  }
+  std::cout << "aqui" << std::endl;
   SDL_RenderPresent(renderer);
 }
 
