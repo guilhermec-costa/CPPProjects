@@ -30,18 +30,24 @@ SDL_Rect a_rect;
 SDL_Rect character_rect;
 SDL_Surface *screen_surface = nullptr;
 SDL_Surface *image = nullptr;
-SDL_Texture *img_texture = nullptr;
 SDL_Rect filled_rectangle;
-SDL_Texture *texture_to_fill_rectangle;
+SDL_Texture *texture_to_fill_rectangle = nullptr;
 Uint32 *filled_rectangle_pixels;
-SDL_Texture *font_texture;
+SDL_Texture *font_texture = nullptr;
 SDL_Rect title;
 SDL_Rect rectangle2;
-SDL_Texture* pixel_player_texture;
+SDL_Texture* pixel_player_texture = nullptr;
 SDL_Rect pixel_player_rect = {200, 200, 128, 128};
+SDL_Rect src_sprite_rect = {1, 1, 31, 31};
+SDL_Rect dst_sprite_rect = {200, 200, 128, 128};
+SDL_Texture* spritesheet = nullptr;
 const char *Game::src_path = "/home/guichina/dev/CPP/src/agame/";
 
-Game::Game() : is_running(false), window(nullptr), renderer(nullptr), m_event(nullptr) {}
+Game::Game() : is_running(false), window(nullptr), renderer(nullptr), m_event(nullptr) {
+  resource_manager = Resource_Manager::get_instance();
+  init_font_API();
+  init_image_API(); 
+}
 
 Game::~Game() {
   // TODO
@@ -56,21 +62,25 @@ bool Game::start() {
     return false;
   if (!create_renderer())
     return false;
-  resource_manager = Resource_Manager::get_instance();
-  init_font_API();
-  init_image_API(); 
+
+  screen_surface = SDL_GetWindowSurface(window);
 
   SDL_Surface* player_pixel_sfc = resource_manager->get_surface("/home/guichina/dev/CPP/src/sdlAPI/assets/player.bmp");
   player_pixel_sfc = resource_manager->get_surface("/home/guichina/dev/CPP/src/sdlAPI/assets/player.bmp");
   player_pixel_sfc = resource_manager->get_surface("/home/guichina/dev/CPP/src/sdlAPI/assets/player.bmp");
-  std::cout << SDL_GetError() << std::endl;
   pixel_player_texture = SDL_CreateTextureFromSurface(renderer, player_pixel_sfc);
   SDL_SetTextureBlendMode(player_texture, SDL_BLENDMODE_ADD);
-  screen_surface = SDL_GetWindowSurface(window);
+
+  SDL_Surface* sprite_sfc = resource_manager->get_surface("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.bmp");
+  SDL_SetColorKey(sprite_sfc, SDL_TRUE, SDL_MapRGB(sprite_sfc->format, 0xFF, 0x00, 0xCD));
+  spritesheet = SDL_CreateTextureFromSurface(renderer, sprite_sfc);
+  SDL_SetTextureBlendMode(spritesheet, SDL_BLENDMODE_ADD);
+  SDL_FreeSurface(sprite_sfc);
+
   image = SDL_LoadBMP("/home/guichina/dev/CPP/src/agame/assets/player.bmp");
-  img_texture = SDL_CreateTextureFromSurface(renderer, image);
 
   SDL_FreeSurface(image);
+  SDL_FreeSurface(player_pixel_sfc);
   rect.h = 64;
   rect.w = 64;
   a_rect.h = 32;
@@ -180,6 +190,7 @@ void Game::render() {
   SDL_RenderCopy(renderer, font_texture, NULL, &title);
   SDL_RenderCopy(renderer, texture_to_fill_rectangle, &srcRect, &dstRect);
   SDL_RenderCopy(renderer, pixel_player_texture, NULL, &pixel_player_rect);
+  SDL_RenderCopy(renderer, spritesheet, &src_sprite_rect, &dst_sprite_rect);
   SDL_RenderPresent(renderer);
 }
 
@@ -210,12 +221,9 @@ void Game::treat_events() {
     }
 
     if(m_event->button.button == SDL_BUTTON_LEFT) {
-      /* set_pixel(screen_surface, 0, 255, 0); */
-    }
-
-    if(m_event->button.button == SDL_BUTTON_LEFT) {
       pixel_player_rect.x = xmouse;
       pixel_player_rect.y = ymouse;
+      dst_sprite_rect.x = xmouse;
     }
 
     if(m_event->type == SDL_MOUSEWHEEL) {
@@ -238,7 +246,6 @@ void Game::set_pixel(SDL_Surface *surface, Uint8 red, Uint8 green, Uint8 blue) {
 
 void Game::finish() {
   IMG_Quit();
-  SDL_DestroyTexture(img_texture);
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
   SDL_Quit();

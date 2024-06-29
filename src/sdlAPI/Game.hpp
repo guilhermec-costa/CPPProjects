@@ -16,7 +16,7 @@ private:
   SDL_Event* m_event;
   Uint32 mouse_buttons;
   int ymouse, xmouse;
-  Resource_Manager* resource_manager;
+  static Resource_Manager* resource_manager;
   const Uint8* keyboard_state;
   
 public:
