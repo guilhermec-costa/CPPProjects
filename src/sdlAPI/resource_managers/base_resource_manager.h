@@ -6,7 +6,7 @@
 namespace sdlAPI {
 class Base_Resource_Manager {
 public:
-  Base_Resource_Manager(SDL_Renderer *const renderer) : m_renderer(renderer){};
+  Base_Resource_Manager(SDL_Renderer *renderer) : m_renderer(renderer){};
   SDL_Texture *get_texture(const char *) const;
   void aloc_resource(const char *, bool consider_colorkey);
 

@@ -1,6 +1,7 @@
 #include "Game.hpp"
+#include "Textured_Rectangle.h"
 #include "animated_sprite.h"
-#include "resource_manager.h"
+#include "resource_managers/base_resource_manager.h"
 #include "resource_managers/sprite_resource_manager.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_blendmode.h>
@@ -15,39 +16,25 @@
 #include <SDL2/SDL_stdinc.h>
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_timer.h>
-#include <SDL2/SDL_video.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_video.h>
 #include <cstring>
 #include <iostream>
 
 namespace sdlAPI {
 
-SDL_Texture *player_texture = nullptr;
-SDL_Rect srcRect;
-SDL_Rect dstRect;
-SDL_Rect rect;
-SDL_Rect a_rect;
-SDL_Rect character_rect;
 SDL_Surface *screen_surface = nullptr;
-SDL_Rect filled_rectangle;
-SDL_Texture *texture_to_fill_rectangle = nullptr;
-Uint32 *filled_rectangle_pixels;
 SDL_Texture *font_texture = nullptr;
-SDL_Rect title;
-SDL_Rect rectangle2;
-SDL_Texture* pixel_player_texture = nullptr;
-SDL_Rect pixel_player_rect = {200, 200, 128, 128};
-SDL_Rect src_sprite_rect = {1, 1, 31, 31};
-SDL_Rect dst_sprite_rect = {200, 200, 128, 128};
-SDL_Texture* spritesheet = nullptr;
+SDL_Rect title = {100, 80, 600, 100};
+SDL_Texture *spritesheet = nullptr;
 Animated_Sprite *animated_sprite = nullptr;
-SDL_Rect collide_rect1 = { 100, 100, 128, 64 };
-SDL_Rect collide_rect2 = { 150, 200, 128, 64 };
-const char *Game::src_path = "/home/guichina/dev/CPP/src/agame/";
+SDL_Rect collide_rect1 = {100, 100, 128, 64};
+SDL_Rect collide_rect2 = {150, 200, 128, 64};
+Textured_Rectangle* object1 = nullptr;
 
-Game::Game() : is_running(false), window(nullptr), renderer(nullptr), m_event(nullptr) {
-  resource_manager = Resource_Manager::get_instance();
-}
+Game::Game()
+    : is_running(false), window(nullptr), renderer(nullptr), m_event(nullptr),
+      m_resource_manager(nullptr) {}
 
 Game::~Game() {
   // TODO
@@ -58,66 +45,46 @@ bool Game::start() {
     std::cout << "Failed to initialise SDL subsystems" << std::endl;
   }
   m_event = new SDL_Event();
-  if (!create_window("my game", 800, 600)) return false;
-  if (!create_renderer()) return false;
-  m_sprite_resource_manager = new Sprite_Resource_Manager(renderer);
-
-  init_font_API();
-  init_image_API(); 
-
   screen_surface = SDL_GetWindowSurface(window);
+  if (!create_window("my game", 800, 600))
+    return false;
+  if (!create_renderer())
+    return false;
+  init_font_API();
+  init_image_API();
 
-  SDL_Surface* player_pixel_sfc = resource_manager->get_surface("/home/guichina/dev/CPP/src/sdlAPI/assets/player.bmp");
-  pixel_player_texture = SDL_CreateTextureFromSurface(renderer, player_pixel_sfc);
-  SDL_FreeSurface(player_pixel_sfc);
-  SDL_SetTextureBlendMode(player_texture, SDL_BLENDMODE_ADD);
-  
-  m_sprite_resource_manager->aloc_resource("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png", true);
-  spritesheet = m_sprite_resource_manager->get_texture("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png");
+  m_resource_manager = new Base_Resource_Manager(renderer);
+
+  m_sprite_resource_manager = new Sprite_Resource_Manager(renderer);
+  m_sprite_resource_manager->aloc_resource(
+      "/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png", true);
+  spritesheet = m_sprite_resource_manager->get_texture(
+      "/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png");
   animated_sprite = new Animated_Sprite(spritesheet);
-
-  SDL_Rect sprite_dst_rect = { 800/2 - 256, 600/2 - 300, 32, 32};
+  SDL_Rect sprite_dst_rect = {800 / 2 - 256, 600 / 2, 128, 128};
   animated_sprite->set_sprite_dst_rect(sprite_dst_rect);
 
-  rect.h = 64;
-  rect.w = 64;
-  a_rect.h = 32;
-  a_rect.w = 64;
-  character_rect.h = 64;
-  character_rect.w = 64;
-  character_rect.x = 105;
-  character_rect.y = 105;
-
-  
-  filled_rectangle.h = 200;
-  filled_rectangle.w = 200;
-  filled_rectangle.x = 100;
-  filled_rectangle.y = 100;
-
-  rectangle2.h = 200;
-  rectangle2.w = 200;
-  rectangle2.x = 450;
-  rectangle2.y = 300;
-
-  title.w = 600;
-  title.h = 100;
-  title.x = 100;
-  title.y = 80;
-  texture_to_fill_rectangle = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, 200, 200);
-  filled_rectangle_pixels = new Uint32[200 * 200];
-
+  object1 = new Textured_Rectangle(
+      renderer,
+      "/home/guichina/dev/CPP/src/sdlAPI/assets/player.png",
+      m_resource_manager
+  );
+  SDL_Rect render_target = {125, 125, 64, 64};
+  object1->render_at(render_target);
 
   is_running = true;
   return true;
 }
 
 void Game::init_font_API() {
-  if(TTF_Init() < 0) {
+  if (TTF_Init() < 0) {
     std::cout << "Failed to initialise fonts API" << std::endl;
   }
-  TTF_Font *pixeledFont = TTF_OpenFont("/home/guichina/dev/CPP/src/sdlAPI/fonts/Daydream.ttf", 16);
-  SDL_Surface *text_sfc = TTF_RenderText_Solid(pixeledFont, "A NAKED MAN", {255, 255, 255});
-  if(text_sfc==nullptr) {
+  TTF_Font *pixeledFont =
+      TTF_OpenFont("/home/guichina/dev/CPP/src/sdlAPI/fonts/Daydream.ttf", 16);
+  SDL_Surface *text_sfc =
+      TTF_RenderText_Solid(pixeledFont, "A NAKED MAN", {255, 255, 255});
+  if (text_sfc == nullptr) {
     std::cout << TTF_GetError() << std::endl;
   }
   font_texture = SDL_CreateTextureFromSurface(renderer, text_sfc);
@@ -127,7 +94,7 @@ void Game::init_font_API() {
 void Game::init_image_API() {
   int supported_formats = IMG_INIT_JPG | IMG_INIT_PNG;
   int innited_bitmask = IMG_Init(supported_formats);
-  if((innited_bitmask & supported_formats) != supported_formats) {
+  if ((innited_bitmask & supported_formats) != supported_formats) {
     std::cout << "SDL2_image format not available" << std::endl;
   }
 }
@@ -154,41 +121,26 @@ bool Game::create_renderer() {
   return true;
 }
 
-void Game::update() {
-}
+void Game::update() {}
 
 void Game::render() {
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(renderer);
-
-  /* for(int y=0; y<200; y++) { */
-  /*   for(int x=0; x<200; x++) { */
-  /*     if(y % 10 == 0) { */
-  /*       filled_rectangle_pixels[(y * 200) + x] = 0xFF0000FF; */
-  /*       continue; */
-  /*     } */
-  /*     filled_rectangle_pixels[(y * 200) + x] = 0x0000FFFF; */
-  /*   } */
-  /* } */
-  /**/
-  /* SDL_UpdateTexture(texture_to_fill_rectangle, NULL, filled_rectangle_pixels, sizeof(Uint32) * 200); */
-  /* SDL_RenderCopy(renderer, player_texture, NULL, NULL); */
-  /* SDL_RenderCopy(renderer, font_texture, NULL, &title); */
-  /* SDL_RenderCopy(renderer, texture_to_fill_rectangle, &srcRect, &dstRect); */
-  /* SDL_RenderCopy(renderer, pixel_player_texture, NULL, &pixel_player_rect); */
   SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderFillRect(renderer, &collide_rect1);
   SDL_SetRenderDrawColor(renderer, 0, 255, 255, SDL_ALPHA_OPAQUE);
   SDL_RenderFillRect(renderer, &collide_rect2);
-  /* static int cur_frame = 0;
+  static int cur_frame = 0;
   SDL_Rect spritesheet_portion = {0, 0, 32, 32};
   animated_sprite->select_sprite(spritesheet_portion, cur_frame);
   animated_sprite->render(renderer);
-  cur_frame++;
-  SDL_Delay(100);
-  if(cur_frame % 22 == 0) {
+  if (SDL_GetTicks() % 500 == 0) {
+    cur_frame++;
+  }
+  if (cur_frame % 22 == 0) {
     cur_frame = 0;
-  } */
+  }
+  object1->render(); 
   SDL_RenderPresent(renderer);
 }
 
@@ -208,23 +160,26 @@ void Game::treat_events() {
       unsigned int key_pressed = m_event->key.keysym.sym;
       /* std::cout << (char)key_pressed << std::endl; */
       /* std::cout << m_event->key.keysym.scancode << std::endl; */
-      if(m_event->key.keysym.scancode == 40) {
-        /* SDL_memset(screen_surface->pixels, 0, screen_surface->pitch * screen_surface->h); */
+      if (m_event->key.keysym.scancode == 40) {
+        /* SDL_memset(screen_surface->pixels, 0, screen_surface->pitch *
+         * screen_surface->h); */
       }
       break;
     }
 
-    if(keyboard_state[SDL_SCANCODE_W] && keyboard_state[SDL_SCANCODE_LCTRL]) {
+    if (keyboard_state[SDL_SCANCODE_W] && keyboard_state[SDL_SCANCODE_LCTRL]) {
       /* std::cout << "ctrl + w pressed" << std::endl; */
     }
 
-    if(m_event->button.button == SDL_BUTTON_LEFT) {
+    if (m_event->button.button == SDL_BUTTON_LEFT) {
       collide_rect2.x = xmouse;
       collide_rect2.y = ymouse;
-      std::cout << SDL_HasIntersection(&collide_rect2, &collide_rect1) << "\n";
+      if (SDL_HasIntersection(&collide_rect1, &collide_rect2)) {
+      } else {
+      }
     }
 
-    if(m_event->type == SDL_MOUSEWHEEL) {
+    if (m_event->type == SDL_MOUSEWHEEL) {
       std::cout << "mouse wheel" << std::endl;
     }
 
@@ -234,21 +189,22 @@ void Game::treat_events() {
 
 void Game::set_pixel(SDL_Surface *surface, Uint8 red, Uint8 green, Uint8 blue) {
   SDL_LockSurface(surface);
-  Uint8 *pixels = (Uint8*)surface->pixels;
-  pixels[(ymouse * surface->pitch) + xmouse*surface->format->BytesPerPixel] = blue;
-  pixels[(ymouse * surface->pitch) + xmouse*surface->format->BytesPerPixel+1] = green;
-  pixels[(ymouse * surface->pitch) + xmouse*surface->format->BytesPerPixel+2] = red;
-  pixels[(ymouse * surface->pitch) + xmouse*surface->format->BytesPerPixel+3] = 255;
+  Uint8 *pixels = (Uint8 *)surface->pixels;
+  pixels[(ymouse * surface->pitch) + xmouse * surface->format->BytesPerPixel] = blue;
+  pixels[(ymouse * surface->pitch) + xmouse * surface->format->BytesPerPixel + 1] = green;
+  pixels[(ymouse * surface->pitch) + xmouse * surface->format->BytesPerPixel + 2] = red;
+  pixels[(ymouse * surface->pitch) + xmouse * surface->format->BytesPerPixel + 3] = 255;
   SDL_UnlockSurface(surface);
 }
 
 void Game::finish() {
   delete m_sprite_resource_manager;
-  delete resource_manager;
+  delete m_resource_manager;
   IMG_Quit();
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
+  delete this;
   SDL_Quit();
 }
 
-} // namespace sdlgame
+} // namespace sdlAPI
