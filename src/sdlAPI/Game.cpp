@@ -18,7 +18,6 @@
 #include <SDL2/SDL_video.h>
 #include <SDL2/SDL_ttf.h>
 #include <cstring>
-#include <iomanip>
 #include <iostream>
 
 namespace sdlAPI {
@@ -42,6 +41,8 @@ SDL_Rect src_sprite_rect = {1, 1, 31, 31};
 SDL_Rect dst_sprite_rect = {200, 200, 128, 128};
 SDL_Texture* spritesheet = nullptr;
 Animated_Sprite *animated_sprite = nullptr;
+SDL_Rect collide_rect1 = { 100, 100, 128, 64 };
+SDL_Rect collide_rect2 = { 150, 200, 128, 64 };
 const char *Game::src_path = "/home/guichina/dev/CPP/src/agame/";
 
 Game::Game() : is_running(false), window(nullptr), renderer(nullptr), m_event(nullptr) {
@@ -75,7 +76,7 @@ bool Game::start() {
   spritesheet = m_sprite_resource_manager->get_texture("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png");
   animated_sprite = new Animated_Sprite(spritesheet);
 
-  SDL_Rect sprite_dst_rect = { 800/2 - 256, 600/2 - 300, 512, 512};
+  SDL_Rect sprite_dst_rect = { 800/2 - 256, 600/2 - 300, 32, 32};
   animated_sprite->set_sprite_dst_rect(sprite_dst_rect);
 
   rect.h = 64;
@@ -172,11 +173,14 @@ void Game::render() {
   /**/
   /* SDL_UpdateTexture(texture_to_fill_rectangle, NULL, filled_rectangle_pixels, sizeof(Uint32) * 200); */
   /* SDL_RenderCopy(renderer, player_texture, NULL, NULL); */
-  SDL_RenderCopy(renderer, font_texture, NULL, &title);
+  /* SDL_RenderCopy(renderer, font_texture, NULL, &title); */
   /* SDL_RenderCopy(renderer, texture_to_fill_rectangle, &srcRect, &dstRect); */
   /* SDL_RenderCopy(renderer, pixel_player_texture, NULL, &pixel_player_rect); */
-  
-  static int cur_frame = 0;
+  SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+  SDL_RenderFillRect(renderer, &collide_rect1);
+  SDL_SetRenderDrawColor(renderer, 0, 255, 255, SDL_ALPHA_OPAQUE);
+  SDL_RenderFillRect(renderer, &collide_rect2);
+  /* static int cur_frame = 0;
   SDL_Rect spritesheet_portion = {0, 0, 32, 32};
   animated_sprite->select_sprite(spritesheet_portion, cur_frame);
   animated_sprite->render(renderer);
@@ -184,8 +188,7 @@ void Game::render() {
   SDL_Delay(100);
   if(cur_frame % 22 == 0) {
     cur_frame = 0;
-  }
-  std::cout << "aqui" << std::endl;
+  } */
   SDL_RenderPresent(renderer);
 }
 
@@ -216,9 +219,9 @@ void Game::treat_events() {
     }
 
     if(m_event->button.button == SDL_BUTTON_LEFT) {
-      pixel_player_rect.x = xmouse;
-      pixel_player_rect.y = ymouse;
-      dst_sprite_rect.x = xmouse;
+      collide_rect2.x = xmouse;
+      collide_rect2.y = ymouse;
+      std::cout << SDL_HasIntersection(&collide_rect2, &collide_rect1) << "\n";
     }
 
     if(m_event->type == SDL_MOUSEWHEEL) {
