@@ -11,10 +11,10 @@ public:
   void set_dimensions(int w, int h);
   bool is_colliding(Textured_Rectangle *);
   void render();
+  const SDL_Rect* get_rect() const { return m_target_rect; }
 private:
   SDL_Rect* m_target_rect;
   SDL_Renderer* m_renderer;
   SDL_Texture* m_texture;
-  const SDL_Rect* get_rect() const { return m_target_rect; }
 };
 }

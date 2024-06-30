@@ -23,6 +23,9 @@ public:
   void update();
 
   inline Textured_Rectangle* get_texture() const { return m_texture; }
+  bool contains_mouse(int x, int y);
+  bool is_active;
+  inline void set_is_active(const bool status) { is_active = status; }
 
 private:
   Textured_Rectangle *m_texture;

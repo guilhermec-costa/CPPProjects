@@ -123,6 +123,8 @@ bool Game::create_renderer() {
 void Game::update() {}
 
 void Game::render() {
+  std::cout << SDL_GetTicks() << std::endl;
+  int frame_start = SDL_GetTicks();
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(renderer);
   static int cur_frame = 0;
@@ -139,6 +141,15 @@ void Game::render() {
   entity1->render();
   entity2->render();
   SDL_RenderPresent(renderer);
+  
+  int frame_elapsed_time = SDL_GetTicks() - frame_start;
+  if(frame_elapsed_time < perfect_ms_between_frames) {
+    SDL_Delay(perfect_ms_between_frames - frame_elapsed_time);
+  }
+  frame_counter++;
+  if(frame_counter == m_max_framerate) {
+    frame_counter = 0;
+  }
 }
 
 void Game::treat_events() {
@@ -154,12 +165,7 @@ void Game::treat_events() {
       break;
 
     case SDL_KEYDOWN:
-      unsigned int key_pressed = m_event->key.keysym.sym;
-      /* std::cout << (char)key_pressed << std::endl; */
-      /* std::cout << m_event->key.keysym.scancode << std::endl; */
       if (m_event->key.keysym.scancode == 40) {
-        /* SDL_memset(screen_surface->pixels, 0, screen_surface->pitch *
-         * screen_surface->h); */
       }
       break;
     }
@@ -169,16 +175,21 @@ void Game::treat_events() {
     }
 
     if (m_event->button.button == SDL_BUTTON_LEFT) {
-        entity2->get_texture()->render_at_pos(xmouse, ymouse);
-      if(entity1->get_texture()->is_colliding(entity2->get_texture())) {
-        std::cout << "colliding\n";
+      if(entity1->contains_mouse(this->get_xmouse(), this->get_ymouse())) {
+        entity1->set_is_active(true);
       } else {
-        std:: cout << "not colliding\n";
+        entity1->set_is_active(false);
       }
     }
 
     if (m_event->type == SDL_MOUSEWHEEL) {
       std::cout << "mouse wheel" << std::endl;
+    }
+
+    if(m_event->type  == SDL_MOUSEMOTION) {
+      if(entity1->is_active) {
+        entity1->get_texture()->render_at_pos(xmouse, ymouse);
+      }
     }
 
     /* SDL_UpdateWindowSurface(window); */

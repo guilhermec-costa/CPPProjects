@@ -16,6 +16,9 @@ private:
   Uint32 mouse_buttons;
   int ymouse, xmouse;
   const Uint8 *keyboard_state;
+  int m_max_framerate;
+  int perfect_ms_between_frames;
+  int frame_counter;
 
 public:
   Game();
@@ -34,8 +37,15 @@ public:
   void update();
   void treat_events();
   void set_pixel(SDL_Surface *surface, Uint8 red, Uint8 green, Uint8 blue);
+  inline int get_xmouse() const { return xmouse; }
+  inline int get_ymouse() const { return ymouse; }
   bool get_state() const { return is_running; };
   const static char *src_path;
+  inline void set_max_framerate(const int framerate) {
+    m_max_framerate = framerate;
+    perfect_ms_between_frames = 1000 / m_max_framerate; 
+  };
+  inline int get_framerate() const { return m_max_framerate; }
 };
 } // namespace sdlAPI
 #endif
