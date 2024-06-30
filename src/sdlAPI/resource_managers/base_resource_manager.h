@@ -9,7 +9,6 @@ class Base_Resource_Manager {
 public:
   static Base_Resource_Manager* get_instance() {
     static Base_Resource_Manager instance;
-    std::cout << &instance << std::endl;
     return &instance;
   };
   

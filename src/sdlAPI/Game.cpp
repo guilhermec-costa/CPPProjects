@@ -28,10 +28,8 @@ SDL_Texture *font_texture = nullptr;
 SDL_Rect title = {100, 80, 600, 100};
 SDL_Texture *spritesheet = nullptr;
 Animated_Sprite *animated_sprite = nullptr;
-SDL_Rect collide_rect1 = {100, 100, 128, 64};
-SDL_Rect collide_rect2 = {150, 200, 128, 64};
-Textured_Rectangle* object1 = nullptr;
 Game_Entity* entity1 = nullptr;
+Game_Entity* entity2 = nullptr;
 
 Game::Game()
     : is_running(false), 
@@ -61,13 +59,15 @@ bool Game::start() {
 
   SDL_Rect sprite_dst_rect = {800 / 2 - 256, 600 / 2, 128, 128};
   animated_sprite->set_sprite_dst_rect(sprite_dst_rect);
-
-  object1 = new Textured_Rectangle( renderer, "/home/guichina/dev/CPP/src/sdlAPI/assets/player.png");
-  SDL_Rect render_target = {125, 125, 64, 64};
-  object1->render_at(render_target);
-
-  entity1 = new Game_Entity("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png", renderer);
-  entity1->set_initial_pos(100, 150);
+  
+  entity1 = new Game_Entity("/home/guichina/dev/CPP/src/sdlAPI/assets/player.png", renderer);
+  const SDL_Rect ent1_pos = { 100, 100, 64, 64};
+  const SDL_Rect ent2_pos = { 100, 200, 128, 128};
+  entity1->get_texture()->render_at_pos(ent1_pos.x, ent1_pos.y);
+  entity1->get_texture()->set_dimensions(ent1_pos.w, ent1_pos.h);
+  entity2 = new Game_Entity("/home/guichina/dev/CPP/src/sdlAPI/assets/player.png", renderer);
+  entity2->get_texture()->render_at_pos(ent2_pos.x, ent2_pos.y);
+  entity2->get_texture()->set_dimensions(ent2_pos.w, ent2_pos.h);
 
   is_running = true;
   return true;
@@ -125,10 +125,6 @@ void Game::update() {}
 void Game::render() {
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(renderer);
-  SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-  SDL_RenderFillRect(renderer, &collide_rect1);
-  SDL_SetRenderDrawColor(renderer, 0, 255, 255, SDL_ALPHA_OPAQUE);
-  SDL_RenderFillRect(renderer, &collide_rect2);
   static int cur_frame = 0;
   SDL_Rect spritesheet_portion = {0, 0, 32, 32};
   animated_sprite->select_sprite(spritesheet_portion, cur_frame);
@@ -139,7 +135,9 @@ void Game::render() {
   if (cur_frame % 22 == 0) {
     cur_frame = 0;
   }
-  object1->render(); 
+
+  entity1->render();
+  entity2->render();
   SDL_RenderPresent(renderer);
 }
 
@@ -171,10 +169,11 @@ void Game::treat_events() {
     }
 
     if (m_event->button.button == SDL_BUTTON_LEFT) {
-      collide_rect2.x = xmouse;
-      collide_rect2.y = ymouse;
-      if (SDL_HasIntersection(&collide_rect1, &collide_rect2)) {
+        entity2->get_texture()->render_at_pos(xmouse, ymouse);
+      if(entity1->get_texture()->is_colliding(entity2->get_texture())) {
+        std::cout << "colliding\n";
       } else {
+        std:: cout << "not colliding\n";
       }
     }
 
