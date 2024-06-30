@@ -6,7 +6,7 @@
 namespace sdlAPI {
 class Textured_Rectangle {
 public:
-  Textured_Rectangle(SDL_Renderer *renderer, const char*filepath, Base_Resource_Manager* base_resource_manager);
+  Textured_Rectangle(SDL_Renderer *renderer, const char*filepath);
   void render_at(const SDL_Rect&);
   void render();
 private:
@@ -14,7 +14,6 @@ private:
   bool is_colliding(const SDL_Rect *B);
   SDL_Renderer* m_renderer;
   SDL_Texture* m_texture;
-  Base_Resource_Manager* m_resource_manager;
   const SDL_Rect* get_rect() const { return m_target_rect; }
 };
 }

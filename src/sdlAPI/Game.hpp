@@ -1,8 +1,6 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include "resource_managers/base_resource_manager.h"
-#include "resource_managers/sprite_resource_manager.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
@@ -17,8 +15,6 @@ private:
   SDL_Event *m_event;
   Uint32 mouse_buttons;
   int ymouse, xmouse;
-  Base_Resource_Manager *m_resource_manager;
-  Sprite_Resource_Manager *m_sprite_resource_manager;
   const Uint8 *keyboard_state;
 
 public:

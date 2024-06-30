@@ -1,8 +1,8 @@
 #include "Game.hpp"
+#include "Game_Entity.h"
 #include "Textured_Rectangle.h"
 #include "animated_sprite.h"
 #include "resource_managers/base_resource_manager.h"
-#include "resource_managers/sprite_resource_manager.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_blendmode.h>
 #include <SDL2/SDL_error.h>
@@ -31,10 +31,15 @@ Animated_Sprite *animated_sprite = nullptr;
 SDL_Rect collide_rect1 = {100, 100, 128, 64};
 SDL_Rect collide_rect2 = {150, 200, 128, 64};
 Textured_Rectangle* object1 = nullptr;
+Game_Entity* entity1 = nullptr;
 
 Game::Game()
-    : is_running(false), window(nullptr), renderer(nullptr), m_event(nullptr),
-      m_resource_manager(nullptr) {}
+    : is_running(false), 
+      window(nullptr),  
+      renderer(nullptr), 
+      m_event(nullptr) {
+  m_event = new SDL_Event();
+}
 
 Game::~Game() {
   // TODO
@@ -44,33 +49,25 @@ bool Game::start() {
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
     std::cout << "Failed to initialise SDL subsystems" << std::endl;
   }
-  m_event = new SDL_Event();
   screen_surface = SDL_GetWindowSurface(window);
-  if (!create_window("my game", 800, 600))
-    return false;
-  if (!create_renderer())
-    return false;
+  if (!create_window("my game", 800, 600)) return false;
+  if (!create_renderer()) return false;
   init_font_API();
   init_image_API();
 
-  m_resource_manager = new Base_Resource_Manager(renderer);
-
-  m_sprite_resource_manager = new Sprite_Resource_Manager(renderer);
-  m_sprite_resource_manager->aloc_resource(
-      "/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png", true);
-  spritesheet = m_sprite_resource_manager->get_texture(
-      "/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png");
+  Base_Resource_Manager::get_instance()->aloc_resource("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png", true, renderer);
+  spritesheet = Base_Resource_Manager::get_instance()->get_texture("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png");
   animated_sprite = new Animated_Sprite(spritesheet);
+
   SDL_Rect sprite_dst_rect = {800 / 2 - 256, 600 / 2, 128, 128};
   animated_sprite->set_sprite_dst_rect(sprite_dst_rect);
 
-  object1 = new Textured_Rectangle(
-      renderer,
-      "/home/guichina/dev/CPP/src/sdlAPI/assets/player.png",
-      m_resource_manager
-  );
+  object1 = new Textured_Rectangle( renderer, "/home/guichina/dev/CPP/src/sdlAPI/assets/player.png");
   SDL_Rect render_target = {125, 125, 64, 64};
   object1->render_at(render_target);
+
+  entity1 = new Game_Entity("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png", renderer);
+  entity1->set_initial_pos(100, 150);
 
   is_running = true;
   return true;
@@ -100,9 +97,11 @@ void Game::init_image_API() {
 }
 
 bool Game::create_window(const char *title, Uint32 width, Uint32 height) {
-  window =
-      SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                       width, height, SDL_WINDOW_SHOWN);
+  window = SDL_CreateWindow(
+                    title, SDL_WINDOWPOS_CENTERED,
+                    SDL_WINDOWPOS_CENTERED, width, 
+                    height, SDL_WINDOW_SHOWN
+          );
 
   if (!window) {
     std::cout << "Failed to create a SDL window" << std::endl;
@@ -198,12 +197,9 @@ void Game::set_pixel(SDL_Surface *surface, Uint8 red, Uint8 green, Uint8 blue) {
 }
 
 void Game::finish() {
-  delete m_sprite_resource_manager;
-  delete m_resource_manager;
   IMG_Quit();
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
-  delete this;
   SDL_Quit();
 }
 

@@ -5,11 +5,10 @@
 
 namespace sdlAPI {
 Textured_Rectangle::Textured_Rectangle(
-    SDL_Renderer *renderer, const char *filepath,
-    Base_Resource_Manager *base_resource_manager)
-    : m_renderer(renderer), m_resource_manager(base_resource_manager) {
-  m_resource_manager->aloc_resource(filepath, false);
-  m_texture = m_resource_manager->get_texture(filepath);
+    SDL_Renderer *renderer, const char *filepath)
+    : m_renderer(renderer) {
+  Base_Resource_Manager::get_instance()->aloc_resource(filepath, false, renderer);
+  m_texture = Base_Resource_Manager::get_instance()->get_texture(filepath);
   m_target_rect = new SDL_Rect();
 }
 
