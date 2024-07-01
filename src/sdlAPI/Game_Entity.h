@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Collider2D.h"
 #include "Textured_Rectangle.h"
 #include "resource_managers/base_resource_manager.h"
 namespace sdlAPI {
@@ -17,24 +18,15 @@ public:
   Game_Entity(const char *assetpath, SDL_Renderer *renderer)
       : m_renderer(renderer), m_current_sprite_frame(0) {
     m_texture = new Textured_Rectangle(m_renderer, assetpath);
+    m_collider2D = new Collider2D();
   }
   virtual ~Game_Entity();
 
-  inline void render() {
-    if (m_texture != nullptr) {
-      m_texture->render();
-    }
-  }
-
-  inline void render(bool move_to_next_portion) {
-    if(m_texture != nullptr) {
-      if(move_to_next_portion) m_texture->render(move_to_next_portion);
-      return;
-    }
-    m_texture->render();
-  }
+  void render();
+  void render(bool move_to_next_portion);
 
   inline Textured_Rectangle *get_texture() const { return m_texture; }
+  inline Collider2D *get_collider2D() const { return m_collider2D; }
   inline void set_is_active(const bool status) { is_active = status; }
   bool contains_mouse(int x, int y);
   void update();
@@ -42,5 +34,6 @@ public:
 private:
   Textured_Rectangle *m_texture;
   SDL_Renderer *m_renderer;
+  Collider2D* m_collider2D;
 };
 } // namespace sdlAPI

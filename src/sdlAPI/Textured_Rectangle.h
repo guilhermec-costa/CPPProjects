@@ -11,13 +11,16 @@ public:
   void set_src_pos(int x, int y);
   void set_dst_dimensions(int w, int h);
   void set_src_dimensions(int w, int h);
-  bool is_colliding(Textured_Rectangle *);
   inline void set_sprite_frame_size(int pixels) { m_sprite_frame_size = pixels; }
   void render();
   void render(bool move_to_next_portion);
   const SDL_Rect* get_rect() const { return m_target_rect; }
   void inline set_ms_between_portions(int ms) { ms_between_portions = ms; }
   void inline set_max_portions(const int portions) { m_max_portions = portions; }
+  int get_x() const;
+  int get_y() const;
+  int get_width() const;
+  int get_height() const;
 private:
   SDL_Rect* m_target_rect;
   SDL_Rect* m_src_rect;

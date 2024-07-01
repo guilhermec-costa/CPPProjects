@@ -9,7 +9,7 @@ Textured_Rectangle::Textured_Rectangle(
     SDL_Renderer *renderer, const char *filepath)
     : m_renderer(renderer), m_current_portion(0),
     m_last_time_frame_updated(0) {
-  Base_Resource_Manager::get_instance()->aloc_resource(filepath, false, renderer);
+  Base_Resource_Manager::get_instance()->aloc_resource(filepath, true, renderer);
   m_texture = Base_Resource_Manager::get_instance()->get_texture(filepath);
   m_target_rect = new SDL_Rect();
   m_target_rect->x = 0;
@@ -44,6 +44,22 @@ void Textured_Rectangle::set_dst_dimensions(int w, int h) {
   m_target_rect->h = h;
 }
 
+int Textured_Rectangle::get_x() const {
+  return m_target_rect->x;
+}
+
+int Textured_Rectangle::get_y() const {
+  return m_target_rect->y;
+}
+
+int Textured_Rectangle::get_width() const {
+  return m_target_rect->w;
+}
+
+int Textured_Rectangle::get_height() const {
+  return m_target_rect->h;
+}
+
 
 void Textured_Rectangle::render() {
   SDL_RenderCopy(m_renderer, m_texture, NULL, m_target_rect);
@@ -63,10 +79,5 @@ void Textured_Rectangle::render(bool move_to_next_portion) {
     };
   }
   SDL_RenderCopy(m_renderer, m_texture, m_src_rect, m_target_rect);
-}
-
-bool Textured_Rectangle::is_colliding(Textured_Rectangle* rectB) {
-  const SDL_Rect *_rectB = rectB->get_rect();
-  return SDL_HasIntersection(m_target_rect, _rectB);
 }
 } // namespace sdlAPI

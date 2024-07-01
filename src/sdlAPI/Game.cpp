@@ -26,8 +26,6 @@ namespace sdlAPI {
 SDL_Surface *screen_surface = nullptr;
 SDL_Texture *font_texture = nullptr;
 SDL_Rect title = {100, 80, 600, 100};
-SDL_Texture *spritesheet = nullptr;
-Animated_Sprite *animated_sprite = nullptr;
 Game_Entity* entity1 = nullptr;
 Game_Entity* entity2 = nullptr;
 Game_Entity* entity3 = nullptr;
@@ -55,19 +53,13 @@ bool Game::start() {
   init_font_API();
   init_image_API();
 
-  Base_Resource_Manager::get_instance()->aloc_resource("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png", true, renderer);
-  spritesheet = Base_Resource_Manager::get_instance()->get_texture("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png");
-  animated_sprite = new Animated_Sprite(spritesheet);
-
-  SDL_Rect sprite_dst_rect = {800 / 2 - 256, 600 / 2, 128, 128};
-  animated_sprite->set_sprite_dst_rect(sprite_dst_rect);
   
   entity1 = new Game_Entity("/home/guichina/dev/CPP/src/sdlAPI/assets/player.png", renderer);
   const SDL_Rect ent1_pos = { 100, 100, 64, 64};
-  const SDL_Rect ent2_pos = { 100, 200, 128, 128};
   entity1->get_texture()->render_at_pos(ent1_pos.x, ent1_pos.y);
   entity1->get_texture()->set_dst_dimensions(ent1_pos.w, ent1_pos.h);
 
+  const SDL_Rect ent2_pos = { 100, 200, 128, 128};
   entity2 = new Game_Entity("/home/guichina/dev/CPP/src/sdlAPI/assets/player.png", renderer);
   entity2->get_texture()->render_at_pos(ent2_pos.x, ent2_pos.y);
   entity2->get_texture()->set_dst_dimensions(ent2_pos.w, ent2_pos.h);
@@ -140,7 +132,10 @@ bool Game::create_renderer() {
   return true;
 }
 
-void Game::update() {}
+void Game::update() {
+  entity1->update();
+  entity2->update();
+}
 
 void Game::render() {
   int frame_start = SDL_GetTicks();
@@ -187,6 +182,7 @@ void Game::treat_events() {
       } else {
         entity1->set_is_active(false);
       }
+
     }
 
     if (m_event->type == SDL_MOUSEWHEEL) {
@@ -197,6 +193,8 @@ void Game::treat_events() {
       if(entity1->is_active) {
         entity1->get_texture()->render_at_pos(xmouse, ymouse);
       }
+      bool entity1_colliding = entity1->get_collider2D()->is_colliding(*entity2->get_collider2D());
+      std::cout << "entity 1 colliding: " << entity1_colliding << std::endl;
     }
 
     /* SDL_UpdateWindowSurface(window); */
