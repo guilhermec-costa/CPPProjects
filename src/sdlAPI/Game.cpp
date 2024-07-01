@@ -1,8 +1,6 @@
 #include "Game.hpp"
 #include "Game_Entity.h"
 #include "Textured_Rectangle.h"
-#include "animated_sprite.h"
-#include "resource_managers/base_resource_manager.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_blendmode.h>
 #include <SDL2/SDL_error.h>
@@ -20,6 +18,7 @@
 #include <SDL2/SDL_video.h>
 #include <cstring>
 #include <iostream>
+#include <vector>
 
 namespace sdlAPI {
 
@@ -30,6 +29,7 @@ Game_Entity* entity1 = nullptr;
 Game_Entity* entity2 = nullptr;
 Game_Entity* entity3 = nullptr;
 Game_Entity* entity4 = nullptr;
+std::vector<Game_Entity*> entities;
 
 Game::Game()
     : is_running(false), 
@@ -80,6 +80,10 @@ bool Game::start() {
   entity4->get_texture()->set_sprite_frame_size(32);
   entity4->get_texture()->render_at_pos(200, 200);
   entity4->get_texture()->set_dst_dimensions(128, 128);
+  entities.push_back(entity1);
+  entities.push_back(entity2);
+  entities.push_back(entity3);
+  entities.push_back(entity4);
 
   is_running = true;
   return true;
@@ -177,12 +181,13 @@ void Game::treat_events() {
     }
 
     if (m_event->button.button == SDL_BUTTON_LEFT) {
-      if(entity1->contains_mouse(this->get_xmouse(), this->get_ymouse())) {
-        entity1->set_is_active(true);
-      } else {
-        entity1->set_is_active(false);
+      for(auto entity : entities) {
+        if(entity->contains_mouse(get_xmouse(), get_ymouse())) {
+          entity->set_is_active(true);
+        } else {
+          entity->set_is_active(false);
+        }
       }
-
     }
 
     if (m_event->type == SDL_MOUSEWHEEL) {
@@ -190,14 +195,17 @@ void Game::treat_events() {
     }
 
     if(m_event->type  == SDL_MOUSEMOTION) {
-      if(entity1->is_active) {
-        entity1->get_texture()->render_at_pos(xmouse, ymouse);
+      for(auto entity : entities) {
+        if(entity->is_active) {
+          entity->get_texture()->render_at_pos(xmouse, ymouse);
+          if(entity->get_collider2D()->is_colliding(*entities.at(1)->get_collider2D())) {
+            std::cout << "Active entity colliding with another entity" << std::endl;
+          } else {
+            std::cout << "Not Active entity not colliding with another entity" << std::endl;
+          }
+        }
       }
-      bool entity1_colliding = entity1->get_collider2D()->is_colliding(*entity2->get_collider2D());
-      std::cout << "entity 1 colliding: " << entity1_colliding << std::endl;
     }
-
-    /* SDL_UpdateWindowSurface(window); */
   }
 }
 

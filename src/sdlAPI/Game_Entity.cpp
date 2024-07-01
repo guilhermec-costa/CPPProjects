@@ -34,6 +34,7 @@ void Game_Entity::render(bool move_to_next_portion) {
 void Game_Entity::render() {
     if (m_texture != nullptr) {
       m_texture->render();
+      m_collider2D->render(m_renderer);
     }
 }
 }

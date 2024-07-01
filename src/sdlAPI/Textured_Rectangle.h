@@ -17,6 +17,7 @@ public:
   const SDL_Rect* get_rect() const { return m_target_rect; }
   void inline set_ms_between_portions(int ms) { ms_between_portions = ms; }
   void inline set_max_portions(const int portions) { m_max_portions = portions; }
+  SDL_Texture* get_texture() const { return m_texture; }
   int get_x() const;
   int get_y() const;
   int get_width() const;

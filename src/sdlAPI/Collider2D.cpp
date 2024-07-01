@@ -1,4 +1,7 @@
 #include "Collider2D.h"
+#include "Textured_Rectangle.h"
+#include <SDL2/SDL_render.h>
+#include <SDL2/SDL_surface.h>
 
 namespace sdlAPI {
 Collider2D::Collider2D() {
@@ -34,5 +37,10 @@ void Collider2D::set_absolute_position(int x, int y) {
 void Collider2D::set_dimensions(int w, int h) {
   m_collider_rectangle.h = h;
   m_collider_rectangle.w = w;
+}
+
+void Collider2D::render(SDL_Renderer* renderer) {
+  SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE);
+  SDL_RenderDrawRect(renderer, &m_collider_rectangle);
 }
 } // namespace sdlAPI
