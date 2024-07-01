@@ -30,6 +30,8 @@ SDL_Texture *spritesheet = nullptr;
 Animated_Sprite *animated_sprite = nullptr;
 Game_Entity* entity1 = nullptr;
 Game_Entity* entity2 = nullptr;
+Game_Entity* entity3 = nullptr;
+Game_Entity* entity4 = nullptr;
 
 Game::Game()
     : is_running(false), 
@@ -64,10 +66,28 @@ bool Game::start() {
   const SDL_Rect ent1_pos = { 100, 100, 64, 64};
   const SDL_Rect ent2_pos = { 100, 200, 128, 128};
   entity1->get_texture()->render_at_pos(ent1_pos.x, ent1_pos.y);
-  entity1->get_texture()->set_dimensions(ent1_pos.w, ent1_pos.h);
+  entity1->get_texture()->set_dst_dimensions(ent1_pos.w, ent1_pos.h);
+
   entity2 = new Game_Entity("/home/guichina/dev/CPP/src/sdlAPI/assets/player.png", renderer);
   entity2->get_texture()->render_at_pos(ent2_pos.x, ent2_pos.y);
-  entity2->get_texture()->set_dimensions(ent2_pos.w, ent2_pos.h);
+  entity2->get_texture()->set_dst_dimensions(ent2_pos.w, ent2_pos.h);
+
+  entity3 = new Game_Entity("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png", renderer);
+  entity3->get_texture()->set_src_pos(0, 0);
+  entity3->get_texture()->set_src_dimensions(32, 32);
+  entity3->get_texture()->set_max_portions(23);
+  entity3->get_texture()->set_ms_between_portions(200);
+  entity3->get_texture()->set_sprite_frame_size(32);
+  entity3->get_texture()->set_dst_dimensions(128, 128);
+
+  entity4 = new Game_Entity("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png", renderer);
+  entity4->get_texture()->set_src_pos(0, 0);
+  entity4->get_texture()->set_src_dimensions(32, 32);
+  entity4->get_texture()->set_max_portions(23);
+  entity4->get_texture()->set_ms_between_portions(1000);
+  entity4->get_texture()->set_sprite_frame_size(32);
+  entity4->get_texture()->render_at_pos(200, 200);
+  entity4->get_texture()->set_dst_dimensions(128, 128);
 
   is_running = true;
   return true;
@@ -123,32 +143,19 @@ bool Game::create_renderer() {
 void Game::update() {}
 
 void Game::render() {
-  std::cout << SDL_GetTicks() << std::endl;
   int frame_start = SDL_GetTicks();
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(renderer);
-  static int cur_frame = 0;
-  SDL_Rect spritesheet_portion = {0, 0, 32, 32};
-  animated_sprite->select_sprite(spritesheet_portion, cur_frame);
-  animated_sprite->render(renderer);
-  if (SDL_GetTicks() % 500 == 0) {
-    cur_frame++;
-  }
-  if (cur_frame % 22 == 0) {
-    cur_frame = 0;
-  }
 
   entity1->render();
   entity2->render();
+  entity3->render(true);
+  entity4->render(true);
   SDL_RenderPresent(renderer);
   
   int frame_elapsed_time = SDL_GetTicks() - frame_start;
   if(frame_elapsed_time < perfect_ms_between_frames) {
     SDL_Delay(perfect_ms_between_frames - frame_elapsed_time);
-  }
-  frame_counter++;
-  if(frame_counter == m_max_framerate) {
-    frame_counter = 0;
   }
 }
 
