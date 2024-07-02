@@ -3,10 +3,12 @@
 #include "resource_managers/base_resource_manager.h"
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_stdinc.h>
 namespace sdlAPI {
 class Textured_Rectangle {
 public:
   Textured_Rectangle(SDL_Renderer *renderer, const char*filepath);
+  Textured_Rectangle(SDL_Renderer *renderer, const char* filepath, Uint32 red, Uint32 blue, Uint32 green);
   void render_at_pos(int x, int y);
   void set_src_pos(int x, int y);
   void set_dst_dimensions(int w, int h);
@@ -32,5 +34,6 @@ private:
   int m_max_portions;
   int m_sprite_frame_size;
   int m_last_time_frame_updated;
+  void init_defaults();
 };
 }

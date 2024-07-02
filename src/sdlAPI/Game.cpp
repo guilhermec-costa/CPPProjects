@@ -29,6 +29,7 @@ Game_Entity* entity1 = nullptr;
 Game_Entity* entity2 = nullptr;
 Game_Entity* entity3 = nullptr;
 Game_Entity* entity4 = nullptr;
+Game_Entity* entity5 = nullptr;
 std::vector<Game_Entity*> entities;
 
 Game::Game()
@@ -54,36 +55,50 @@ bool Game::start() {
   init_image_API();
 
   
-  entity1 = new Game_Entity("/home/guichina/dev/CPP/src/sdlAPI/assets/player.png", renderer);
-  const SDL_Rect ent1_pos = { 100, 100, 64, 64};
+  entity1 = new Game_Entity(renderer);
+  entity1->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/player.png");
+  const SDL_Rect ent1_pos = { 5, 5, 64, 64};
   entity1->get_texture()->render_at_pos(ent1_pos.x, ent1_pos.y);
   entity1->get_texture()->set_dst_dimensions(ent1_pos.w, ent1_pos.h);
 
-  const SDL_Rect ent2_pos = { 100, 200, 128, 128};
-  entity2 = new Game_Entity("/home/guichina/dev/CPP/src/sdlAPI/assets/player.png", renderer);
+  const SDL_Rect ent2_pos = { 100, 20, 128, 128};
+  entity2 = new Game_Entity(renderer);
+  entity2->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/player.png");
   entity2->get_texture()->render_at_pos(ent2_pos.x, ent2_pos.y);
   entity2->get_texture()->set_dst_dimensions(ent2_pos.w, ent2_pos.h);
 
-  entity3 = new Game_Entity("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png", renderer);
+  entity3 = new Game_Entity(renderer);
+  entity3->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png", 0xEF, 0, 0xFF);
   entity3->get_texture()->set_src_pos(0, 0);
   entity3->get_texture()->set_src_dimensions(32, 32);
   entity3->get_texture()->set_max_portions(23);
-  entity3->get_texture()->set_ms_between_portions(200);
+  entity3->get_texture()->set_ms_between_portions(100);
   entity3->get_texture()->set_sprite_frame_size(32);
   entity3->get_texture()->set_dst_dimensions(128, 128);
+  entity3->get_texture()->render_at_pos(180, 200);
 
-  entity4 = new Game_Entity("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png", renderer);
+  entity4 = new Game_Entity(renderer);
+  entity4->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png", 0xEF, 0, 0xFF);
   entity4->get_texture()->set_src_pos(0, 0);
   entity4->get_texture()->set_src_dimensions(32, 32);
   entity4->get_texture()->set_max_portions(23);
-  entity4->get_texture()->set_ms_between_portions(1000);
+  entity4->get_texture()->set_ms_between_portions(2000);
   entity4->get_texture()->set_sprite_frame_size(32);
-  entity4->get_texture()->render_at_pos(200, 200);
+  entity4->get_texture()->render_at_pos(300, 250);
   entity4->get_texture()->set_dst_dimensions(128, 128);
+
+  entity5 = new Game_Entity(renderer);
+  entity5->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/kong.png", 0xEF, 0, 0xFF);
+  entity5->get_texture()->set_src_pos(0, 0);
+  entity5->get_texture()->set_dst_dimensions(64, 64);
+  entity5->get_texture()->render_at_pos(400, 300);
+  entity5->get_texture()->set_dst_dimensions(128, 128);
+
   entities.push_back(entity1);
   entities.push_back(entity2);
   entities.push_back(entity3);
   entities.push_back(entity4);
+  entities.push_back(entity5);
 
   is_running = true;
   return true;
@@ -139,6 +154,9 @@ bool Game::create_renderer() {
 void Game::update() {
   entity1->update();
   entity2->update();
+  entity3->update();
+  entity4->update();
+  entity5->update();
 }
 
 void Game::render() {
@@ -150,6 +168,7 @@ void Game::render() {
   entity2->render();
   entity3->render(true);
   entity4->render(true);
+  entity5->render();
   SDL_RenderPresent(renderer);
   
   int frame_elapsed_time = SDL_GetTicks() - frame_start;
@@ -180,7 +199,7 @@ void Game::treat_events() {
       /* std::cout << "ctrl + w pressed" << std::endl; */
     }
 
-    if (m_event->button.button == SDL_BUTTON_LEFT) {
+    if (m_event->button.button == SDL_BUTTON_RIGHT) {
       for(auto entity : entities) {
         if(entity->contains_mouse(get_xmouse(), get_ymouse())) {
           entity->set_is_active(true);
@@ -194,7 +213,7 @@ void Game::treat_events() {
       std::cout << "mouse wheel" << std::endl;
     }
 
-    if(m_event->type  == SDL_MOUSEMOTION) {
+    if(m_event->button.button == SDL_BUTTON_LEFT) {
       for(auto entity : entities) {
         if(entity->is_active) {
           entity->get_texture()->render_at_pos(xmouse, ymouse);
@@ -220,6 +239,9 @@ void Game::set_pixel(SDL_Surface *surface, Uint8 red, Uint8 green, Uint8 blue) {
 }
 
 void Game::finish() {
+  for(auto entity: entities) {
+    delete entity;
+  }
   IMG_Quit();
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);

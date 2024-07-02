@@ -1,6 +1,20 @@
 #include "Game_Entity.h"
+#include "Collider2D.h"
+#include "Textured_Rectangle.h"
 
 namespace sdlAPI {
+Game_Entity::Game_Entity()
+      : m_renderer(nullptr),
+        m_texture(nullptr), 
+        m_current_sprite_frame(0),
+        m_collider2D(nullptr) {}
+
+Game_Entity::Game_Entity(SDL_Renderer* renderer)
+  : m_renderer(renderer),
+    m_texture(nullptr),
+    m_current_sprite_frame(0),
+    m_collider2D(new Collider2D()) {}
+
 void Game_Entity::update() {
   int entity_x = m_texture->get_x();
   int entity_y = m_texture->get_y();
@@ -36,6 +50,14 @@ void Game_Entity::render() {
       m_texture->render();
       m_collider2D->render(m_renderer);
     }
+}
+
+void Game_Entity::add_textured_rectangle(const char* filepath) {
+    m_texture = new Textured_Rectangle(m_renderer, filepath);
+}
+
+void Game_Entity::add_textured_rectangle(const char* filepath, Uint32 red, Uint32 green, Uint32 blue) {
+  m_texture = new Textured_Rectangle(m_renderer, filepath, red, green, blue);
 }
 }
 

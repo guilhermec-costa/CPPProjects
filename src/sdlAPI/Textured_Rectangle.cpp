@@ -2,15 +2,38 @@
 #include "resource_managers/base_resource_manager.h"
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_timer.h>
 
 namespace sdlAPI {
+Textured_Rectangle::Textured_Rectangle(SDL_Renderer *renderer, const char *filepath)
+    : m_renderer(renderer), 
+      m_texture(nullptr)
+{
+  Base_Resource_Manager::get_instance()->aloc_resource(filepath);
+  SDL_Surface* tmp_sfc = Base_Resource_Manager::get_instance()->get_resource(filepath);
+  m_texture  = SDL_CreateTextureFromSurface(renderer, tmp_sfc);
+  init_defaults();
+}
+
 Textured_Rectangle::Textured_Rectangle(
-    SDL_Renderer *renderer, const char *filepath)
-    : m_renderer(renderer), m_current_portion(0),
-    m_last_time_frame_updated(0) {
-  Base_Resource_Manager::get_instance()->aloc_resource(filepath, true, renderer);
-  m_texture = Base_Resource_Manager::get_instance()->get_texture(filepath);
+        SDL_Renderer* renderer, 
+        const char *filepath,
+        Uint32 red,
+        Uint32 green,
+        Uint32 blue
+): m_renderer(renderer) 
+{
+  Base_Resource_Manager::get_instance()->aloc_resource(filepath);
+  SDL_Surface* tmp_sfc = Base_Resource_Manager::get_instance()->get_resource(filepath);
+  SDL_SetColorKey(tmp_sfc, SDL_TRUE, SDL_MapRGB(tmp_sfc->format, red, green, blue));
+  m_texture = SDL_CreateTextureFromSurface(m_renderer, tmp_sfc);
+  init_defaults();
+}
+
+void Textured_Rectangle::init_defaults() {
+  m_current_portion = 0;
+  m_last_time_frame_updated = 0;
   m_target_rect = new SDL_Rect();
   m_target_rect->x = 0;
   m_target_rect->y = 0;

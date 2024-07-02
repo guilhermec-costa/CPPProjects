@@ -16,11 +16,11 @@ public:
   Base_Resource_Manager(const Base_Resource_Manager&) = delete;
   void operator=(const Base_Resource_Manager&) = delete;
 
-  SDL_Texture *get_texture(const char *) const;
-  void aloc_resource(const char *, bool consider_colorkey, SDL_Renderer* renderer);
+  SDL_Surface*get_resource(const char *) const;
+  void aloc_resource(const char *filepath);
 
 private:
   Base_Resource_Manager() {};
-  std::unordered_map<const char *, SDL_Texture *> m_textures;
+  std::unordered_map<const char *, SDL_Surface*> m_surfaces;
 };
 } // namespace sdlAPI

@@ -1,28 +1,22 @@
 #include "base_resource_manager.h"
-#include "../texture_handler.hpp"
+#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_render.h>
 #include <iostream>
 
 namespace sdlAPI {
-void Base_Resource_Manager::aloc_resource(const char *rsc_path, const bool consider_colorkey, SDL_Renderer* renderer) {
-  auto rsc_texture = m_textures.find(rsc_path);
-  if (rsc_texture != nullptr) {
+void Base_Resource_Manager::aloc_resource(const char *filepath) {
+  auto surface = m_surfaces.find(filepath);
+  if (surface != nullptr) {
     std::cout << "Resource is already allocated" << std::endl;
   }
-  
-  SDL_Texture* texture;
-  if(consider_colorkey) {
-    texture = TextureHandler::create_texture_from_surface_with_colorkey(rsc_path, renderer, 0xEF00FFFF);
-  } else {
-    texture = TextureHandler::create_texture_from_surface(rsc_path, renderer);
-  }
-  m_textures.insert(std::make_pair(rsc_path, texture));
+  SDL_Surface* tmp_sfc = IMG_Load(filepath);
+  m_surfaces.insert(std::make_pair(filepath, tmp_sfc));
 }
 
-SDL_Texture* Base_Resource_Manager::get_texture(const char *rsc_path) const {
-  const auto rsc_texture = m_textures.find(rsc_path);
-  if(rsc_texture != m_textures.end()) {
-    return m_textures.at(rsc_path);
+SDL_Surface* Base_Resource_Manager::get_resource(const char *filepath) const {
+  const auto rsc_surface = m_surfaces.find(filepath);
+  if(rsc_surface != m_surfaces.end()) {
+    return m_surfaces.at(filepath);
   }
   std::cout << "Texture is not allocated. First, allocate it" << std::endl;
   return nullptr;
