@@ -7,13 +7,15 @@ namespace sdlAPI {
 Game_Entity::Game_Entity()
       : m_renderer(nullptr),
         m_texture(nullptr), 
-        m_current_sprite_frame(0)
+        m_current_sprite_frame(0),
+        is_active(false)
         {}
 
 Game_Entity::Game_Entity(SDL_Renderer* renderer, std::string TAG)
   : m_renderer(renderer),
     m_texture(nullptr),
     m_current_sprite_frame(0),
+    is_active(false),
     m_TAG(TAG){}
 
 void Game_Entity::update() {
@@ -46,9 +48,9 @@ bool Game_Entity::contains_mouse(int xmouse, int ymouse) {
 void Game_Entity::render(bool move_to_next_portion) {
     if(m_texture != nullptr) {
       if(move_to_next_portion) m_texture->render(move_to_next_portion);
-      return;
+      else m_texture->render();
+      for(Collider2D* collider: m_colliders2D) collider->render(m_renderer);
     }
-    m_texture->render();
 }
 
 void Game_Entity::render() {

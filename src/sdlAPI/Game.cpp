@@ -41,7 +41,10 @@ Game::Game()
 }
 
 Game::~Game() {
-  // TODO
+  delete m_event;
+  for(auto entity: entities) {
+    delete entity;
+  }
 }
 
 bool Game::start() {
@@ -62,12 +65,14 @@ bool Game::start() {
   entity1->get_texture()->set_dst_dimensions(ent1_pos.w, ent1_pos.h);
   entity1->add_collider2D()->set_outline(255, 0, 0);
   entity1->add_collider2D()->set_outline(255, 0, 255);
+  entity1->add_collider2D()->set_outline(0, 225, 255);
 
   const SDL_Rect ent2_pos = { 100, 20, 128, 128};
   entity2 = new Game_Entity(renderer);
   entity2->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/player.png");
   entity2->get_texture()->render_at_pos(ent2_pos.x, ent2_pos.y);
   entity2->get_texture()->set_dst_dimensions(ent2_pos.w, ent2_pos.h);
+  entity2->add_collider2D()->set_outline(255, 255, 255);
 
   const SDL_Rect ent3_pos = { 200, 250, 128, 128};
   entity3 = new Game_Entity(renderer, "Entity 3");
@@ -79,9 +84,9 @@ bool Game::start() {
   entity3->get_texture()->set_sprite_frame_size(32);
   entity3->get_texture()->render_at_pos(ent3_pos.x, ent3_pos.y);
   entity3->get_texture()->set_dst_dimensions(ent3_pos.w, ent3_pos.h);
-  entity3->add_collider2D();
+  entity3->add_collider2D()->set_outline(0, 255, 255);
 
-  const SDL_Rect ent4_pos = { 300, 250, 128, 128};
+  const SDL_Rect ent4_pos = { 500, 100, 128, 128};
   entity4 = new Game_Entity(renderer, "Entity 4");
   entity4->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png", 0xEF, 0, 0xFF);
   entity4->get_texture()->set_src_pos(0, 0);
@@ -91,7 +96,7 @@ bool Game::start() {
   entity4->get_texture()->set_sprite_frame_size(32);
   entity4->get_texture()->render_at_pos(ent4_pos.x, ent4_pos.y);
   entity4->get_texture()->set_dst_dimensions(ent4_pos.w, ent4_pos.h);
-  entity4->add_collider2D();
+  entity4->add_collider2D()->set_outline(0, 255, 255);
 
   entity5 = new Game_Entity(renderer);
   entity5->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/kong.png", 0xEF, 0, 0xFF);
@@ -99,7 +104,7 @@ bool Game::start() {
   entity5->get_texture()->set_dst_dimensions(64, 64);
   entity5->get_texture()->render_at_pos(400, 300);
   entity5->get_texture()->set_dst_dimensions(128, 128);
-  entity5->add_collider2D();
+  entity5->add_collider2D()->set_outline(120, 255, 0);
 
   entities.push_back(entity1);
   entities.push_back(entity2);
@@ -159,20 +164,24 @@ bool Game::create_renderer() {
 }
 
 void Game::update() {
-  entity1->get_collider2D(0)->
-    set_absolute_position(entity1->get_texture()->get_x(), entity1->get_texture()->get_y());
-  entity1->get_collider2D(0)->
-    set_dimensions(entity1->get_texture()->get_width(), entity1->get_texture()->get_height());
-  entity1->get_collider2D(1)->
-    set_absolute_position(entity1->get_texture()->get_x(), entity1->get_texture()->get_y());
-  entity1->get_collider2D(1)->
-    set_dimensions(entity1->get_texture()->get_width()/2, entity1->get_texture()->get_height()/2);
+  entity1->get_collider2D(0)->set_absolute_position(entity1->get_texture()->get_x(), entity1->get_texture()->get_y());
+  entity1->get_collider2D(0)->set_dimensions(entity1->get_texture()->get_width(), entity1->get_texture()->get_height());
+  entity1->get_collider2D(1)->set_absolute_position(entity1->get_texture()->get_x(), entity1->get_texture()->get_y());
+  entity1->get_collider2D(1)->set_dimensions(entity1->get_texture()->get_width()/2, entity1->get_texture()->get_height()/2);
+  entity1->get_collider2D(2)->set_absolute_position(entity1->get_texture()->get_x() + entity1->get_texture()->get_width()/2, entity1->get_texture()->get_y() + entity1->get_texture()->get_height()/2);
+  entity1->get_collider2D(2)->set_dimensions(entity1->get_texture()->get_width()/2, entity1->get_texture()->get_height()/3);
 
-  /* entity1->update(); */
-  /* entity2->update(); */
-  /* entity3->update(); */
-  /* entity4->update(); */
-  /* entity5->update(); */
+  entity2->get_collider2D(0)->set_absolute_position(entity2->get_texture()->get_x(), entity2->get_texture()->get_y());
+  entity2->get_collider2D(0)->set_dimensions(entity2->get_texture()->get_width(), entity2->get_texture()->get_height());
+
+  entity3->get_collider2D(0)->set_absolute_position(entity3->get_texture()->get_x(), entity3->get_texture()->get_y());
+  entity3->get_collider2D(0)->set_dimensions(entity3->get_texture()->get_width(), entity3->get_texture()->get_height());
+
+  entity4->get_collider2D(0)->set_absolute_position(entity4->get_texture()->get_x(), entity4->get_texture()->get_y());
+  entity4->get_collider2D(0)->set_dimensions(entity4->get_texture()->get_width(), entity4->get_texture()->get_height());
+
+  entity5->get_collider2D(0)->set_absolute_position(entity5->get_texture()->get_x(), entity5->get_texture()->get_y());
+  entity5->get_collider2D(0)->set_dimensions(entity5->get_texture()->get_width(), entity5->get_texture()->get_height());
 }
 
 void Game::render() {
@@ -229,14 +238,15 @@ void Game::treat_events() {
       std::cout << "mouse wheel" << std::endl;
     }
 
-    if(m_event->button.button == SDL_BUTTON_LEFT) {
-      for(auto entity : entities) {
+    if(m_event->type == SDL_MOUSEMOTION) {
+      for(Game_Entity* entity : entities) {
         if(entity->is_active) {
           entity->get_texture()->render_at_pos(xmouse, ymouse);
-          if(entity->get_collider2D(0)->is_colliding(*entities.at(1)->get_collider2D(0))) {
-            std::cout << "Active entity colliding with another entity" << std::endl;
-          } else {
-            std::cout << "Not Active entity not colliding with another entity" << std::endl;
+          if(entity->get_collider2D(0)->is_colliding(*entity1->get_collider2D(2))) {
+            std::cout << "Entity is colliding with blue box" << std::endl;
+          }
+          if(entity->get_collider2D(0)->is_colliding(*entity1->get_collider2D(1))) {
+            std::cout << "Entity is colliding with purple box" << std::endl;
           }
         }
       }
@@ -255,9 +265,6 @@ void Game::set_pixel(SDL_Surface *surface, Uint8 red, Uint8 green, Uint8 blue) {
 }
 
 void Game::finish() {
-  for(auto entity: entities) {
-    delete entity;
-  }
   IMG_Quit();
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);

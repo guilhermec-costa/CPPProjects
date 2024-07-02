@@ -52,9 +52,7 @@ void Collider2D::render(SDL_Renderer* renderer) {
         SDL_ALPHA_OPAQUE
     );
     SDL_RenderDrawRect(renderer, m_collider_rectangle);
-  } else {
-    std::cout << "Must add a outline color around in the collider" << std::endl;
-  }
+  } 
 }
 
 void Collider2D::set_outline(Uint8 red, Uint8 green, Uint8 blue) {
