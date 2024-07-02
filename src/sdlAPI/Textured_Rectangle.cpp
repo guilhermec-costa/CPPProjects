@@ -47,11 +47,6 @@ void Textured_Rectangle::init_defaults() {
   m_src_rect->h = 32;
 }
 
-void Textured_Rectangle::render_at_pos(int x, int y) {
-  m_target_rect->x = x;
-  m_target_rect->y = y;
-}
-
 void Textured_Rectangle::set_src_pos(int x, int y) {
   m_src_rect->x = x;
   m_src_rect->y = y;
@@ -60,6 +55,11 @@ void Textured_Rectangle::set_src_pos(int x, int y) {
 void Textured_Rectangle::set_src_dimensions(int w, int h) {
   m_src_rect->w = w;
   m_src_rect->h = h;
+}
+
+void Textured_Rectangle::render_at_pos(int x, int y) {
+  m_target_rect->x = x;
+  m_target_rect->y = y;
 }
 
 void Textured_Rectangle::set_dst_dimensions(int w, int h) {

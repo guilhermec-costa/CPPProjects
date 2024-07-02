@@ -55,11 +55,13 @@ bool Game::start() {
   init_image_API();
 
   
-  entity1 = new Game_Entity(renderer);
+  entity1 = new Game_Entity(renderer, "Entity 1");
   entity1->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/player.png");
   const SDL_Rect ent1_pos = { 5, 5, 64, 64};
   entity1->get_texture()->render_at_pos(ent1_pos.x, ent1_pos.y);
   entity1->get_texture()->set_dst_dimensions(ent1_pos.w, ent1_pos.h);
+  entity1->add_collider2D()->set_outline(255, 0, 0);
+  entity1->add_collider2D()->set_outline(255, 0, 255);
 
   const SDL_Rect ent2_pos = { 100, 20, 128, 128};
   entity2 = new Game_Entity(renderer);
@@ -67,25 +69,29 @@ bool Game::start() {
   entity2->get_texture()->render_at_pos(ent2_pos.x, ent2_pos.y);
   entity2->get_texture()->set_dst_dimensions(ent2_pos.w, ent2_pos.h);
 
-  entity3 = new Game_Entity(renderer);
+  const SDL_Rect ent3_pos = { 200, 250, 128, 128};
+  entity3 = new Game_Entity(renderer, "Entity 3");
   entity3->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png", 0xEF, 0, 0xFF);
   entity3->get_texture()->set_src_pos(0, 0);
   entity3->get_texture()->set_src_dimensions(32, 32);
   entity3->get_texture()->set_max_portions(23);
   entity3->get_texture()->set_ms_between_portions(100);
   entity3->get_texture()->set_sprite_frame_size(32);
-  entity3->get_texture()->set_dst_dimensions(128, 128);
-  entity3->get_texture()->render_at_pos(180, 200);
+  entity3->get_texture()->render_at_pos(ent3_pos.x, ent3_pos.y);
+  entity3->get_texture()->set_dst_dimensions(ent3_pos.w, ent3_pos.h);
+  entity3->add_collider2D();
 
-  entity4 = new Game_Entity(renderer);
+  const SDL_Rect ent4_pos = { 300, 250, 128, 128};
+  entity4 = new Game_Entity(renderer, "Entity 4");
   entity4->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png", 0xEF, 0, 0xFF);
   entity4->get_texture()->set_src_pos(0, 0);
   entity4->get_texture()->set_src_dimensions(32, 32);
   entity4->get_texture()->set_max_portions(23);
   entity4->get_texture()->set_ms_between_portions(2000);
   entity4->get_texture()->set_sprite_frame_size(32);
-  entity4->get_texture()->render_at_pos(300, 250);
-  entity4->get_texture()->set_dst_dimensions(128, 128);
+  entity4->get_texture()->render_at_pos(ent4_pos.x, ent4_pos.y);
+  entity4->get_texture()->set_dst_dimensions(ent4_pos.w, ent4_pos.h);
+  entity4->add_collider2D();
 
   entity5 = new Game_Entity(renderer);
   entity5->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/kong.png", 0xEF, 0, 0xFF);
@@ -93,6 +99,7 @@ bool Game::start() {
   entity5->get_texture()->set_dst_dimensions(64, 64);
   entity5->get_texture()->render_at_pos(400, 300);
   entity5->get_texture()->set_dst_dimensions(128, 128);
+  entity5->add_collider2D();
 
   entities.push_back(entity1);
   entities.push_back(entity2);
@@ -152,11 +159,20 @@ bool Game::create_renderer() {
 }
 
 void Game::update() {
-  entity1->update();
-  entity2->update();
-  entity3->update();
-  entity4->update();
-  entity5->update();
+  entity1->get_collider2D(0)->
+    set_absolute_position(entity1->get_texture()->get_x(), entity1->get_texture()->get_y());
+  entity1->get_collider2D(0)->
+    set_dimensions(entity1->get_texture()->get_width(), entity1->get_texture()->get_height());
+  entity1->get_collider2D(1)->
+    set_absolute_position(entity1->get_texture()->get_x(), entity1->get_texture()->get_y());
+  entity1->get_collider2D(1)->
+    set_dimensions(entity1->get_texture()->get_width()/2, entity1->get_texture()->get_height()/2);
+
+  /* entity1->update(); */
+  /* entity2->update(); */
+  /* entity3->update(); */
+  /* entity4->update(); */
+  /* entity5->update(); */
 }
 
 void Game::render() {
@@ -217,7 +233,7 @@ void Game::treat_events() {
       for(auto entity : entities) {
         if(entity->is_active) {
           entity->get_texture()->render_at_pos(xmouse, ymouse);
-          if(entity->get_collider2D()->is_colliding(*entities.at(1)->get_collider2D())) {
+          if(entity->get_collider2D(0)->is_colliding(*entities.at(1)->get_collider2D(0))) {
             std::cout << "Active entity colliding with another entity" << std::endl;
           } else {
             std::cout << "Not Active entity not colliding with another entity" << std::endl;
