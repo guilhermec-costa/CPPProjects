@@ -31,6 +31,14 @@ Textured_Rectangle::Textured_Rectangle(
   init_defaults();
 }
 
+Textured_Rectangle::Textured_Rectangle(SDL_Renderer* renderer, SDL_Surface* src_surface, const char*filepath)
+  : m_renderer(renderer), m_texture(nullptr)
+{
+  Base_Resource_Manager::get_instance()->aloc_resource(filepath, src_surface);
+  m_texture  = SDL_CreateTextureFromSurface(renderer, Base_Resource_Manager::get_instance()->get_resource(filepath));
+  init_defaults();
+}
+
 void Textured_Rectangle::init_defaults() {
   m_current_portion = 0;
   m_last_time_frame_updated = 0;
@@ -102,5 +110,9 @@ void Textured_Rectangle::render(bool move_to_next_portion) {
     };
   }
   SDL_RenderCopy(m_renderer, m_texture, m_src_rect, m_target_rect);
+}
+
+SDL_Renderer* Textured_Rectangle::get_renderer() const {
+  return m_renderer;
 }
 } // namespace sdlAPI

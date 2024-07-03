@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Collider2D.h"
+#include "TextComponent.hpp"
 #include "Textured_Rectangle.h"
 #include "resource_managers/base_resource_manager.h"
 #include <SDL2/SDL_stdinc.h>
@@ -29,10 +30,12 @@ public:
   void add_textured_rectangle(const char *filepath);
   void add_textured_rectangle(const char* filepath, Uint32 red, Uint32 green, Uint32 blue);
   Collider2D* add_collider2D();
+  void add_text_component(const char*, int32_t size);
 
   // get components
   Textured_Rectangle *get_texture() const;
   Collider2D *get_collider2D(size_t idx) const; 
+  std::vector<Collider2D*> get_colliders2D() const;
 
 public:
   std::string m_TAG;
@@ -40,6 +43,7 @@ public:
 private:
   Textured_Rectangle *m_texture;
   SDL_Renderer *m_renderer;
+  Text_Component* m_text;
   std::vector<Collider2D*> m_colliders2D;
 };
 } // namespace sdlAPI

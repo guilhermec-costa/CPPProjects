@@ -83,8 +83,16 @@ Collider2D* Game_Entity::add_collider2D() {
   return collider;
 }
 
+void Game_Entity::add_text_component(const char*, int32_t size) {
+  m_text = new Text_Component(m_renderer, "/home/guichina/dev/CPP/src/sdlAPI/assets/fonts/Lato-Regular.ttf", 14);
+}
+
 Collider2D* Game_Entity::get_collider2D(size_t idx) const {
   return m_colliders2D[idx];
+}
+
+std::vector<Collider2D*> Game_Entity::get_colliders2D() const {
+  return m_colliders2D;
 }
 }
 

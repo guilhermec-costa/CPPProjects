@@ -9,6 +9,7 @@ class Textured_Rectangle {
 public:
   Textured_Rectangle(SDL_Renderer *renderer, const char*filepath);
   Textured_Rectangle(SDL_Renderer *renderer, const char* filepath, Uint32 red, Uint32 blue, Uint32 green);
+  Textured_Rectangle(SDL_Renderer* renderer, SDL_Surface* src_surface, const char*filepath);
   void render_at_pos(int x, int y);
   void set_src_pos(int x, int y);
   void set_dst_dimensions(int w, int h);
@@ -24,6 +25,7 @@ public:
   int get_y() const;
   int get_width() const;
   int get_height() const;
+  SDL_Renderer* get_renderer() const;
 private:
   SDL_Rect* m_target_rect;
   SDL_Rect* m_src_rect;

@@ -33,6 +33,7 @@ public:
   bool create_renderer();
   void init_font_API();
   void init_image_API();
+  void init_audio_API();
   void render();
   void update();
   void treat_events();

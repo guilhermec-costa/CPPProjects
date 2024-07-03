@@ -1,5 +1,8 @@
 #include "Game.hpp"
+#include "Collider2D.h"
 #include "Game_Entity.h"
+#include "ISound.h"
+#include "TextComponent.hpp"
 #include "Textured_Rectangle.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_blendmode.h>
@@ -24,12 +27,14 @@ namespace sdlAPI {
 
 SDL_Surface *screen_surface = nullptr;
 SDL_Texture *font_texture = nullptr;
-SDL_Rect title = {100, 80, 600, 100};
+SDL_Rect title = {500, 80, 200, 100};
 Game_Entity* entity1 = nullptr;
 Game_Entity* entity2 = nullptr;
 Game_Entity* entity3 = nullptr;
 Game_Entity* entity4 = nullptr;
 Game_Entity* entity5 = nullptr;
+SDL_Sound* collision_sound = nullptr;
+Text_Component* font = nullptr;
 std::vector<Game_Entity*> entities;
 
 Game::Game()
@@ -48,18 +53,29 @@ Game::~Game() {
 }
 
 bool Game::start() {
-  if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
     std::cout << "Failed to initialise SDL subsystems" << std::endl;
   }
+  if (TTF_Init() < 0) {
+    std::cout << "Failed to initialise fonts API" << std::endl;
+  }
   screen_surface = SDL_GetWindowSurface(window);
+  collision_sound = new SDL_Sound("/home/guichina/dev/CPP/src/sdlAPI/assets/sounds/collide.wav");
+  collision_sound->setup_device();
+
   if (!create_window("my game", 800, 600)) return false;
   if (!create_renderer()) return false;
-  init_font_API();
   init_image_API();
 
   
+  font = new Text_Component(renderer, "/home/guichina/dev/CPP/src/sdlAPI/assets/fonts/Lato-Regular.ttf", 14);
+  font->set_text("churros");
+  font->get_texture()->render_at_pos(150, 400);
+  font->get_texture()->set_dst_dimensions(250, 128);
+
+
   entity1 = new Game_Entity(renderer, "Entity 1");
-  entity1->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/player.png");
+  entity1->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/images/player.png");
   const SDL_Rect ent1_pos = { 5, 5, 64, 64};
   entity1->get_texture()->render_at_pos(ent1_pos.x, ent1_pos.y);
   entity1->get_texture()->set_dst_dimensions(ent1_pos.w, ent1_pos.h);
@@ -69,14 +85,14 @@ bool Game::start() {
 
   const SDL_Rect ent2_pos = { 100, 20, 128, 128};
   entity2 = new Game_Entity(renderer);
-  entity2->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/player.png");
+  entity2->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/images/player.png");
   entity2->get_texture()->render_at_pos(ent2_pos.x, ent2_pos.y);
   entity2->get_texture()->set_dst_dimensions(ent2_pos.w, ent2_pos.h);
   entity2->add_collider2D()->set_outline(255, 255, 255);
 
   const SDL_Rect ent3_pos = { 200, 250, 128, 128};
   entity3 = new Game_Entity(renderer, "Entity 3");
-  entity3->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png", 0xEF, 0, 0xFF);
+  entity3->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/images/player_spritesheet.png", 0xEF, 0, 0xFF);
   entity3->get_texture()->set_src_pos(0, 0);
   entity3->get_texture()->set_src_dimensions(32, 32);
   entity3->get_texture()->set_max_portions(23);
@@ -88,7 +104,7 @@ bool Game::start() {
 
   const SDL_Rect ent4_pos = { 500, 100, 128, 128};
   entity4 = new Game_Entity(renderer, "Entity 4");
-  entity4->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/player_spritesheet.png", 0xEF, 0, 0xFF);
+  entity4->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/images/player_spritesheet.png", 0xEF, 0, 0xFF);
   entity4->get_texture()->set_src_pos(0, 0);
   entity4->get_texture()->set_src_dimensions(32, 32);
   entity4->get_texture()->set_max_portions(23);
@@ -99,12 +115,13 @@ bool Game::start() {
   entity4->add_collider2D()->set_outline(0, 255, 255);
 
   entity5 = new Game_Entity(renderer);
-  entity5->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/kong.png", 0xEF, 0, 0xFF);
+  entity5->add_textured_rectangle("/home/guichina/dev/CPP/src/sdlAPI/assets/images/kong.png", 0xEF, 0, 0xFF);
   entity5->get_texture()->set_src_pos(0, 0);
   entity5->get_texture()->set_dst_dimensions(64, 64);
   entity5->get_texture()->render_at_pos(400, 300);
   entity5->get_texture()->set_dst_dimensions(128, 128);
   entity5->add_collider2D()->set_outline(120, 255, 0);
+  entity5->add_collider2D()->set_outline(120, 120, 255);
 
   entities.push_back(entity1);
   entities.push_back(entity2);
@@ -114,21 +131,6 @@ bool Game::start() {
 
   is_running = true;
   return true;
-}
-
-void Game::init_font_API() {
-  if (TTF_Init() < 0) {
-    std::cout << "Failed to initialise fonts API" << std::endl;
-  }
-  TTF_Font *pixeledFont =
-      TTF_OpenFont("/home/guichina/dev/CPP/src/sdlAPI/fonts/Daydream.ttf", 16);
-  SDL_Surface *text_sfc =
-      TTF_RenderText_Solid(pixeledFont, "A NAKED MAN", {255, 255, 255});
-  if (text_sfc == nullptr) {
-    std::cout << TTF_GetError() << std::endl;
-  }
-  font_texture = SDL_CreateTextureFromSurface(renderer, text_sfc);
-  SDL_FreeSurface(text_sfc);
 }
 
 void Game::init_image_API() {
@@ -182,13 +184,16 @@ void Game::update() {
 
   entity5->get_collider2D(0)->set_absolute_position(entity5->get_texture()->get_x(), entity5->get_texture()->get_y());
   entity5->get_collider2D(0)->set_dimensions(entity5->get_texture()->get_width(), entity5->get_texture()->get_height());
+  entity5->get_collider2D(1)->set_absolute_position(entity5->get_texture()->get_x(), entity5->get_texture()->get_y());
+  entity5->get_collider2D(1)->set_dimensions(entity5->get_texture()->get_width()*3, entity5->get_texture()->get_height());
 }
 
 void Game::render() {
   int frame_start = SDL_GetTicks();
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(renderer);
-
+  
+  font->render();
   entity1->render();
   entity2->render();
   entity3->render(true);
@@ -210,14 +215,6 @@ void Game::treat_events() {
     case SDL_QUIT:
       is_running = false;
       break;
-
-    case SDL_MOUSEMOTION:
-      break;
-
-    case SDL_KEYDOWN:
-      if (m_event->key.keysym.scancode == 40) {
-      }
-      break;
     }
 
     if (keyboard_state[SDL_SCANCODE_W] && keyboard_state[SDL_SCANCODE_LCTRL]) {
@@ -234,19 +231,21 @@ void Game::treat_events() {
       }
     }
 
-    if (m_event->type == SDL_MOUSEWHEEL) {
-      std::cout << "mouse wheel" << std::endl;
-    }
-
     if(m_event->type == SDL_MOUSEMOTION) {
       for(Game_Entity* entity : entities) {
         if(entity->is_active) {
           entity->get_texture()->render_at_pos(xmouse, ymouse);
-          if(entity->get_collider2D(0)->is_colliding(*entity1->get_collider2D(2))) {
-            std::cout << "Entity is colliding with blue box" << std::endl;
-          }
-          if(entity->get_collider2D(0)->is_colliding(*entity1->get_collider2D(1))) {
-            std::cout << "Entity is colliding with purple box" << std::endl;
+        }
+      }
+    }
+
+    if(m_event->button.button == SDL_BUTTON_LEFT && m_event->type == SDL_MOUSEBUTTONDOWN) {
+      for(Game_Entity* entity : entities) {
+        if(entity->is_active) {
+          for(Collider2D* collider: entity->get_colliders2D()) {
+            if(collider->is_colliding(*entity1->get_collider2D(2))) {
+              collision_sound->play_sound();
+            }
           }
         }
       }

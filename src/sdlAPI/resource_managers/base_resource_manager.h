@@ -18,6 +18,7 @@ public:
 
   SDL_Surface*get_resource(const char *) const;
   void aloc_resource(const char *filepath);
+  void aloc_resource(const char *filepath, SDL_Surface* src_surface);
 
 private:
   Base_Resource_Manager() {};
