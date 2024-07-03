@@ -16,6 +16,7 @@ public:
   void set_src_dimensions(int w, int h);
   inline void set_sprite_frame_size(int pixels) { m_sprite_frame_size = pixels; }
   void render();
+  void render_from_src();
   void render(bool move_to_next_portion);
   const SDL_Rect* get_rect() const { return m_target_rect; }
   void inline set_ms_between_portions(int ms) { ms_between_portions = ms; }

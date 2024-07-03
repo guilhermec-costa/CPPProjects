@@ -19,7 +19,9 @@
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_video.h>
+#include <cstdlib>
 #include <cstring>
+#include <ctime>
 #include <iostream>
 #include <vector>
 
@@ -35,7 +37,20 @@ Game_Entity* entity4 = nullptr;
 Game_Entity* entity5 = nullptr;
 SDL_Sound* collision_sound = nullptr;
 Text_Component* font = nullptr;
+Textured_Rectangle* tilemap_texture = nullptr;
+
+int tilemap[25][19];
+SDL_Rect tiles[25][19];
+SDL_Rect select_tile1 = { 0, 0, 32, 32 };
+SDL_Rect select_tile2 = { 32, 0, 32, 32 };
+SDL_Rect select_tile3 = { 0, 32, 32, 32 };
+SDL_Rect select_tile4 = { 32, 32, 32, 32 };
 std::vector<Game_Entity*> entities;
+
+Uint32 print_something(Uint32 interval, void *param) {
+  std::cout << "Hello" << std::endl;
+  return 0;
+}
 
 Game::Game()
     : is_running(false), 
@@ -53,7 +68,7 @@ Game::~Game() {
 }
 
 bool Game::start() {
-  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0) {
     std::cout << "Failed to initialise SDL subsystems" << std::endl;
   }
   if (TTF_Init() < 0) {
@@ -66,6 +81,7 @@ bool Game::start() {
   if (!create_window("my game", 800, 600)) return false;
   if (!create_renderer()) return false;
   init_image_API();
+  srand(time(NULL));
 
   
   font = new Text_Component(renderer, "/home/guichina/dev/CPP/src/sdlAPI/assets/fonts/Lato-Regular.ttf", 14);
@@ -123,15 +139,38 @@ bool Game::start() {
   entity5->add_collider2D()->set_outline(120, 255, 0);
   entity5->add_collider2D()->set_outline(120, 120, 255);
 
+  tilemap_texture = new Textured_Rectangle(renderer, "/home/guichina/dev/CPP/src/sdlAPI/assets/images/tilemap.png");
+  for(int x=0; x<25; x++) {
+    for(int y=0; y<19; y++) {
+      tilemap[x][y] = rand() % 4 + 1;
+    }
+  }
+
+  for(int x=0; x<25; x++) {
+    for(int y=0; y<19; y++) {
+      tiles[x][y].x = x*32;
+      tiles[x][y].y = y*32;
+      tiles[x][y].w = 32;
+      tiles[x][y].h = 32;
+    }
+  }
+
+
   entities.push_back(entity1);
   entities.push_back(entity2);
   entities.push_back(entity3);
   entities.push_back(entity4);
   entities.push_back(entity5);
+  
+  // each src_rect to get from the whole texture 
+
+
+  SDL_AddTimer(7000, print_something, (char*)"teste");
 
   is_running = true;
   return true;
 }
+
 
 void Game::init_image_API() {
   int supported_formats = IMG_INIT_JPG | IMG_INIT_PNG;
@@ -192,7 +231,30 @@ void Game::render() {
   int frame_start = SDL_GetTicks();
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(renderer);
-  
+
+  for(int x=0; x<25; x++) {
+    for(int y=0; y<19; y++) {
+      switch(tilemap[x][y]) {
+        case 1: {
+          SDL_RenderCopy(renderer, tilemap_texture->get_texture(), &select_tile1, &tiles[x][y]);
+          break;
+        }
+        case 2: {
+          SDL_RenderCopy(renderer, tilemap_texture->get_texture(), &select_tile2, &tiles[x][y]);
+          break;
+        }
+        case 3: {
+          SDL_RenderCopy(renderer, tilemap_texture->get_texture(), &select_tile3, &tiles[x][y]);
+          break;
+        }
+        case 4: {
+          SDL_RenderCopy(renderer, tilemap_texture->get_texture(), &select_tile4, &tiles[x][y]);
+          break;
+        }
+      }
+    }
+  }
+
   font->render();
   entity1->render();
   entity2->render();

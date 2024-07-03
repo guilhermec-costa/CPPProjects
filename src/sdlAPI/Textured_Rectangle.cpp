@@ -96,6 +96,10 @@ void Textured_Rectangle::render() {
   SDL_RenderCopy(m_renderer, m_texture, NULL, m_target_rect);
 }
 
+void Textured_Rectangle::render_from_src() {
+  SDL_RenderCopy(m_renderer, m_texture, m_src_rect, m_target_rect);
+}
+
 void Textured_Rectangle::render(bool move_to_next_portion) {
   const int frame_start = SDL_GetTicks();
   if(frame_start - m_last_time_frame_updated >= ms_between_portions) {

@@ -13,7 +13,7 @@ Text_Component::Text_Component(SDL_Renderer* renderer, std::string fontpath, uin
   if(m_font == nullptr) {
     std::cout << "Failed to load font from: " << fontpath << std::endl;
   }
-  SDL_Surface* tmp_surface = TTF_RenderText_Solid(m_font, NULL, { 255, 255, 255});
+  SDL_Surface* tmp_surface = TTF_RenderText_Solid(m_font, NULL, { 255, 0, 0});
   m_font_texture = new Textured_Rectangle(renderer, tmp_surface, fontpath.c_str());
   m_last_surface = tmp_surface; 
 }
@@ -30,7 +30,7 @@ void Text_Component::set_font_size(uint32_t size) {
   SDL_FreeSurface(m_last_surface);
   m_font_size = size;
   m_font = TTF_OpenFont(m_fontpath.c_str(), m_font_size);
-  SDL_Surface* tmp_surface = TTF_RenderText_Solid(m_font, NULL, { 255, 255, 255});
+  SDL_Surface* tmp_surface = TTF_RenderText_Solid(m_font, NULL, { 255, 0, 0});
   m_font_texture = new Textured_Rectangle(m_font_texture->get_renderer(), tmp_surface, m_fontpath.c_str());
   m_last_surface = tmp_surface; 
 }
@@ -38,7 +38,7 @@ void Text_Component::set_font_size(uint32_t size) {
 void Text_Component::set_text(const char* text) {
   SDL_FreeSurface(m_last_surface);
   m_text = text;
-  SDL_Surface* tmp_surface = TTF_RenderText_Solid(m_font, m_text, { 255, 255, 255});
+  SDL_Surface* tmp_surface = TTF_RenderText_Solid(m_font, m_text, { 255, 0, 0});
   m_font_texture = new Textured_Rectangle(m_font_texture->get_renderer(), tmp_surface, m_fontpath.c_str());
   m_last_surface = tmp_surface;
 }
