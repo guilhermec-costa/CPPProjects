@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.29.0)
 
 project(cppIntro)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+
 # Incluir todos os arquivos .cpp no diretório de fontes e subdiretórios
 set(source_dir "${PROJECT_SOURCE_DIR}/src")
 file(GLOB_RECURSE source_files "${source_dir}/*.cpp")

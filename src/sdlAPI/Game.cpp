@@ -59,6 +59,7 @@ Game::Game()
       m_event(nullptr) {
   m_event = new SDL_Event();
 }
+// header file in its ESSENCE
 
 Game::~Game() {
   delete m_event;

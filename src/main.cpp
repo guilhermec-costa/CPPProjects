@@ -16,9 +16,17 @@
 #include <sstream>
 #include <string>
 // build process:
-// preprocessing ->
-// compilation(.o) ->
+// preprocessing -> the compiler runs the preprocessor
+// compilation(translation) proccess(.o) -> Compiler: converts .cpp files (translation unity) into .o files (machine code)
+//  -> tokenizing
+//  -> abstract syntax tree
+//  -> after makes the tree, than it generates machine code
 // linking(links all .o, including .o from libraries) and produces executable
+//
+//
+// it is not always possible to associate a translation unity to a single cpp file
+// translation unity is any cpp file that is compiled and translated to a object file. But a cpp file can include another cpp file
+// in this case, there is only one translation unity for two cpp files, because only object file will be generated
 //
 //
 // DYNAMIC LIBRARIES: code that the program finds during runtime, not during
@@ -32,14 +40,42 @@
 //
 //  header files + static library file to link with + dinamic library files to
 //  execute at runtime called by the static library
+//
+// header files are not compiled. Only when they are include via preprocessor
+//  every cpp file is compiled individually into a object file ( transforms cpp code into machine code)
+//  linker: links all .o files and creates a executable
+//
+//
+//  function declaration == function prototype
+//  function definition == function prototype + function body
+//
+//  any function can be used anywhere, even if its DEFINITION is typed in another file
+//  the compiler only needs to see the DECLARATION of the function in the file that is going to be used
+//  and it is going to trust that the DEFINITON is declared elsewhere
+//
+//  now, the LINKER finds all the definitions of the functions, and matches them against its declarations
+//  via the .o files
+//
+//  FILES have no MEANING for the c++ compiler. It is just a data source that feeds the compiler to produce .o files
+
+#define CHURROS int
+
+#ifndef CHURROS
+#define CHURROS bool
+#endif
+
 using namespace std;
 // it is necessary to include the .h where the namespace is defined
 using namespace gmcc;
 using namespace sdlgame;
 using namespace sdlAPI;
 
+void Log(const char*);
+
 int main() {
-  sdlAPI::main();
+  /* Log("hello world"); */
+  /* sdlAPI::main(); */
+  preprocessor_statements();
   return 0;
 }
 
@@ -462,4 +498,9 @@ void bitwise_and() {
   // bitwise or: | (if one of them is one, so the result is one)
   // bitwise and: & (if both of them are one, so the result is one)
   // bitwise xor: & (if both are equal, so the result is 0, otherwise, is 1)
+}
+
+void preprocessor_statements() {
+  const CHURROS number = 7;
+  std::cout << "churros symbol representing the number " << number << std::endl;
 }
