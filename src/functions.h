@@ -37,6 +37,8 @@ void constructorInheritance();
 void bit_shifiting();
 void bitwise_and();
 void preprocessor_statements();
+void receive_pointer(void* ptr_to_int);
+void receive_reference(int& ref_to_int);
 
 class GoingToBeInherited {
 private:

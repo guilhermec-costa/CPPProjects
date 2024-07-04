@@ -9,6 +9,7 @@
 #include "functions.h"
 #include <climits>
 #include <cstddef>
+#include <cstring>
 #include <iomanip>
 #include <ios>
 #include <iostream>
@@ -57,12 +58,17 @@
 //  via the .o files
 //
 //  FILES have no MEANING for the c++ compiler. It is just a data source that feeds the compiler to produce .o files
+//
+//
+//  #pragma once -> header guard: prevents from multiple includes of the same header file a single translation unity
 
 #define CHURROS int
 
 #ifndef CHURROS
 #define CHURROS bool
 #endif
+
+#define CALL(y) std::cout << y << std::endl;
 
 using namespace std;
 // it is necessary to include the .h where the namespace is defined
@@ -72,10 +78,34 @@ using namespace sdlAPI;
 
 void Log(const char*);
 
+struct Anything {};
+
 int main() {
   /* Log("hello world"); */
   /* sdlAPI::main(); */
-  preprocessor_statements();
+  /* preprocessor_statements(); */
+  CALL(5);
+  // a not valid pointer. It is fine. It has the memory address of 0. It is either not possible to read from or write to  
+  // points to nowhere, and has no value
+  //
+  //
+  // types for pointers are kind of meaningless, if you do not need to write to the memory via the pointer
+  int var = 8;
+  void* ptr = &var;
+
+  // pointer to the beggining of the block of memory
+  char* buffer = new char[9];
+  int i = 0;
+  memset(buffer,'B',9);
+  //*ptr = 10;  error here
+  
+  // pointer to a pointer (double pointer)
+  char** ptr_to_char_ptr = &buffer;
+
+   
+  std::cout << &buffer << std::endl;
+  std::cout << *ptr_to_char_ptr << std::endl;
+  delete[] buffer;
   return 0;
 }
 
@@ -503,4 +533,13 @@ void bitwise_and() {
 void preprocessor_statements() {
   const CHURROS number = 7;
   std::cout << "churros symbol representing the number " << number << std::endl;
+}
+
+void receive_pointer(void* ptr_to_int) {
+  std::cout << ptr_to_int << std::endl;
+}
+
+void receive_reference(int& ref_to_int) {
+  std::cout << ref_to_int << std::endl;
+  std::cout << &ref_to_int << std::endl;
 }

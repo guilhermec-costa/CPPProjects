@@ -1,11 +1,9 @@
 #include "Pointers.h"
-#include <functional>
 #include <iostream>
-#include <unordered_map>
 using namespace std;
 
 void Pointers::init() {
-  // A pointer stores a memory address of another variable
+  // A pointer is just an integer that stores a memory address
   // so, the value of a pointer is a memory address
   // The pointer itself has its own memory address as well
   Pointers::pointersArithmetic();
@@ -24,6 +22,8 @@ void Pointers::changeValueViaPointer(int *value, int _new) {
   // in some memory address.
   // In this case, no extra memory is allocated, because no copy is created
   *value = _new;
+
+  // *: this is how a pointer is derreferenced. In other words, how you read from or write to directly in memory
   // value = 10. this would change the memory address of the variable
 }
 
