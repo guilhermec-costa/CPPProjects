@@ -6,6 +6,14 @@ void Pointers::init() {
   // A pointer is just an integer that stores a memory address
   // so, the value of a pointer is a memory address
   // The pointer itself has its own memory address as well
+  //
+  //
+  // pointers and references are basically the same thing
+  // semantically speaking they are different. But they goal the same thing
+  // but pointers are more powerfull, given that it possible to manipulate not only their value, but their position
+  //
+  // references are sintax sugar on top of pointers
+  // references needs to reference an already existing variable
   Pointers::pointersArithmetic();
 };
 
@@ -111,6 +119,12 @@ void Pointers::reverseString() {
 }
 
 void Pointers::references() {
+  // references are sintax sugar on top of pointers
+  // references needs to reference an already existing variable
+  // it is not possible to change the variables that a references refers to. Only through pointers
+  // references needs to be initialized at the moment of its declaration. Differs from pointers on this
+  //
+  // a reference to a value has the same memory address as the value
   int value1 = 123;
   int& value2 = value1;
   cout << "value 1: " << value1 << " value 2: " << value2 << endl;

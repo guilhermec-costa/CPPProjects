@@ -1,8 +1,8 @@
 // pre-processor directives
 // runs before any code by a pre-processor
 #include "particle/main.h"
-#include "agame/main.h"
 #include "sdlAPI/main.h"
+#include "agame/main.h"
 #include "Cat.h"
 #include "Machine.h"
 #include "NS.h"
@@ -62,13 +62,12 @@
 //
 //  #pragma once -> header guard: prevents from multiple includes of the same header file a single translation unity
 
-#define CHURROS int
-
-#ifndef CHURROS
-#define CHURROS bool
-#endif
 
 #define CALL(y) std::cout << y << std::endl;
+extern int variable_from_translation_unit1;
+void function() {
+
+}
 
 using namespace std;
 // it is necessary to include the .h where the namespace is defined
@@ -79,6 +78,23 @@ using namespace sdlAPI;
 void Log(const char*);
 
 struct Anything {};
+
+
+
+// recomendation: use structs for POD (plain old data). No behavior. Only methods that manipulates interval variables from the struct
+// used for data structures that atre not too much complex. No inheritance
+struct Player {
+  int x;
+  int y;
+  int speed;
+
+  Player() {}
+
+  void Move(int x, int y) {
+    this->x += x * speed;
+    this->y += y * speed;
+  }
+};
 
 int main() {
   /* Log("hello world"); */
@@ -94,6 +110,9 @@ int main() {
   void* ptr = &var;
 
   // pointer to the beggining of the block of memory
+  #ifndef CHURROS
+    std::cout << "Churros not defined" << std::endl;
+  #endif
   char* buffer = new char[9];
   int i = 0;
   memset(buffer,'B',9);
@@ -106,6 +125,25 @@ int main() {
   std::cout << &buffer << std::endl;
   std::cout << *ptr_to_char_ptr << std::endl;
   delete[] buffer;
+
+
+  // a reference to a value has the same memory address as the value
+  // it is an alias
+  int a = 10;
+  int* ptr_a = &a;
+  int& b = a;
+  b = 20;
+  std::cout << &b << " " << &a << std::endl;
+  
+  
+  // deferrencing a pointer returns a reference to the memory address that it refers to
+  receive_reference(*ptr_a);
+  std::cout << a << std::endl;
+
+
+  Player player;
+
+  std::cout << variable_from_translation_unit1 << std::endl;
   return 0;
 }
 
@@ -531,15 +569,27 @@ void bitwise_and() {
 }
 
 void preprocessor_statements() {
-  const CHURROS number = 7;
-  std::cout << "churros symbol representing the number " << number << std::endl;
+  #ifdef CHURROS
+    const CHURROS number = 7;
+    std::cout << "churros symbol representing the number " << number << std::endl;
+  #endif
 }
 
 void receive_pointer(void* ptr_to_int) {
+  // A pointer is just an integer that stores a memory address
+  // so, the value of a pointer is a memory address
+  // The pointer itself has its own memory address as well
+  //
+  //
+  // pointers and references are basically the same thing
+  // semantically speaking they are different
   std::cout << ptr_to_int << std::endl;
 }
 
 void receive_reference(int& ref_to_int) {
+  // references are sintax sugar on top of pointers
+  // references needs to reference an already existing variable
   std::cout << ref_to_int << std::endl;
   std::cout << &ref_to_int << std::endl;
+  ref_to_int++;
 }
