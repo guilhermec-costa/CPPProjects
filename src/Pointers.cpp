@@ -149,11 +149,51 @@ void Pointers::changeValueViaReference(int &cur, int _new) {
 }
 
 
+struct X {
+  int* x, *y;
+
+  X(): x(nullptr), y(nullptr) {
+    std::cout << "created X default" << std::endl;
+  };
+
+  X(int x) {
+    std::cout << "Created X with int" << std::endl;
+  };
+
+  // mutable allows a variable to be modified inside constant methods
+  mutable int z;
+
+  const int *const get_x() const {
+    z = 5;
+    return x;
+  }
+
+  const int& get_x_ref() const {
+    return *x;
+  }
+
+  const int *const get_y() const {
+    return y;
+  }
+};
+
+void print_x(const X* x_instance) {
+  // not possible to change the value of the pointer
+  std::cout << x_instance->get_x() << std::endl;
+}
+
+void print_x(const X& x_instance) {
+  // the reference is already the value of a pointer. Not a pointer itself
+  // so, it is like you could not derrefence the pointer and changes its value. But, with reference is more readable
+  std::cout << x_instance.get_x() << std::endl;
+}
+
 void Pointers::constness() {
   int valueX = 10;
   int valueY = 9;
   int valueZ = 8;
   int valueA = 7;
+  const int valueC = 10;
   int *pValueX = &valueX;
   *pValueX = 6;
   pValueX = &valueY;
@@ -161,6 +201,10 @@ void Pointers::constness() {
   // pointer to an int that is constant
   // can not change the int value via the pointer
   const int *pValueY = &valueY;
+  int const *pValueYY = &valueY; // the same thing as the above line
+  //
+  // if const goes before the "*", then the content of the pointer is constant
+  // if const goes after the "*", the memory address the pointer points to is contant
   
   // constant pointer to an int
   // can not change the pointer address
@@ -169,5 +213,6 @@ void Pointers::constness() {
   // constant pointer to a constant int
   // can not change both int value via the pointer and the pointer address
   const int *const pValueA = &valueA;
+  X* x = new X(4);
 }
 

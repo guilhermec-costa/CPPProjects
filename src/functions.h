@@ -42,6 +42,7 @@ void receive_reference(int& ref_to_int);
 void enums();
 void virtual_funcs();
 void interfaces();
+void heap_stack();
 
 class GoingToBeInherited {
 private:

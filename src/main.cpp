@@ -1,6 +1,7 @@
 // pre-processor directives
 // runs before any code by a pre-processor
 #include "particle/main.h"
+#include "Pointers.h"
 #include "sdlAPI/main.h"
 #include "agame/main.h"
 #include "Cat.h"
@@ -148,21 +149,21 @@ int main() {
   //*ptr = 10;  error here
   
   // pointer to a pointer (double pointer)
-  char** ptr_to_char_ptr = &buffer;
+  /* char** ptr_to_char_ptr = &buffer; */
 
    
-  std::cout << &buffer << std::endl;
-  std::cout << *ptr_to_char_ptr << std::endl;
-  delete[] buffer;
+  /* std::cout << &buffer << std::endl; */
+  /* std::cout << *ptr_to_char_ptr << std::endl; */
+  /* delete[] buffer; */
 
 
   // a reference to a value has the same memory address as the value
   // it is an alias
-  int a = 10;
-  int* ptr_a = &a;
-  int& b = a;
-  b = 20;
-  std::cout << &b << " " << &a << std::endl;
+  /* int a = 10; */
+  /* int* ptr_a = &a; */
+  /* int& b = a; */
+  /* b = 20; */
+  /* std::cout << &b << " " << &a << std::endl; */
   
   
   // deferrencing a pointer returns a reference to the memory address that it refers to
@@ -184,7 +185,9 @@ int main() {
   /* std::cout << e1.s_get_entity() << std::endl; */
   /* std::cout << e2.s_get_entity() << std::endl; */
   /* virtual_funcs(); */
-  interfaces();
+  /* interfaces(); */
+  /* Pointers::constness(); */
+  heap_stack();
   return 0;
 }
 
@@ -730,4 +733,36 @@ void interfaces() {
   IBaseAbstraction* abs2 = new Abstraction_Type2();
   std::cout << get_class_name(*abs) << std::endl;
   std::cout << get_class_name(*abs2) << std::endl;
+}
+
+// creating objects in different ways
+
+class Entity_Class {
+public:
+  int x;
+  std::string m_name;
+
+  Entity_Class(): m_name("Unkown") {};
+  Entity_Class(const std::string& name): m_name(name) {}
+  ~Entity_Class() {
+    std::cout << "Entity destroyed" << std::endl;
+  }
+
+  const std::string& get_name() const {
+    return m_name;
+  }
+};
+
+void heap_stack() {
+  
+  // created on the stack
+  // lifetime of the scope where it is created
+  Entity_Class e1; // default constructor
+  Entity_Class e2("churros 2"); // default constructor
+  Entity_Class e3 = Entity_Class("churros 3"); // default constructor
+  
+  
+  std::cout << e1.get_name() << std::endl;
+  std::cout << e2.get_name() << std::endl;
+  std::cout << e3.get_name() << std::endl;
 }
