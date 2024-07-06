@@ -39,6 +39,9 @@ void bitwise_and();
 void preprocessor_statements();
 void receive_pointer(void* ptr_to_int);
 void receive_reference(int& ref_to_int);
+void enums();
+void virtual_funcs();
+void interfaces();
 
 class GoingToBeInherited {
 private:
@@ -66,6 +69,7 @@ public:
 
   static int get_n_members() { return n_members; }
 };
+
 
 class GoingToInherit : public GoingToBeInherited {
 public:

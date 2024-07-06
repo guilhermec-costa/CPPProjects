@@ -68,6 +68,7 @@ extern int variable_from_translation_unit1;
 void function() {
 
 }
+int GoingToBeInherited::n_members = 0;
 
 using namespace std;
 // it is necessary to include the .h where the namespace is defined
@@ -88,13 +89,41 @@ struct Player {
   int y;
   int speed;
 
-  Player() {}
-
   void Move(int x, int y) {
     this->x += x * speed;
     this->y += y * speed;
   }
 };
+
+class Player_Class {
+public:
+  int x, y, speed;
+  void Move(int x, int y) {
+    this->x += x * speed;
+    this->y += y * speed;
+  }
+};
+
+
+struct Entity {
+  int x, y;
+
+
+  // static members are shared across all the instances of a class/struct
+  // it points to the same memory address regardless the instance
+  static int s_member;
+  void print() {
+    std::cout << x << ", " << y << std::endl;
+  }
+
+  // returns always the same reference
+  static Entity* s_get_entity() {
+    static Entity* ent = new Entity();
+    return ent;
+  }
+};
+
+int Entity::s_member = 10;
 
 int main() {
   /* Log("hello world"); */
@@ -106,8 +135,8 @@ int main() {
   //
   //
   // types for pointers are kind of meaningless, if you do not need to write to the memory via the pointer
-  int var = 8;
-  void* ptr = &var;
+  /* int var = 8; */
+  /* void* ptr = &var; */
 
   // pointer to the beggining of the block of memory
   #ifndef CHURROS
@@ -137,13 +166,24 @@ int main() {
   
   
   // deferrencing a pointer returns a reference to the memory address that it refers to
-  receive_reference(*ptr_a);
-  std::cout << a << std::endl;
-
-
-  Player player;
-
-  std::cout << variable_from_translation_unit1 << std::endl;
+  /* receive_reference(*ptr_a); */
+  /* std::cout << a << std::endl; */
+  /**/
+  /**/
+  /* Player player = {0, 2, 4}; */
+  /* Player_Class player_class = {5, 5, 2}; */
+  /* Entity e1= {5, 8}; */
+  /* Entity e2= {10, 12}; */
+  /**/
+  /* std::cout << variable_from_translation_unit1 << std::endl; */
+  /* e1.print(); */
+  /* e2.print(); */
+  /* std::cout << &e1.s_member << std::endl; */
+  /* std::cout << &e2.s_member << std::endl; */
+  /* std::cout << &Entity::s_member << std::endl; */
+  /* std::cout << e1.s_get_entity() << std::endl; */
+  /* std::cout << e2.s_get_entity() << std::endl; */
+  virtual_funcs();
   return 0;
 }
 
@@ -592,4 +632,55 @@ void receive_reference(int& ref_to_int) {
   std::cout << ref_to_int << std::endl;
   std::cout << &ref_to_int << std::endl;
   ref_to_int++;
+}
+
+// enumeration: set of values
+void enums() {
+  enum Example {
+    A = 1,
+    B = 2,
+    C = 3,
+  };
+
+  Example a = Example::A;
+}
+
+class A 
+{
+public:
+  
+  // generates a vtable for the function
+  //
+  // runtime costs:
+  // -> aditional memory to vtable
+  virtual int get_num() {
+  return 1;
+}
+};
+
+class B : public A 
+{
+public:
+  int get_num() override {
+    return 2;
+  }
+};
+
+void virtual_funcs() {
+
+
+  // virtual keyword is SUPER IMPORTANT in the context of polymorphism
+  // it enables sublasses to create their own implementation of a base class method,
+  // in other words, to override it
+  //
+  // this make it possible to create an instance of a base class type via a subclass type, 
+  // and even so have all the behavior of the subclass
+  //
+  //
+  // Vtable: map with all the virtual functions of a base class
+  // so it is possbile to match them against the correct overwritten function at runtime
+  B b1;
+  A* b2 = new B();
+  std::cout << b1.get_num() << std::endl;
+  std::cout << b2->get_num() << std::endl;
 }
