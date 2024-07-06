@@ -183,7 +183,8 @@ int main() {
   /* std::cout << &Entity::s_member << std::endl; */
   /* std::cout << e1.s_get_entity() << std::endl; */
   /* std::cout << e2.s_get_entity() << std::endl; */
-  virtual_funcs();
+  /* virtual_funcs(); */
+  interfaces();
   return 0;
 }
 
@@ -683,4 +684,50 @@ void virtual_funcs() {
   A* b2 = new B();
   std::cout << b1.get_num() << std::endl;
   std::cout << b2->get_num() << std::endl;
+}
+
+class Printable {
+public:
+  virtual std::string get_class_name() = 0;
+};
+
+class IBaseAbstraction: public Printable {
+public:
+  //"=0" makes it a PURE VIRTUAL FUNCTION, in other words, it has to be implemented
+  // in the subclasses, if you want to create an instance of the subclass
+  // and it has to be virtual
+  virtual void show_something() = 0;
+};
+
+class Abstraction_Type1: public IBaseAbstraction {
+  void show_something() override {
+    std::cout << "showing something" << std::endl;
+  }
+
+  std::string get_class_name() override {
+    return "Abstraction_Type1";
+  }
+};
+
+class Abstraction_Type2: public IBaseAbstraction {
+  void show_something() override {
+    std::cout << "showing something on abs2" << std::endl;
+  }
+
+  std::string get_class_name() override {
+    return "Abstraction_Type2";
+  }
+};
+
+std::string get_class_name(Printable& abs) {
+  return abs.get_class_name();
+}
+
+// are just classes. There is no interface keyword
+void interfaces() {
+
+  IBaseAbstraction* abs = new Abstraction_Type1();
+  IBaseAbstraction* abs2 = new Abstraction_Type2();
+  std::cout << get_class_name(*abs) << std::endl;
+  std::cout << get_class_name(*abs2) << std::endl;
 }
