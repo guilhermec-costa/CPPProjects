@@ -10,6 +10,7 @@
 #include "functions.h"
 #include <climits>
 #include <cstddef>
+#include <cstdlib>
 #include <cstring>
 #include <iomanip>
 #include <ios>
@@ -187,7 +188,8 @@ int main() {
   /* virtual_funcs(); */
   /* interfaces(); */
   /* Pointers::constness(); */
-  heap_stack();
+  /* heap_stack(); */
+  operator_overloading();
   return 0;
 }
 
@@ -755,14 +757,110 @@ public:
 
 void heap_stack() {
   
+  Entity_Class* e;
   // created on the stack
+  // a stack frame is created. And the variables as long as that stack frame lives
   // lifetime of the scope where it is created
+  // is the fastest way and the most "managable" way
+  //
+  // stack has less memory. So, need to be careful to alocate large objects on it
   Entity_Class e1; // default constructor
   Entity_Class e2("churros 2"); // default constructor
   Entity_Class e3 = Entity_Class("churros 3"); // default constructor
+  {
+    Entity_Class e4; 
+    e = &e4;
+    std::cout << e4.get_name() << std::endl;
+    std::cout << e->get_name() << std::endl;
+    std::cout << (*e).get_name() << std::endl;
+  }
+
+  // created on the heap
+  // lives after the end of the scope
+  // slower, but much more space
+  //
+  //
+  // the "new" keyword makes the operational system find a contiguous block of memory that is enough to store the bytes for the particular type
+  // and it returns a pointer to the memory address of the beggining of the contiguous block
+  // "new" takes time
+  //
+  // key points:
+  //    -> allocate on the heap takes longer
+  //    -> if something is allocated on the heap, you have to manually deallocate it 
+  //    if it is not deallocated, it will stay at the heap, blocking other computations to use that space
+  //
+  //    decide where to create an object is a matter of balance between perfomance, memory space required and object life time
+  Entity_Class* e5 = new Entity_Class(); // heap allocation
+ 
   
+  int a1 = 5; // on the stack
+  int* a2 = new int; // on the heap
   
+  // in this case, it is allocated 50 contiguous blocks of memory with the necessary bytes for each entity
+  // given that one entity takes 40 bytes, it will be necessary 200 bytes of memory
+  // and, given that a "memory unit" is 1 byte, so 200 memory addresses will be allocated for this array of entities
+
+  Entity_Class* entities1 = new Entity_Class[50]; // on the heap. This line, calls the constructor for each one
+  Entity_Class* entities2 = (Entity_Class*)malloc(sizeof(Entity_Class)); // it is equivalent to this. But, is this case, it does not call the constructor
+  
+  std::cout << "-----------------" << std::endl;
   std::cout << e1.get_name() << std::endl;
   std::cout << e2.get_name() << std::endl;
   std::cout << e3.get_name() << std::endl;
+  std::cout << sizeof(entities1[0]) << std::endl;
+  
+  delete e5; // calls the destructor
+  delete a2;
+  delete[] entities1;
+}
+
+struct Vector2 {
+  float x, y;
+
+  Vector2(float x, float y): x(x), y(y) {}
+
+
+  Vector2 Add(const Vector2& other) const {
+    return Vector2(x + other.x, y + other.y);
+  }
+
+  Vector2 AddV2(const Vector2& other) const
+  {
+    // uses the overloaded "+" operator
+    return *this + other;
+  }
+
+  Vector2 Multiply(const Vector2& other) const {
+    return Vector2(x * other.x, y * other.y);
+  }
+
+  Vector2 operator+(const Vector2& other) const {
+    return Add(other);
+  }
+
+  Vector2 operator*(const Vector2& other) const {
+    return Multiply(other);
+  }
+
+  bool operator==(const Vector2& other) {
+    return x == other.x && y == other.y;
+  }
+
+  bool operator!=(const Vector2& other) {
+    return !(*this == other);
+  }
+};
+
+void operator_overloading()
+{
+  Vector2 position(4.0f, 4.0f);
+  Vector2 speed(0.5f, 1.5f);
+  Vector2 powerup(1.1f, 1.1f);
+  
+  Vector2 result1 = position.Add(speed.Multiply(powerup));
+  Vector2 result2 = position + speed * powerup;
+  std::cout << "result 1: x" << result1.x << " y: " << result2.y << std::endl;
+  std::cout << "result 2: x" << result2.x << " y: " << result2.y << std::endl;
+  std::cout << (result1 == result2) << std::endl;
+  std::cout << (result1 != result2) << std::endl;
 }

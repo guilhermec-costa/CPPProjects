@@ -43,6 +43,7 @@ void enums();
 void virtual_funcs();
 void interfaces();
 void heap_stack();
+void operator_overloading();
 
 class GoingToBeInherited {
 private:
