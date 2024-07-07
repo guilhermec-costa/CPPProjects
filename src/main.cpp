@@ -15,6 +15,7 @@
 #include <iomanip>
 #include <ios>
 #include <iostream>
+#include <memory>
 #include <ostream>
 #include <sstream>
 #include <string>
@@ -189,7 +190,9 @@ int main() {
   /* interfaces(); */
   /* Pointers::constness(); */
   /* heap_stack(); */
-  operator_overloading();
+  /* operator_overloading(); */
+  /* smart_pointers(); */
+  smart_pointers();
   return 0;
 }
 
@@ -744,7 +747,10 @@ public:
   int x;
   std::string m_name;
 
-  Entity_Class(): m_name("Unkown") {};
+  Entity_Class(): m_name("Unkown")
+  {
+    std::cout << "Entity created" << std::endl;
+  };
   Entity_Class(const std::string& name): m_name(name) {}
   ~Entity_Class() {
     std::cout << "Entity destroyed" << std::endl;
@@ -752,6 +758,34 @@ public:
 
   const std::string& get_name() const {
     return m_name;
+  }
+
+  void print() const {
+    std::cout << m_name << std::endl;
+  }
+};
+
+int* CreateArray()
+{
+  int array[50];
+  return array; 
+  // this is going to fail, because it is returning a pointer to a stack-based memory allocation,
+  // whose livetime is the scope of the function. Therefore, it is not possible to access after the end of the function
+}
+
+// this is a way of declaring a variable on the heap (a pointer) through a stack-allocated wrapper
+// and, through the destructor of the stack-allocated instance, deallocate the heap-allocated member
+// this is a unique pointer
+class Scoped_ptr
+{
+private:
+  Entity_Class* m_ptr;
+public:
+  Scoped_ptr(Entity_Class* e): m_ptr(e) {}
+  ~Scoped_ptr() { 
+    // this destructor is key, because it is what deletes the pointer that was previously allocated on the heap, 
+    // via the constructor of this wrapper
+    delete m_ptr; 
   }
 };
 
@@ -763,6 +797,9 @@ void heap_stack() {
   // lifetime of the scope where it is created
   // is the fastest way and the most "managable" way
   //
+  // every time you enter a scope in c++, a stack frame is created on the callstack
+  // every variable, function call, object created, are gone as soon as that stackframe is destroyed
+  //
   // stack has less memory. So, need to be careful to alocate large objects on it
   Entity_Class e1; // default constructor
   Entity_Class e2("churros 2"); // default constructor
@@ -773,6 +810,17 @@ void heap_stack() {
     std::cout << e4.get_name() << std::endl;
     std::cout << e->get_name() << std::endl;
     std::cout << (*e).get_name() << std::endl;
+  }
+
+  {
+    Entity_Class e5;
+  }
+
+  std::cout << "----------------------" << std::endl;
+  {
+    // heap allocates the pointer
+    // therefore, heap deallocates the pointer after the scope is gone
+    Scoped_ptr e6(new Entity_Class);
   }
 
   // created on the heap
@@ -863,4 +911,54 @@ void operator_overloading()
   std::cout << "result 2: x" << result2.x << " y: " << result2.y << std::endl;
   std::cout << (result1 == result2) << std::endl;
   std::cout << (result1 != result2) << std::endl;
+}
+
+// it is a way of "auto manage" heap-allocation memory
+// there's different kinds of smart pointers, but they are essencially wrappers around raw pointers
+//
+//
+// unique pointer: scoped pointer
+//  -> it can only have one reference to the created object
+//  because once it's free/deleted/deallocated, it will fail
+//  -> delete is called when the scope of the unique reference is gone
+//  -> lower overhead
+//
+//  shared pointer
+//   -> it can have multiple references to the created object
+//   -> greater overhead
+//
+//  weak pointer
+//   -> it does not increment the ref count
+//   -> it can have multiple references to the created object
+//
+//
+//
+//
+//  try to use them all the time
+void smart_pointers()
+{
+  {
+    std::shared_ptr<Entity_Class> e0;
+    // this pointer only going to be deleted as soons as all the references to it are gone
+    {
+      std::unique_ptr<Entity_Class> e1 = std::make_unique<Entity_Class>();
+      e1->print();
+
+      // based on reference counting
+      // when all references to the pointer are gone, then the pointer is deleted
+      std::shared_ptr<Entity_Class> shared_entity = std::make_shared<Entity_Class>();
+      e0 = shared_entity;
+
+      // event though the scope of "shated_entity" has gone, the e0 reference is still valid, because the ref count is still greater than one
+    }
+  }
+
+  {
+    // does not increase the ref count
+    std::shared_ptr<Entity_Class> e0;
+    {
+      std::shared_ptr<Entity_Class> shared_entity = std::make_shared<Entity_Class>();
+      e0 = shared_entity;
+    }
+  }
 }

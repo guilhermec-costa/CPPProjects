@@ -44,6 +44,7 @@ void virtual_funcs();
 void interfaces();
 void heap_stack();
 void operator_overloading();
+void smart_pointers();
 
 class GoingToBeInherited {
 private:
