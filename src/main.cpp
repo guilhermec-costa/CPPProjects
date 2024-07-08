@@ -1,13 +1,13 @@
 // pre-processor directives
 // runs before any code by a pre-processor
 #include "particle/main.h"
-#include "Pointers.h"
-#include "sdlAPI/main.h"
-#include "agame/main.h"
 #include "Cat.h"
 #include "Machine.h"
 #include "NS.h"
+#include "Pointers.h"
+#include "agame/main.h"
 #include "functions.h"
+#include "sdlAPI/main.h"
 #include <climits>
 #include <cmath>
 #include <cstddef>
@@ -23,16 +23,19 @@
 #include <vector>
 // build process:
 // preprocessing -> the compiler runs the preprocessor
-// compilation(translation) proccess(.o) -> Compiler: converts .cpp files (translation unity) into .o files (machine code)
+// compilation(translation) proccess(.o) -> Compiler: converts .cpp files
+// (translation unity) into .o files (machine code)
 //  -> tokenizing
 //  -> abstract syntax tree
 //  -> after makes the tree, than it generates machine code
 // linking(links all .o, including .o from libraries) and produces executable
 //
 //
-// it is not always possible to associate a translation unity to a single cpp file
-// translation unity is any cpp file that is compiled and translated to a object file. But a cpp file can include another cpp file
-// in this case, there is only one translation unity for two cpp files, because only object file will be generated
+// it is not always possible to associate a translation unity to a single cpp
+// file translation unity is any cpp file that is compiled and translated to a
+// object file. But a cpp file can include another cpp file in this case, there
+// is only one translation unity for two cpp files, because only object file
+// will be generated
 //
 //
 // DYNAMIC LIBRARIES: code that the program finds during runtime, not during
@@ -48,31 +51,49 @@
 //  execute at runtime called by the static library
 //
 // header files are not compiled. Only when they are include via preprocessor
-//  every cpp file is compiled individually into a object file ( transforms cpp code into machine code)
-//  linker: links all .o files and creates a executable
+//  every cpp file is compiled individually into a object file ( transforms cpp
+//  code into machine code) linker: links all .o files and creates a executable
 //
 //
 //  function declaration == function prototype
 //  function definition == function prototype + function body
 //
-//  any function can be used anywhere, even if its DEFINITION is typed in another file
-//  the compiler only needs to see the DECLARATION of the function in the file that is going to be used
-//  and it is going to trust that the DEFINITON is declared elsewhere
+//  any function can be used anywhere, even if its DEFINITION is typed in
+//  another file the compiler only needs to see the DECLARATION of the function
+//  in the file that is going to be used and it is going to trust that the
+//  DEFINITON is declared elsewhere
 //
-//  now, the LINKER finds all the definitions of the functions, and matches them against its declarations
-//  via the .o files
+//  now, the LINKER finds all the definitions of the functions, and matches them
+//  against its declarations via the .o files
 //
-//  FILES have no MEANING for the c++ compiler. It is just a data source that feeds the compiler to produce .o files
+//  FILES have no MEANING for the c++ compiler. It is just a data source that
+//  feeds the compiler to produce .o files
 //
 //
-//  #pragma once -> header guard: prevents from multiple includes of the same header file a single translation unity
-
+//  #pragma once -> header guard: prevents from multiple includes of the same
+//  header file a single translation unity
+//
+//
+//
+//
+//
+//  Libraries:
+//
+//  ways to setup:
+//   -> binary linking
+//   -> include the source code of the library directly on the repo
+//
+//
+//  library structure:
+//   -> include directory (bunch of header files) -> symbol declarations of the pre-built binaries
+//   -> lib directory: has the pre-built binaries. Has all the declations of the header files. Effectivelly, all the compiled .cpp files
+//      -> dynamic library: gets linked at runtime. At the application launch, after the executable starts
+//      -> static library: the library is put into your executable. It is inside the executable. This is how it is linked
+//          -> static linking results in a faster application
 
 #define CALL(y) std::cout << y << std::endl;
 extern int variable_from_translation_unit1;
-void function() {
-
-}
+void function() {}
 int GoingToBeInherited::n_members = 0;
 
 using namespace std;
@@ -81,14 +102,13 @@ using namespace gmcc;
 using namespace sdlgame;
 using namespace sdlAPI;
 
-void Log(const char*);
+void Log(const char *);
 
 struct Anything {};
 
-
-
-// recomendation: use structs for POD (plain old data). No behavior. Only methods that manipulates interval variables from the struct
-// used for data structures that atre not too much complex. No inheritance
+// recomendation: use structs for POD (plain old data). No behavior. Only
+// methods that manipulates interval variables from the struct used for data
+// structures that atre not too much complex. No inheritance
 struct Player {
   int x;
   int y;
@@ -109,21 +129,17 @@ public:
   }
 };
 
-
 struct Entity {
   int x, y;
-
 
   // static members are shared across all the instances of a class/struct
   // it points to the same memory address regardless the instance
   static int s_member;
-  void print() {
-    std::cout << x << ", " << y << std::endl;
-  }
+  void print() { std::cout << x << ", " << y << std::endl; }
 
   // returns always the same reference
-  static Entity* s_get_entity() {
-    static Entity* ent = new Entity();
+  static Entity *s_get_entity() {
+    static Entity *ent = new Entity();
     return ent;
   }
 };
@@ -131,35 +147,34 @@ struct Entity {
 int Entity::s_member = 10;
 
 int main() {
-  /* Log("hello world"); */
-  /* sdlAPI::main(); */
-  /* preprocessor_statements(); */
-  /* CALL(5); */
-  // a not valid pointer. It is fine. It has the memory address of 0. It is either not possible to read from or write to  
-  // points to nowhere, and has no value
-  //
-  //
-  // types for pointers are kind of meaningless, if you do not need to write to the memory via the pointer
-  /* int var = 8; */
-  /* void* ptr = &var; */
+/* Log("hello world"); */
+/* sdlAPI::main(); */
+/* preprocessor_statements(); */
+/* CALL(5); */
+// a not valid pointer. It is fine. It has the memory address of 0. It is either
+// not possible to read from or write to points to nowhere, and has no value
+//
+//
+// types for pointers are kind of meaningless, if you do not need to write to
+// the memory via the pointer
+/* int var = 8; */
+/* void* ptr = &var; */
 
-  // pointer to the beggining of the block of memory
-  #ifndef CHURROS
-    /* std::cout << "Churros not defined" << std::endl; */
-  #endif
-  char* buffer = new char[9];
+// pointer to the beggining of the block of memory
+#ifndef CHURROS
+  /* std::cout << "Churros not defined" << std::endl; */
+#endif
+  char *buffer = new char[9];
   int i = 0;
-  memset(buffer,'B',9);
+  memset(buffer, 'B', 9);
   //*ptr = 10;  error here
-  
+
   // pointer to a pointer (double pointer)
   /* char** ptr_to_char_ptr = &buffer; */
 
-   
   /* std::cout << &buffer << std::endl; */
   /* std::cout << *ptr_to_char_ptr << std::endl; */
   /* delete[] buffer; */
-
 
   // a reference to a value has the same memory address as the value
   // it is an alias
@@ -168,9 +183,9 @@ int main() {
   /* int& b = a; */
   /* b = 20; */
   /* std::cout << &b << " " << &a << std::endl; */
-  
-  
-  // deferrencing a pointer returns a reference to the memory address that it refers to
+
+  // deferrencing a pointer returns a reference to the memory address that it
+  // refers to
   /* receive_reference(*ptr_a); */
   /* std::cout << a << std::endl; */
   /**/
@@ -196,7 +211,8 @@ int main() {
   /* smart_pointers(); */
   /* smart_pointers(); */
   /* copy(); */
-  vectors();
+  /* vectors(); */
+  local_static();
   return 0;
 }
 
@@ -604,7 +620,7 @@ void bitwise_and() {
   // &: compares each bit of both values
   // color= 000100100011010001010110
   // 0xFF = 111111110000000000000000 (mask)
-  //result= 000100100000000000000000 
+  // result= 000100100000000000000000
   // 1 && 1 = 1
   // 0 && 0 = 0
   // 1 && 0 = 0
@@ -622,13 +638,13 @@ void bitwise_and() {
 }
 
 void preprocessor_statements() {
-  #ifdef CHURROS
-    const CHURROS number = 7;
-    std::cout << "churros symbol representing the number " << number << std::endl;
-  #endif
+#ifdef CHURROS
+  const CHURROS number = 7;
+  std::cout << "churros symbol representing the number " << number << std::endl;
+#endif
 }
 
-void receive_pointer(void* ptr_to_int) {
+void receive_pointer(void *ptr_to_int) {
   // A pointer is just an integer that stores a memory address
   // so, the value of a pointer is a memory address
   // The pointer itself has its own memory address as well
@@ -639,7 +655,7 @@ void receive_pointer(void* ptr_to_int) {
   std::cout << ptr_to_int << std::endl;
 }
 
-void receive_reference(int& ref_to_int) {
+void receive_reference(int &ref_to_int) {
   // references are sintax sugar on top of pointers
   // references needs to reference an already existing variable
   std::cout << ref_to_int << std::endl;
@@ -658,42 +674,35 @@ void enums() {
   Example a = Example::A;
 }
 
-class A 
-{
+class A {
 public:
-  
   // generates a vtable for the function
   //
   // runtime costs:
   // -> aditional memory to vtable
-  virtual int get_num() {
-  return 1;
-}
+  virtual int get_num() { return 1; }
 };
 
-class B : public A 
-{
+class B : public A {
 public:
-  int get_num() override {
-    return 2;
-  }
+  int get_num() override { return 2; }
 };
 
 void virtual_funcs() {
 
-
   // virtual keyword is SUPER IMPORTANT in the context of polymorphism
-  // it enables sublasses to create their own implementation of a base class method,
-  // in other words, to override it
+  // it enables sublasses to create their own implementation of a base class
+  // method, in other words, to override it
   //
-  // this make it possible to create an instance of a base class type via a subclass type, 
-  // and even so have all the behavior of the subclass
+  // this make it possible to create an instance of a base class type via a
+  // subclass type, and even so have all the behavior of the subclass
   //
   //
   // Vtable: map with all the virtual functions of a base class
-  // so it is possbile to match them against the correct overwritten function at runtime
+  // so it is possbile to match them against the correct overwritten function at
+  // runtime
   B b1;
-  A* b2 = new B();
+  A *b2 = new B();
   std::cout << b1.get_num() << std::endl;
   std::cout << b2->get_num() << std::endl;
 }
@@ -703,43 +712,38 @@ public:
   virtual std::string get_class_name() = 0;
 };
 
-class IBaseAbstraction: public Printable {
+class IBaseAbstraction : public Printable {
 public:
-  //"=0" makes it a PURE VIRTUAL FUNCTION, in other words, it has to be implemented
+  //"=0" makes it a PURE VIRTUAL FUNCTION, in other words, it has to be
+  //implemented
   // in the subclasses, if you want to create an instance of the subclass
   // and it has to be virtual
   virtual void show_something() = 0;
 };
 
-class Abstraction_Type1: public IBaseAbstraction {
+class Abstraction_Type1 : public IBaseAbstraction {
   void show_something() override {
     std::cout << "showing something" << std::endl;
   }
 
-  std::string get_class_name() override {
-    return "Abstraction_Type1";
-  }
+  std::string get_class_name() override { return "Abstraction_Type1"; }
 };
 
-class Abstraction_Type2: public IBaseAbstraction {
+class Abstraction_Type2 : public IBaseAbstraction {
   void show_something() override {
     std::cout << "showing something on abs2" << std::endl;
   }
 
-  std::string get_class_name() override {
-    return "Abstraction_Type2";
-  }
+  std::string get_class_name() override { return "Abstraction_Type2"; }
 };
 
-std::string get_class_name(Printable& abs) {
-  return abs.get_class_name();
-}
+std::string get_class_name(Printable &abs) { return abs.get_class_name(); }
 
 // are just classes. There is no interface keyword
 void interfaces() {
 
-  IBaseAbstraction* abs = new Abstraction_Type1();
-  IBaseAbstraction* abs2 = new Abstraction_Type2();
+  IBaseAbstraction *abs = new Abstraction_Type1();
+  IBaseAbstraction *abs2 = new Abstraction_Type2();
   std::cout << get_class_name(*abs) << std::endl;
   std::cout << get_class_name(*abs2) << std::endl;
 }
@@ -751,74 +755,67 @@ public:
   int x;
   std::string m_name;
 
-  Entity_Class(): m_name("Unkown")
-  {
+  Entity_Class() : m_name("Unkown") {
     std::cout << "Entity created" << std::endl;
   };
-  Entity_Class(const std::string& name): m_name(name) {}
-  ~Entity_Class() {
-    std::cout << "Entity destroyed" << std::endl;
-  }
+  Entity_Class(const std::string &name) : m_name(name) {}
+  ~Entity_Class() { std::cout << "Entity destroyed" << std::endl; }
 
-  const std::string& get_name() const {
-    return m_name;
-  }
+  const std::string &get_name() const { return m_name; }
 
-  void print() const {
-    std::cout << m_name << std::endl;
-  }
+  void print() const { std::cout << m_name << std::endl; }
 };
 
-int* CreateArray()
-{
+int *CreateArray() {
   int array[50];
-  return array; 
-  // this is going to fail, because it is returning a pointer to a stack-based memory allocation,
-  // whose livetime is the scope of the function. Therefore, it is not possible to access after the end of the function
+  return array;
+  // this is going to fail, because it is returning a pointer to a stack-based
+  // memory allocation, whose livetime is the scope of the function. Therefore,
+  // it is not possible to access after the end of the function
 }
 
-// this is a way of declaring a variable on the heap (a pointer) through a stack-allocated wrapper
-// and, through the destructor of the stack-allocated instance, deallocate the heap-allocated member
-// this is a unique pointer
-class Scoped_ptr
-{
+// this is a way of declaring a variable on the heap (a pointer) through a
+// stack-allocated wrapper and, through the destructor of the stack-allocated
+// instance, deallocate the heap-allocated member this is a unique pointer
+class Scoped_ptr {
 private:
-  Entity_Class* m_ptr;
+  Entity_Class *m_ptr;
+
 public:
-  Scoped_ptr(Entity_Class* e): m_ptr(e) {}
-  ~Scoped_ptr() { 
-    // this destructor is key, because it is what deletes the pointer that was previously allocated on the heap, 
-    // via the constructor of this wrapper
-    delete m_ptr; 
+  Scoped_ptr(Entity_Class *e) : m_ptr(e) {}
+  ~Scoped_ptr() {
+    // this destructor is key, because it is what deletes the pointer that was
+    // previously allocated on the heap, via the constructor of this wrapper
+    delete m_ptr;
   }
 };
 
 void heap_stack() {
-  
-  Entity_Class* e;
+
+  Entity_Class *e;
   // created on the stack
-  // a stack frame is created. And the variables as long as that stack frame lives
-  // lifetime of the scope where it is created
-  // is the fastest way and the most "managable" way
+  // a stack frame is created. And the variables as long as that stack frame
+  // lives lifetime of the scope where it is created is the fastest way and the
+  // most "managable" way
   //
-  // every time you enter a scope in c++, a stack frame is created on the callstack
-  // every variable, function call, object created, are gone as soon as that stackframe is destroyed
+  // every time you enter a scope in c++, a stack frame is created on the
+  // callstack every variable, function call, object created, are gone as soon
+  // as that stackframe is destroyed
   //
-  // stack has less memory. So, need to be careful to alocate large objects on it
-  Entity_Class e1; // default constructor
-  Entity_Class e2("churros 2"); // default constructor
+  // stack has less memory. So, need to be careful to alocate large objects on
+  // it
+  Entity_Class e1;                             // default constructor
+  Entity_Class e2("churros 2");                // default constructor
   Entity_Class e3 = Entity_Class("churros 3"); // default constructor
   {
-    Entity_Class e4; 
+    Entity_Class e4;
     e = &e4;
     std::cout << e4.get_name() << std::endl;
     std::cout << e->get_name() << std::endl;
     std::cout << (*e).get_name() << std::endl;
   }
 
-  {
-    Entity_Class e5;
-  }
+  { Entity_Class e5; }
 
   std::cout << "----------------------" << std::endl;
   {
@@ -832,35 +829,42 @@ void heap_stack() {
   // slower, but much more space
   //
   //
-  // the "new" keyword makes the operational system find a contiguous block of memory that is enough to store the bytes for the particular type
-  // and it returns a pointer to the memory address of the beggining of the contiguous block
-  // "new" takes time
+  // the "new" keyword makes the operational system find a contiguous block of
+  // memory that is enough to store the bytes for the particular type and it
+  // returns a pointer to the memory address of the beggining of the contiguous
+  // block "new" takes time
   //
   // key points:
   //    -> allocate on the heap takes longer
-  //    -> if something is allocated on the heap, you have to manually deallocate it 
-  //    if it is not deallocated, it will stay at the heap, blocking other computations to use that space
+  //    -> if something is allocated on the heap, you have to manually
+  //    deallocate it if it is not deallocated, it will stay at the heap,
+  //    blocking other computations to use that space
   //
-  //    decide where to create an object is a matter of balance between perfomance, memory space required and object life time
-  Entity_Class* e5 = new Entity_Class(); // heap allocation
- 
-  
-  int a1 = 5; // on the stack
-  int* a2 = new int; // on the heap
-  
-  // in this case, it is allocated 50 contiguous blocks of memory with the necessary bytes for each entity
-  // given that one entity takes 40 bytes, it will be necessary 200 bytes of memory
-  // and, given that a "memory unit" is 1 byte, so 200 memory addresses will be allocated for this array of entities
+  //    decide where to create an object is a matter of balance between
+  //    perfomance, memory space required and object life time
+  Entity_Class *e5 = new Entity_Class(); // heap allocation
 
-  Entity_Class* entities1 = new Entity_Class[50]; // on the heap. This line, calls the constructor for each one
-  Entity_Class* entities2 = (Entity_Class*)malloc(sizeof(Entity_Class)); // it is equivalent to this. But, is this case, it does not call the constructor
-  
+  int a1 = 5;        // on the stack
+  int *a2 = new int; // on the heap
+
+  // in this case, it is allocated 50 contiguous blocks of memory with the
+  // necessary bytes for each entity given that one entity takes 40 bytes, it
+  // will be necessary 200 bytes of memory and, given that a "memory unit" is 1
+  // byte, so 200 memory addresses will be allocated for this array of entities
+
+  Entity_Class *entities1 =
+      new Entity_Class[50]; // on the heap. This line, calls the constructor for
+                            // each one
+  Entity_Class *entities2 = (Entity_Class *)malloc(
+      sizeof(Entity_Class)); // it is equivalent to this. But, is this case, it
+                             // does not call the constructor
+
   std::cout << "-----------------" << std::endl;
   std::cout << e1.get_name() << std::endl;
   std::cout << e2.get_name() << std::endl;
   std::cout << e3.get_name() << std::endl;
   std::cout << sizeof(entities1[0]) << std::endl;
-  
+
   delete e5; // calls the destructor
   delete a2;
   delete[] entities1;
@@ -869,46 +873,35 @@ void heap_stack() {
 struct Vector2 {
   float x, y;
 
-  Vector2(float x, float y): x(x), y(y) {}
+  Vector2(float x, float y) : x(x), y(y) {}
 
-
-  Vector2 Add(const Vector2& other) const {
+  Vector2 Add(const Vector2 &other) const {
     return Vector2(x + other.x, y + other.y);
   }
 
-  Vector2 AddV2(const Vector2& other) const
-  {
+  Vector2 AddV2(const Vector2 &other) const {
     // uses the overloaded "+" operator
     return *this + other;
   }
 
-  Vector2 Multiply(const Vector2& other) const {
+  Vector2 Multiply(const Vector2 &other) const {
     return Vector2(x * other.x, y * other.y);
   }
 
-  Vector2 operator+(const Vector2& other) const {
-    return Add(other);
-  }
+  Vector2 operator+(const Vector2 &other) const { return Add(other); }
 
-  Vector2 operator*(const Vector2& other) const {
-    return Multiply(other);
-  }
+  Vector2 operator*(const Vector2 &other) const { return Multiply(other); }
 
-  bool operator==(const Vector2& other) {
-    return x == other.x && y == other.y;
-  }
+  bool operator==(const Vector2 &other) { return x == other.x && y == other.y; }
 
-  bool operator!=(const Vector2& other) {
-    return !(*this == other);
-  }
+  bool operator!=(const Vector2 &other) { return !(*this == other); }
 };
 
-void operator_overloading()
-{
+void operator_overloading() {
   Vector2 position(4.0f, 4.0f);
   Vector2 speed(0.5f, 1.5f);
   Vector2 powerup(1.1f, 1.1f);
-  
+
   Vector2 result1 = position.Add(speed.Multiply(powerup));
   Vector2 result2 = position + speed * powerup;
   std::cout << "result 1: x" << result1.x << " y: " << result2.y << std::endl;
@@ -918,7 +911,8 @@ void operator_overloading()
 }
 
 // it is a way of "auto manage" heap-allocation memory
-// there's different kinds of smart pointers, but they are essencially wrappers around raw pointers
+// there's different kinds of smart pointers, but they are essencially wrappers
+// around raw pointers
 //
 //
 // unique pointer: scoped pointer
@@ -939,21 +933,24 @@ void operator_overloading()
 //
 //
 //  try to use them all the time
-void smart_pointers()
-{
+void smart_pointers() {
   {
     std::shared_ptr<Entity_Class> e0;
-    // this pointer only going to be deleted as soons as all the references to it are gone
+    // this pointer only going to be deleted as soons as all the references to
+    // it are gone
     {
       std::unique_ptr<Entity_Class> e1 = std::make_unique<Entity_Class>();
       e1->print();
 
       // based on reference counting
-      // when all references to the pointer are gone, then the pointer is deleted
-      std::shared_ptr<Entity_Class> shared_entity = std::make_shared<Entity_Class>();
+      // when all references to the pointer are gone, then the pointer is
+      // deleted
+      std::shared_ptr<Entity_Class> shared_entity =
+          std::make_shared<Entity_Class>();
       e0 = shared_entity;
 
-      // event though the scope of "shated_entity" has gone, the e0 reference is still valid, because the ref count is still greater than one
+      // event though the scope of "shated_entity" has gone, the e0 reference is
+      // still valid, because the ref count is still greater than one
     }
   }
 
@@ -961,39 +958,37 @@ void smart_pointers()
     // does not increase the ref count
     std::shared_ptr<Entity_Class> e0;
     {
-      std::shared_ptr<Entity_Class> shared_entity = std::make_shared<Entity_Class>();
+      std::shared_ptr<Entity_Class> shared_entity =
+          std::make_shared<Entity_Class>();
       e0 = shared_entity;
     }
   }
 
-  int* x = new int;
-  int** y = &x;
+  int *x = new int;
+  int **y = &x;
   *x = 10;
   **y = 15;
   std::cout << *x << std::endl;
 }
 
-struct _Vector2 
-{
-  float x,y;
+struct _Vector2 {
+  float x, y;
 };
 
-class _Vector2_c
-{
-  float x,y;
+class _Vector2_c {
+  float x, y;
+
 public:
-  _Vector2_c(float x, float y): x(x), y(y) {}
-  ~_Vector2_c() {
-    std::cout << "vector destroyed" << std::endl;
-  }
+  _Vector2_c(float x, float y) : x(x), y(y) {}
+  ~_Vector2_c() { std::cout << "vector destroyed" << std::endl; }
 };
 
-class String 
-{
-  char* m_buffer;
+class String {
+  char *m_buffer;
   unsigned char m_size;
+
 public:
-  String(const char* string) {
+  String(const char *string) {
     m_size = strlen(string);
     m_buffer = new char[m_size + 1];
     memcpy(m_buffer, string, m_size);
@@ -1004,121 +999,143 @@ public:
   // copy all the object contents. Not the memory address
   // create a whole new instance of String
   // it is needed to specify the copy constructor
-  String(const String& other)
-    : m_size(other.m_size)
-  {
+  String(const String &other) : m_size(other.m_size) {
     std::cout << "copied string" << std::endl;
     m_buffer = new char[m_size + 1];
     memcpy(m_buffer, other.m_buffer, m_size + 1);
   }
-  
-  ~String()
-  {
-    delete[] m_buffer;
-  }
 
-  char& operator[](unsigned int idx) {
-    return m_buffer[idx];
-  }
-  friend std::ostream& operator<<(ostream&, const String& string);
+  ~String() { delete[] m_buffer; }
+
+  char &operator[](unsigned int idx) { return m_buffer[idx]; }
+  friend std::ostream &operator<<(ostream &, const String &string);
 };
 
-std::ostream& operator<<(ostream& stream, const String& string) {
+std::ostream &operator<<(ostream &stream, const String &string) {
   stream << string.m_buffer;
   return stream;
 }
 
 // not passing as reference, is a completelly caos
 // the copy constructor is going to be called every time,
-// allocating more and more memory 
-void print_str(const String& string) {
-  std:: cout << string << std::endl;
-}
+// allocating more and more memory
+void print_str(const String &string) { std::cout << string << std::endl; }
 
 void copy() {
   int a = 5;
-  int& b = a;
+  int &b = a;
   b = 10;
-  
+
   {
     _Vector2 v1 = {5, 7};
     _Vector2 v2 = v1; // copying the value of v1 to v2
-    _Vector2* v3 = &v1;
+    _Vector2 *v3 = &v1;
     v3->x = 7;
-    std::cout << v1.x << std::endl; 
+    std::cout << v1.x << std::endl;
   }
 
-
   {
-    _Vector2* v1 = new _Vector2();
-    _Vector2* v3 = v1;
+    _Vector2 *v1 = new _Vector2();
+    _Vector2 *v3 = v1;
 
     // affects both v1 and v3
     v3->x = 7;
-    std::cout << v1->x << std::endl; 
+    std::cout << v1->x << std::endl;
   }
 
   String dog1 = "Churros";
 
   // shallow copy
-  String dog2 = dog1; 
+  String dog2 = dog1;
   dog2[2] = 'a';
   // - error: is going to copy the m_buffer pointer
-  // but once dog1's "m_buffer" is freed, the dog2's m_buffer can't be freed again
+  // but once dog1's "m_buffer" is freed, the dog2's m_buffer can't be freed
+  // again
   print_str(dog1);
   print_str(dog2);
 }
 
-struct Vertex
-{
+struct Vertex {
   float x, y, z;
-  Vertex(float x, float y, float z)
-    : x(x), y(y), z(z)
-  {
-  }
+  Vertex(float x, float y, float z) : x(x), y(y), z(z) {}
 
-  Vertex(const Vertex& other)
-    : x(other.x), y(other.y), z(other.z)
-  {
+  Vertex(const Vertex &other) : x(other.x), y(other.y), z(other.z) {
     std::cout << "copied vertex" << std::endl;
   }
 };
 
-ostream& operator<<(ostream&stream, const Vertex& vtx)
-{
+ostream &operator<<(ostream &stream, const Vertex &vtx) {
   stream << vtx.x << ", " << vtx.y << ", " << vtx.z;
   return stream;
 }
 
-void vectors()
-{
+void vectors() {
   std::vector<Vertex> vertices;
 
   // optmization
   // from 6 to 0 copies
-  vertices.reserve(3); // reserves 3 locations, and does not initialize any of them
+  vertices.reserve(
+      3); // reserves 3 locations, and does not initialize any of them
   // this prevent copy
-  
+
   // emplace back: creates the vertex in the actual vector
-  vertices.emplace_back(1 ,2 ,3); // aggregate initializer
+  vertices.emplace_back(1, 2, 3); // aggregate initializer
   // the vertex pushed is created at the stack frame of the vectors function
   // so, under the hood, it is copied into the array
-  vertices.emplace_back( 4, 5, 6 );
-  vertices.emplace_back( 7, 8, 9 );
+  vertices.emplace_back(4, 5, 6);
+  vertices.emplace_back(7, 8, 9);
 
   // iterate as reference
-  // if not, one copy is going to be created for each one in the scope of the for looop
-  for(const Vertex& v : vertices) {
+  // if not, one copy is going to be created for each one in the scope of the
+  // for looop
+  for (const Vertex &v : vertices) {
     std::cout << v << std::endl;
   }
 
   vertices.erase(vertices.begin() + 1);
   std::cout << "---------" << std::endl;
-  for(int i=0; i<vertices.size(); i++)
-  {
-      std::cout << vertices[i] << std::endl;
+  for (int i = 0; i < vertices.size(); i++) {
+    std::cout << vertices[i] << std::endl;
   }
 
-
   vertices.clear();
+}
+
+void Function()
+{
+  // it is going to be initialize once, only at the first call
+  // on the subsequent calls, it is going to use that one initialized static variable
+  //
+  // it is only accessible inside the scope where it is created
+  static int i = 0;
+  std::cout << i << std::endl;
+  i++;
+};
+
+class Singleton
+{
+
+public:
+  static const Singleton& get()
+  {
+    // it is going to be initialize once, only at the first call of the class
+    // on the subsequent calls, it is going to return that one initialized static variable
+    //
+    // it is only accessible inside the scope where it is created
+    static const Singleton instance;
+    return instance;
+  }
+};
+
+void local_static() 
+{
+  Function();
+  Function();
+  Function();
+  Function();
+
+  std::cout << &Singleton::get() << std::endl;
+  std::cout << &Singleton::get() << std::endl;
+  std::cout << &Singleton::get() << std::endl;
+  std::cout << &Singleton::get() << std::endl;
 }

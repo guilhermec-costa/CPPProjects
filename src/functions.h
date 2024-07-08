@@ -47,6 +47,7 @@ void operator_overloading();
 void smart_pointers();
 void copy();
 void vectors();
+void local_static();
 
 class GoingToBeInherited {
 private:
