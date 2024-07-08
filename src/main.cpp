@@ -132,7 +132,7 @@ int main() {
   /* Log("hello world"); */
   /* sdlAPI::main(); */
   /* preprocessor_statements(); */
-  CALL(5);
+  /* CALL(5); */
   // a not valid pointer. It is fine. It has the memory address of 0. It is either not possible to read from or write to  
   // points to nowhere, and has no value
   //
@@ -143,7 +143,7 @@ int main() {
 
   // pointer to the beggining of the block of memory
   #ifndef CHURROS
-    std::cout << "Churros not defined" << std::endl;
+    /* std::cout << "Churros not defined" << std::endl; */
   #endif
   char* buffer = new char[9];
   int i = 0;
@@ -192,7 +192,8 @@ int main() {
   /* heap_stack(); */
   /* operator_overloading(); */
   /* smart_pointers(); */
-  smart_pointers();
+  /* smart_pointers(); */
+  copy();
   return 0;
 }
 
@@ -961,4 +962,106 @@ void smart_pointers()
       e0 = shared_entity;
     }
   }
+
+  int* x = new int;
+  int** y = &x;
+  *x = 10;
+  **y = 15;
+  std::cout << *x << std::endl;
+}
+
+struct _Vector2 
+{
+  float x,y;
+};
+
+class _Vector2_c
+{
+  float x,y;
+public:
+  _Vector2_c(float x, float y): x(x), y(y) {}
+  ~_Vector2_c() {
+    std::cout << "vector destroyed" << std::endl;
+  }
+};
+
+class String 
+{
+  char* m_buffer;
+  unsigned char m_size;
+public:
+  String(const char* string) {
+    m_size = strlen(string);
+    m_buffer = new char[m_size + 1];
+    memcpy(m_buffer, string, m_size);
+    m_buffer[m_size] = 0;
+  }
+
+  // performs a deep copy
+  // copy all the object contents. Not the memory address
+  // create a whole new instance of String
+  // it is needed to specify the copy constructor
+  String(const String& other)
+    : m_size(other.m_size)
+  {
+    std::cout << "copied string" << std::endl;
+    m_buffer = new char[m_size + 1];
+    memcpy(m_buffer, other.m_buffer, m_size + 1);
+  }
+  
+  ~String()
+  {
+    delete[] m_buffer;
+  }
+
+  char& operator[](unsigned int idx) {
+    return m_buffer[idx];
+  }
+  friend std::ostream& operator<<(ostream&, const String& string);
+};
+
+std::ostream& operator<<(ostream& stream, const String& string) {
+  stream << string.m_buffer;
+  return stream;
+}
+
+// not passing as reference, is a completelly caos
+// the copy constructor is going to be called every time,
+// allocating more and more memory 
+void print_str(const String& string) {
+  std:: cout << string << std::endl;
+}
+
+void copy() {
+  int a = 5;
+  int& b = a;
+  b = 10;
+  
+  {
+    _Vector2 v1 = {5, 7};
+    _Vector2 v2 = v1; // copying the value of v1 to v2
+    _Vector2* v3 = &v1;
+    v3->x = 7;
+    std::cout << v1.x << std::endl; 
+  }
+
+
+  {
+    _Vector2* v1 = new _Vector2();
+    _Vector2* v3 = v1;
+
+    // affects both v1 and v3
+    v3->x = 7;
+    std::cout << v1->x << std::endl; 
+  }
+
+  String dog1 = "Churros";
+
+  // shallow copy
+  String dog2 = dog1; 
+  dog2[2] = 'a';
+  // - error: is going to copy the m_buffer pointer
+  // but once dog1's "m_buffer" is freed, the dog2's m_buffer can't be freed again
+  print_str(dog1);
+  print_str(dog2);
 }
