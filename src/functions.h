@@ -46,6 +46,7 @@ void heap_stack();
 void operator_overloading();
 void smart_pointers();
 void copy();
+void vectors();
 
 class GoingToBeInherited {
 private:

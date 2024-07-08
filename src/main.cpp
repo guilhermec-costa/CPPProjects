@@ -9,6 +9,7 @@
 #include "NS.h"
 #include "functions.h"
 #include <climits>
+#include <cmath>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
@@ -19,6 +20,7 @@
 #include <ostream>
 #include <sstream>
 #include <string>
+#include <vector>
 // build process:
 // preprocessing -> the compiler runs the preprocessor
 // compilation(translation) proccess(.o) -> Compiler: converts .cpp files (translation unity) into .o files (machine code)
@@ -193,7 +195,8 @@ int main() {
   /* operator_overloading(); */
   /* smart_pointers(); */
   /* smart_pointers(); */
-  copy();
+  /* copy(); */
+  vectors();
   return 0;
 }
 
@@ -1064,4 +1067,58 @@ void copy() {
   // but once dog1's "m_buffer" is freed, the dog2's m_buffer can't be freed again
   print_str(dog1);
   print_str(dog2);
+}
+
+struct Vertex
+{
+  float x, y, z;
+  Vertex(float x, float y, float z)
+    : x(x), y(y), z(z)
+  {
+  }
+
+  Vertex(const Vertex& other)
+    : x(other.x), y(other.y), z(other.z)
+  {
+    std::cout << "copied vertex" << std::endl;
+  }
+};
+
+ostream& operator<<(ostream&stream, const Vertex& vtx)
+{
+  stream << vtx.x << ", " << vtx.y << ", " << vtx.z;
+  return stream;
+}
+
+void vectors()
+{
+  std::vector<Vertex> vertices;
+
+  // optmization
+  // from 6 to 0 copies
+  vertices.reserve(3); // reserves 3 locations, and does not initialize any of them
+  // this prevent copy
+  
+  // emplace back: creates the vertex in the actual vector
+  vertices.emplace_back(1 ,2 ,3); // aggregate initializer
+  // the vertex pushed is created at the stack frame of the vectors function
+  // so, under the hood, it is copied into the array
+  vertices.emplace_back( 4, 5, 6 );
+  vertices.emplace_back( 7, 8, 9 );
+
+  // iterate as reference
+  // if not, one copy is going to be created for each one in the scope of the for looop
+  for(const Vertex& v : vertices) {
+    std::cout << v << std::endl;
+  }
+
+  vertices.erase(vertices.begin() + 1);
+  std::cout << "---------" << std::endl;
+  for(int i=0; i<vertices.size(); i++)
+  {
+      std::cout << vertices[i] << std::endl;
+  }
+
+
+  vertices.clear();
 }
