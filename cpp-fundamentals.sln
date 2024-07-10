@@ -5,6 +5,8 @@ VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cpp-fundamentals", "cpp-fundamentals\cpp-fundamentals.vcxproj", "{E7AC8694-8E48-44B7-97A3-86FA33DAF5EA}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cobra", "cobra\cobra.vcxproj", "{B87640F5-E25D-4F0E-B2CE-6D5666E2B2B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{E7AC8694-8E48-44B7-97A3-86FA33DAF5EA}.Release|x64.Build.0 = Release|x64
 		{E7AC8694-8E48-44B7-97A3-86FA33DAF5EA}.Release|x86.ActiveCfg = Release|Win32
 		{E7AC8694-8E48-44B7-97A3-86FA33DAF5EA}.Release|x86.Build.0 = Release|Win32
+		{B87640F5-E25D-4F0E-B2CE-6D5666E2B2B4}.Debug|x64.ActiveCfg = Debug|x64
+		{B87640F5-E25D-4F0E-B2CE-6D5666E2B2B4}.Debug|x64.Build.0 = Debug|x64
+		{B87640F5-E25D-4F0E-B2CE-6D5666E2B2B4}.Debug|x86.ActiveCfg = Debug|Win32
+		{B87640F5-E25D-4F0E-B2CE-6D5666E2B2B4}.Debug|x86.Build.0 = Debug|Win32
+		{B87640F5-E25D-4F0E-B2CE-6D5666E2B2B4}.Release|x64.ActiveCfg = Release|x64
+		{B87640F5-E25D-4F0E-B2CE-6D5666E2B2B4}.Release|x64.Build.0 = Release|x64
+		{B87640F5-E25D-4F0E-B2CE-6D5666E2B2B4}.Release|x86.ActiveCfg = Release|Win32
+		{B87640F5-E25D-4F0E-B2CE-6D5666E2B2B4}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
