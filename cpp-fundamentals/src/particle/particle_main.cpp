@@ -1,4 +1,4 @@
-#include "main.h"
+#include "particle_main.h"
 #include <SDL2/SDL_timer.h>
 #include <ctime>
 #include <iostream>

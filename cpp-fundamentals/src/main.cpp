@@ -1,6 +1,5 @@
 // pre-processor directives
 // runs before any code by a pre-processor
-#include "particle/main.h"
 #include "Cat.h"
 #include "Machine.h"
 #include "NS.h"
@@ -21,6 +20,7 @@
 #include <vector>
 #include "sdlAPI/sdlapi.h"
 #include <SDL2/SDL_filesystem.h>
+#include "particle/particle_main.h"
 
 // build process:
 // preprocessing -> the compiler runs the preprocessor
@@ -148,9 +148,11 @@ struct Entity {
 
 int Entity::s_member = 10;
 
+
 int main() {
 	/* Log("hello world"); */
-	sdlAPI::run();
+	//sdlAPI::run();
+	//gmcc::run();
 	/* preprocessor_statements(); */
 	/* CALL(5); */
 	// a not valid pointer. It is fine. It has the memory address of 0. It is either
@@ -1143,3 +1145,4 @@ void local_static()
 	std::cout << &Singleton::get() << std::endl;
 	std::cout << &Singleton::get() << std::endl;
 }
+

@@ -24,7 +24,7 @@
     <ClCompile Include="src\Machine.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\NS.cpp" />
-    <ClCompile Include="src\particle\main.cpp" />
+    <ClCompile Include="src\particle\particle_main.cpp" />
     <ClCompile Include="src\particle\particle.cpp" />
     <ClCompile Include="src\particle\particle_orchestrator.cpp" />
     <ClCompile Include="src\particle\window.cpp" />
@@ -47,7 +47,7 @@
     <ClInclude Include="src\functions.h" />
     <ClInclude Include="src\Machine.h" />
     <ClInclude Include="src\NS.h" />
-    <ClInclude Include="src\particle\main.h" />
+    <ClInclude Include="src\particle\particle_main.h" />
     <ClInclude Include="src\particle\particle.h" />
     <ClInclude Include="src\particle\particle_orchestrator.h" />
     <ClInclude Include="src\particle\window.h" />
@@ -82,9 +82,6 @@
     <Font Include="src\sdlAPI\assets\fonts\Lato-Regular.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\SDL2.dll" />
-    <None Include="src\SDL2_image.dll" />
-    <None Include="src\SDL2_ttf.dll" />
     <None Include="src\sdlAPI\assets\fonts\lato.zip" />
     <None Include="src\sdlAPI\assets\images\naked_man_therehe.xcf" />
   </ItemGroup>
@@ -157,6 +154,22 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\$(ProjectName)\intermediates\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>

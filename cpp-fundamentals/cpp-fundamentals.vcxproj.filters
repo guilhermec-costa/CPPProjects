@@ -69,7 +69,7 @@
     <ClCompile Include="src\sdlAPI\resource_managers\base_resource_manager.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="src\particle\main.cpp">
+    <ClCompile Include="src\particle\particle_main.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
     <ClCompile Include="src\particle\particle.cpp">
@@ -128,7 +128,7 @@
     <ClInclude Include="src\sdlAPI\resource_managers\base_resource_manager.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
-    <ClInclude Include="src\particle\main.h">
+    <ClInclude Include="src\particle\particle_main.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
     <ClInclude Include="src\particle\particle.h">
@@ -164,9 +164,6 @@
   <ItemGroup>
     <None Include="src\sdlAPI\assets\fonts\lato.zip" />
     <None Include="src\sdlAPI\assets\images\naked_man_therehe.xcf" />
-    <None Include="src\SDL2.dll" />
-    <None Include="src\SDL2_ttf.dll" />
-    <None Include="src\SDL2_image.dll" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\sdlAPI\assets\images\archer.bmp">
