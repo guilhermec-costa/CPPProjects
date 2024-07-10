@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Cat.cpp" />
+    <ClCompile Include="src\Log.cpp" />
+    <ClCompile Include="src\Machine.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\NS.cpp" />
+    <ClCompile Include="src\particle\main.cpp" />
+    <ClCompile Include="src\particle\particle.cpp" />
+    <ClCompile Include="src\particle\particle_orchestrator.cpp" />
+    <ClCompile Include="src\particle\window.cpp" />
+    <ClCompile Include="src\Pointers.cpp" />
+    <ClCompile Include="src\sdlAPI\animated_sprite.cpp" />
+    <ClCompile Include="src\sdlAPI\Collider2D.cpp" />
+    <ClCompile Include="src\sdlAPI\Game.cpp" />
+    <ClCompile Include="src\sdlAPI\Game_Entity.cpp" />
+    <ClCompile Include="src\sdlAPI\ISound.cpp" />
+    <ClCompile Include="src\sdlAPI\sdlapi.cpp" />
+    <ClCompile Include="src\sdlAPI\resource_manager.cpp" />
+    <ClCompile Include="src\sdlAPI\resource_managers\base_resource_manager.cpp" />
+    <ClCompile Include="src\sdlAPI\TextComponent.cpp" />
+    <ClCompile Include="src\sdlAPI\Textured_Rectangle.cpp" />
+    <ClCompile Include="src\sdlAPI\texture_handler.cpp" />
+    <ClCompile Include="src\static.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Cat.h" />
+    <ClInclude Include="src\functions.h" />
+    <ClInclude Include="src\Machine.h" />
+    <ClInclude Include="src\NS.h" />
+    <ClInclude Include="src\particle\main.h" />
+    <ClInclude Include="src\particle\particle.h" />
+    <ClInclude Include="src\particle\particle_orchestrator.h" />
+    <ClInclude Include="src\particle\window.h" />
+    <ClInclude Include="src\Pointers.h" />
+    <ClInclude Include="src\sdlAPI\animated_sprite.h" />
+    <ClInclude Include="src\sdlAPI\Collider2D.h" />
+    <ClInclude Include="src\sdlAPI\Game.hpp" />
+    <ClInclude Include="src\sdlAPI\Game_Entity.h" />
+    <ClInclude Include="src\sdlAPI\ISound.h" />
+    <ClInclude Include="src\sdlAPI\sdlapi.h" />
+    <ClInclude Include="src\sdlAPI\resource_manager.h" />
+    <ClInclude Include="src\sdlAPI\resource_managers\base_resource_manager.h" />
+    <ClInclude Include="src\sdlAPI\TextComponent.hpp" />
+    <ClInclude Include="src\sdlAPI\Textured_Rectangle.h" />
+    <ClInclude Include="src\sdlAPI\texture_handler.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\sdlAPI\assets\fonts\Daydream 1.0 Personal License.txt" />
+    <Text Include="src\sdlAPI\assets\fonts\OFL.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="src\sdlAPI\assets\fonts\Daydream.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-Black.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-BlackItalic.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-Bold.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-BoldItalic.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-Hairline.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-HairlineItalic.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-Italic.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-Light.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-LightItalic.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-Regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\SDL2.dll" />
+    <None Include="src\SDL2_image.dll" />
+    <None Include="src\SDL2_ttf.dll" />
+    <None Include="src\sdlAPI\assets\fonts\lato.zip" />
+    <None Include="src\sdlAPI\assets\images\naked_man_therehe.xcf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="src\sdlAPI\assets\images\archer.bmp" />
+    <Image Include="src\sdlAPI\assets\images\archer.jpg" />
+    <Image Include="src\sdlAPI\assets\images\fighter.png" />
+    <Image Include="src\sdlAPI\assets\images\kong.png" />
+    <Image Include="src\sdlAPI\assets\images\player.bmp" />
+    <Image Include="src\sdlAPI\assets\images\player.png" />
+    <Image Include="src\sdlAPI\assets\images\player_spritesheet.bmp" />
+    <Image Include="src\sdlAPI\assets\images\player_spritesheet.png" />
+    <Image Include="src\sdlAPI\assets\images\sheet.png" />
+    <Image Include="src\sdlAPI\assets\images\tilemap.png" />
+    <Image Include="src\sdlAPI\assets\images\warror_sprite.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="src\sdlAPI\assets\sounds\collide.wav" />
+    <Media Include="src\sdlAPI\assets\sounds\notification.wav" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{e7ac8694-8e48-44b7-97a3-86fa33daf5ea}</ProjectGuid>
+    <RootNamespace>cppfundamentals</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\SDL2\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

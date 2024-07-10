@@ -1,0 +1,46 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1119,5): warning MSB8027: Two or more files with the name of main.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are src\main.cpp, src\particle\main.cpp.
+  Cat.cpp
+  Log.cpp
+  Machine.cpp
+  main.cpp
+C:\Users\guico\source\repos\cpp-fundamentals\cpp-fundamentals\src\main.cpp(251,17): warning C4305: 'initializing': truncation from '__int64' to 'long'
+C:\Users\guico\source\repos\cpp-fundamentals\cpp-fundamentals\src\main.cpp(251,19): warning C4309: 'initializing': truncation of constant value
+C:\Users\guico\source\repos\cpp-fundamentals\cpp-fundamentals\src\main.cpp(259,14): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\guico\source\repos\cpp-fundamentals\cpp-fundamentals\src\main.cpp(278,16): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\guico\source\repos\cpp-fundamentals\cpp-fundamentals\src\main.cpp(338,14): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\guico\source\repos\cpp-fundamentals\cpp-fundamentals\src\main.cpp(341,14): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\guico\source\repos\cpp-fundamentals\cpp-fundamentals\src\main.cpp(996,18): warning C4267: '=': conversion from 'size_t' to 'unsigned char', possible loss of data
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\xmemory(700,103): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\xmemory(700,103): warning C4244:         with
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\xmemory(700,103): warning C4244:         [
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\xmemory(700,103): warning C4244:             _Ty=int
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\include\xmemory(700,103): warning C4244:         ]
+  NS.cpp
+  main.cpp
+C:\Users\guico\source\repos\cpp-fundamentals\cpp-fundamentals\src\particle\main.cpp(12,13): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\guico\source\repos\cpp-fundamentals\cpp-fundamentals\src\particle\main.cpp(32,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\guico\source\repos\cpp-fundamentals\cpp-fundamentals\src\particle\main.cpp(33,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  particle.cpp
+  particle_orchestrator.cpp
+  window.cpp
+  Pointers.cpp
+  animated_sprite.cpp
+  Collider2D.cpp
+  Game.cpp
+C:\Users\guico\source\repos\cpp-fundamentals\cpp-fundamentals\src\sdlAPI\Game.cpp(85,13): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Game_Entity.cpp
+  ISound.cpp
+  sdlapi.cpp
+  resource_manager.cpp
+  base_resource_manager.cpp
+  TextComponent.cpp
+  Textured_Rectangle.cpp
+  Generating Code...
+C:\Users\guico\source\repos\cpp-fundamentals\cpp-fundamentals\src\main.cpp(775,1): warning C4172: returning address of local variable or temporary: array
+C:\Users\guico\source\repos\cpp-fundamentals\cpp-fundamentals\src\Machine.cpp(17,1): warning C4172: returning address of local variable or temporary: machine
+  Compiling...
+  texture_handler.cpp
+  static.cpp
+  Generating Code...
+x64\Debug\main.obj : warning LNK4042: object specified more than once; extras ignored
+  cpp-fundamentals.vcxproj -> C:\Users\guico\source\repos\cpp-fundamentals\x64\Debug\cpp-fundamentals.exe
