@@ -9,22 +9,22 @@ Sdl_API::Sdl_API()
 {
 	if (SDL_Init(COBRA_SUBSYSTEMS) != 0)
 	{
-		Logger::log_err("Failed to initialize SDL Video Subsystems");
+		Logger::s_get_instance().log_err("Failed to initialize SDL Video Subsystems");
 	}
 
 	if (TTF_Init() != 0)
 	{
-		Logger::log_err("Failed to initialize SDL_TTF system");
+		Logger::s_get_instance().log_err("Failed to initialize SDL_TTF system");
 	}
 
 	setup_window("my window", 800, 600);
+	get_metadata().set_game_state(Game_State::RUNNING);
 	std::cout << "SDL API started" << std::endl;
 }
 
 void Sdl_API::setup_window(const char* title, int w, int h)
 {
 	m_window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, SDL_WINDOW_SHOWN);
-
 }
 
 void Sdl_API::play()

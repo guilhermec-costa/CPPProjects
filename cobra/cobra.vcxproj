@@ -146,11 +146,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game_Metadata.cpp" />
     <ClCompile Include="src\Logger.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Sdl_API.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Game_Metadata.h" />
     <ClInclude Include="include\IGame.h" />
     <ClInclude Include="include\Logger.h" />
     <ClInclude Include="include\Sdl_API.h" />

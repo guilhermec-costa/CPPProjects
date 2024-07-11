@@ -1,16 +1,16 @@
 #include "Logger.h"
 #include <iostream>
 
-time_t* Logger::m_rawtime = new time_t;
-tm* Logger::m_timeinfo = new tm;
-
 Logger::Logger() 
+	: m_rawtime(new time_t), m_timeinfo(new tm)
 {}
 Logger& Logger::operator=(const Logger&) {
 	return *this;
 }
 
-Logger::Logger(Logger const&) {}
+Logger::Logger(Logger const&)
+	: m_rawtime(nullptr), m_timeinfo(nullptr)
+{}
 
 Logger& Logger::s_get_instance()
 {
@@ -20,7 +20,7 @@ Logger& Logger::s_get_instance()
 
 void Logger::log(const char* msg)
 {
-	std::cout << msg << std::endl;
+	std::cout << "[INFO] >> " << msg << std::endl;
 }
 
 void Logger::log_err(const char* err)
