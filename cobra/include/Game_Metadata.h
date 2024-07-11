@@ -2,14 +2,15 @@
 
 enum Game_State {
 	RUNNING,
-	WHATEVER
+	PAUSED,
+	TERMINATED
 };
 
 struct Game_Metadata {
-public:
+private:
 	Game_State* state;
+public:
 	Game_Metadata();
 	void set_game_state(const Game_State&);
 	Game_State& get_game_state() const;
-
 };

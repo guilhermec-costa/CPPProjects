@@ -6,10 +6,10 @@
 
 int main(int argc, char* args[])
 {
-	IGame* sdlAPI = new Sdl_API();
+	std::unique_ptr<IGame> sdlAPI = std::make_unique<Sdl_API>();
 	while (sdlAPI->get_metadata().get_game_state() == Game_State::RUNNING)
 	{
-		std::cout << "Hello game" << std::endl;
+		sdlAPI->handle_events();
 	}
 	sdlAPI->terminate();
 	return 0;

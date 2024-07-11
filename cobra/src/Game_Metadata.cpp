@@ -1,10 +1,8 @@
 #include "Game_Metadata.h"
 
 Game_Metadata::Game_Metadata()
-	: state()
+	: state(new Game_State())
 {
-	state = new Game_State();
-	*state = Game_State::WHATEVER;
 }
 
 Game_State& Game_Metadata::get_game_state() const

@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
+#include "CobraEVENTS.h"
 
 Sdl_API::Sdl_API()
 	: m_window(nullptr)
@@ -16,6 +17,8 @@ Sdl_API::Sdl_API()
 	{
 		Logger::s_get_instance().log_err("Failed to initialize SDL_TTF system");
 	}
+
+	m_event_src = new SDL_Event();
 
 	setup_window("my window", 800, 600);
 	get_metadata().set_game_state(Game_State::RUNNING);
@@ -47,7 +50,15 @@ void Sdl_API::update()
 	std::cout << "updating game state" << std::endl;
 }
 
-void Sdl_API::event_cb()
+void Sdl_API::handle_events()
 {
-	std::cout << "managing events callback" << std::endl;
+	while (SDL_PollEvent(m_event_src))
+	{
+		switch (m_event_src->type)
+		{
+		case SDL_QUIT:
+			Cobra_EVENTS.quit_event = []() { std::cout << "terminating game" << std::endl; };
+			this->get_metadata().set_game_state(Game_State::TERMINATED);
+		}
+	}
 }
