@@ -1,16 +1,21 @@
 #include "Logger.h"
 #include <iostream>
-#include <ctime>
 
-Logger::Logger()
+time_t* Logger::m_rawtime = new time_t;
+tm* Logger::m_timeinfo = new tm;
+
+Logger::Logger() 
+{}
+Logger& Logger::operator=(const Logger&) {
+	return *this;
+}
+
+Logger::Logger(Logger const&) {}
+
+Logger& Logger::s_get_instance()
 {
-	m_rawtime = new time_t;
-	if (m_rawtime == nullptr) 
-	{
-		std::cerr << "Falha ao alocar memória para m_rawtime" << std::endl;
-		std::abort();
-	}
-	m_timeinfo = new tm;
+	static Logger* logger = new Logger();
+	return *logger;
 }
 
 void Logger::log(const char* msg)
@@ -23,7 +28,7 @@ void Logger::log_err(const char* err)
 	time(m_rawtime);
 	struct tm tmp = *localtime(m_rawtime);
 	*m_timeinfo = tmp;
-	std::cout << "[ERROR] >> " << err << " at " << asctime(m_timeinfo) << std::endl;
+	std::cerr << "[ERROR] >> " << err << " at " << asctime(m_timeinfo) << std::endl;
 }
 
 Logger::~Logger()

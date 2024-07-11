@@ -148,9 +148,12 @@
   <ItemGroup>
     <ClCompile Include="src\Logger.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Sdl_API.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\IGame.h" />
     <ClInclude Include="include\Logger.h" />
+    <ClInclude Include="include\Sdl_API.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
