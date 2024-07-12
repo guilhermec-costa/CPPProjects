@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
-#include "CobraEVENTS.h"
+#include "cobra_events.h"
 
 Sdl_API::Sdl_API()
 	: m_window(nullptr)
@@ -20,19 +20,26 @@ Sdl_API::Sdl_API()
 
 	m_event_src = new SDL_Event();
 
-	setup_window("my window", 800, 600);
+	setup_window("my window", NULL, NULL, 800, 600);
 	get_metadata().set_game_state(Game_State::RUNNING);
+	init_event_handlers();
 	std::cout << "SDL API started" << std::endl;
 }
 
-void Sdl_API::setup_window(const char* title, int w, int h)
+void Sdl_API::init_event_handlers()
 {
-	m_window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, SDL_WINDOW_SHOWN);
+	Cobra_EVENTS.quit_event = _quit_event;
 }
 
-void Sdl_API::play()
+void Sdl_API::setup_window(const char* title, int x, int y, int w, int h)
 {
-	std::cout << "playing sound" << std::endl;
+	if (x == NULL) x = SDL_WINDOWPOS_CENTERED;
+	if (y == NULL) y = SDL_WINDOWPOS_CENTERED;
+	m_window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, SDL_WINDOW_SHOWN);
+	if (m_window == nullptr) {
+		is_health = false;
+		Logger::s_get_instance().log_err("Failed to created SDL window");
+	}
 }
 
 void Sdl_API::render()
@@ -42,7 +49,8 @@ void Sdl_API::render()
 
 void Sdl_API::terminate()
 {
-	std::cout << "terminating game" << std::endl;
+	Cobra_EVENTS.quit_event();
+	get_metadata().set_game_state(Game_State::TERMINATED);
 }
 
 void Sdl_API::update()
@@ -57,8 +65,7 @@ void Sdl_API::handle_events()
 		switch (m_event_src->type)
 		{
 		case SDL_QUIT:
-			Cobra_EVENTS.quit_event = []() { std::cout << "terminating game" << std::endl; };
-			this->get_metadata().set_game_state(Game_State::TERMINATED);
+			terminate();
 		}
 	}
 }

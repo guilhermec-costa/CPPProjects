@@ -146,17 +146,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="include\CobraEVENTS.h" />
-    <ClCompile Include="src\Game_Metadata.cpp" />
-    <ClCompile Include="src\Logger.cpp" />
+    <ClCompile Include="include\cobra_events.h" />
+    <ClCompile Include="src\event_handlers.cpp" />
+    <ClCompile Include="src\game_metadata.cpp" />
+    <ClCompile Include="src\logger.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Sdl_API.cpp" />
+    <ClCompile Include="src\sdl_api.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Game_Metadata.h" />
-    <ClInclude Include="include\IGame.h" />
-    <ClInclude Include="include\Logger.h" />
-    <ClInclude Include="include\Sdl_API.h" />
+    <ClInclude Include="include\game_metadata.h" />
+    <ClInclude Include="include\game.h" />
+    <ClInclude Include="include\logger.h" />
+    <ClInclude Include="include\sdl_api.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

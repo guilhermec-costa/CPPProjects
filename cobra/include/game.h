@@ -4,9 +4,9 @@
 class IGame {
 protected:
 	Game_Metadata* m_metadata;
-	IGame() : m_metadata(new Game_Metadata()) {};
+	bool is_health;
+	IGame() : m_metadata(new Game_Metadata()), is_health(true) {};
 public:
-	virtual void play() = 0;
 	virtual void terminate() = 0;
 	virtual void render() = 0;
 	virtual void update() = 0;

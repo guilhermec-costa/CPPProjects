@@ -3,6 +3,7 @@
 #include <SDL2/SDL_ttf.h>
 #include "Logger.h"
 #include "Sdl_API.h"
+#include "cobra_events.h"
 
 int main(int argc, char* args[])
 {
@@ -10,6 +11,7 @@ int main(int argc, char* args[])
 	while (sdlAPI->get_metadata().get_game_state() == Game_State::RUNNING)
 	{
 		sdlAPI->handle_events();
+		sdlAPI->update();
 	}
 	sdlAPI->terminate();
 	return 0;
