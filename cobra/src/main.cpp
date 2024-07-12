@@ -8,6 +8,7 @@
 int main(int argc, char* args[])
 {
 	std::unique_ptr<Sdl_API> sdlAPI = std::make_unique<Sdl_API>();
+
 	if (sdlAPI->check_integrity())
 	{
 		sdlAPI->setup_window("COBRA", NULL, NULL, 1360, 768);
@@ -19,6 +20,5 @@ int main(int argc, char* args[])
 			sdlAPI->render();
 		}
 	}
-	sdlAPI->terminate();
 	return 0;
 }

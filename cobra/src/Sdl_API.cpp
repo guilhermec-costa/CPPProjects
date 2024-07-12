@@ -3,6 +3,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
+#include "asset_manager.h"
+
 
 Sdl_API::Sdl_API()
 	: m_window(nullptr), m_event_src(new SDL_Event())
@@ -14,6 +16,7 @@ Sdl_API::Sdl_API()
 	m_integrity = HEALTH;
 	std::string msg = "SDL API started";
 	Logger::s_get_instance().log(msg);
+	Asset_Manager::get_instance().load_asset("C:\\Users\\guico\\source\\repos\\cpp-fundamentals\\cobra\\assets\\foods.png");
 }
 
 void Sdl_API::init_event_handlers()
@@ -55,6 +58,7 @@ void Sdl_API::setup_window(const char* title, int x, int y, int w, int h)
 void Sdl_API::setup_renderer(SDL_RendererFlags flags)
 {
 	if (flags == NULL) flags = SDL_RENDERER_PRESENTVSYNC;
+	if (m_window == nullptr) return;
 	m_renderer = SDL_CreateRenderer(m_window, -1, flags);
 	if (m_renderer == nullptr) {
 		m_integrity = NOT_HEALTH;
