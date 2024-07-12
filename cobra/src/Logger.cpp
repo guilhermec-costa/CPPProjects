@@ -18,17 +18,17 @@ Logger& Logger::s_get_instance()
 	return *logger;
 }
 
-void Logger::log(const char* msg)
+void Logger::log(string& msg)
 {
 	std::cout << "[INFO] >> " << msg << std::endl;
 }
 
-void Logger::log_err(const char* err)
+void Logger::log_err(string& msg)
 {
 	time(m_rawtime);
 	struct tm tmp = *localtime(m_rawtime);
 	*m_timeinfo = tmp;
-	std::cerr << "[ERROR] >> " << err << " at " << asctime(m_timeinfo) << std::endl;
+	std::cerr << "[ERROR] >> " << msg << " at " << asctime(m_timeinfo) << std::endl;
 }
 
 Logger::~Logger()

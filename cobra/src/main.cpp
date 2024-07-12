@@ -7,11 +7,17 @@
 
 int main(int argc, char* args[])
 {
-	std::unique_ptr<IGame> sdlAPI = std::make_unique<Sdl_API>();
-	while (sdlAPI->get_metadata().get_game_state() == Game_State::RUNNING)
+	std::unique_ptr<Sdl_API> sdlAPI = std::make_unique<Sdl_API>();
+	if (sdlAPI->check_integrity())
 	{
-		sdlAPI->handle_events();
-		sdlAPI->update();
+		sdlAPI->setup_window("COBRA", NULL, NULL, 1360, 768);
+		sdlAPI->setup_renderer(SDL_RENDERER_ACCELERATED);
+		while (sdlAPI->get_metadata().get_game_state() == Game_State::RUNNING)
+		{
+			sdlAPI->handle_events();
+			sdlAPI->update();
+			sdlAPI->render();
+		}
 	}
 	sdlAPI->terminate();
 	return 0;

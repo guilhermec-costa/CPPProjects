@@ -1,10 +1,13 @@
 #pragma once
 
-enum Game_State {
+constexpr int HEALTH = 1;
+constexpr int NOT_HEALTH = 0;
+
+typedef enum {
 	RUNNING,
 	PAUSED,
 	TERMINATED
-};
+} Game_State;
 
 struct Game_Metadata {
 private:

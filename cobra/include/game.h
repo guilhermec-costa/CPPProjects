@@ -4,8 +4,8 @@
 class IGame {
 protected:
 	Game_Metadata* m_metadata;
-	bool is_health;
-	IGame() : m_metadata(new Game_Metadata()), is_health(true) {};
+	unsigned short m_integrity;
+	IGame() : m_metadata(new Game_Metadata()), m_integrity(HEALTH) {};
 public:
 	virtual void terminate() = 0;
 	virtual void render() = 0;

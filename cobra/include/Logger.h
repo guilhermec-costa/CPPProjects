@@ -1,5 +1,8 @@
 #pragma once
 #include <ctime>
+#include <iostream>
+
+using string = std::string;
 
 class Logger
 {
@@ -10,8 +13,8 @@ private:
 	~Logger();
 public:
 	static Logger& s_get_instance();
-	void log(const char*);
-	void log_err(const char*);
+	void log(string&);
+	void log_err(string&);
 private:
 	time_t* m_rawtime;
 	struct tm* m_timeinfo;

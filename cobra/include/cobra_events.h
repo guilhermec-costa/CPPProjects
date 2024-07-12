@@ -2,7 +2,7 @@
 #include <iostream>
 
 typedef void (*quit_event_handler)(void);
-struct {
+typedef union Cobra_EVENTS {
 	quit_event_handler quit_event;
 } Cobra_EVENTS;
 
