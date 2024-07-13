@@ -4,6 +4,7 @@
 #include "Logger.h"
 #include "Sdl_API.h"
 #include "cobra_events.h"
+#include "game_entity.h"
 
 int main(int argc, char* args[])
 {
@@ -14,13 +15,15 @@ int main(int argc, char* args[])
 		sdlAPI->setup_window("COBRA", NULL, NULL, 1360, 768);
 		sdlAPI->setup_renderer(SDL_RENDERER_ACCELERATED);
 
-		sdlAPI->texture_component = new Texture_Component(
-			sdlAPI->get_renderer(),
+		Game_Entity* yellow_apple = new Game_Entity(sdlAPI->get_renderer());
+		yellow_apple->add_texture_component(
 			"C:\\Users\\guico\\source\\repos\\cpp-fundamentals\\cobra\\assets\\foods.png",
 			{ 0xFF, 0, 0xF4, 0xFF }
 		);
-		sdlAPI->texture_component->set_src_fraction_rect(new Cobra_Rect(0, 0, 266, 300));
-		sdlAPI->texture_component->set_render_target_rect(new Cobra_Rect(10, 10, 266, 300));
+		yellow_apple->get_texture_component()->set_src_fraction_rect(new Cobra_Rect(0, 0, 266, 300));
+		yellow_apple->get_texture_component()->set_render_target_rect(new Cobra_Rect(10, 10, 266, 300));
+		sdlAPI->add_entity(yellow_apple);
+
 		while (sdlAPI->get_metadata().get_game_state() == Game_State::RUNNING)
 		{
 			sdlAPI->handle_events();
