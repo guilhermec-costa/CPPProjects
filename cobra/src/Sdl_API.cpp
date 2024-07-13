@@ -4,6 +4,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
 #include "asset_manager.h"
+#include "components/texture_component.h"
 
 
 Sdl_API::Sdl_API()
@@ -69,19 +70,21 @@ void Sdl_API::setup_renderer(SDL_RendererFlags flags)
 	}
 }
 
-inline SDL_Renderer& Sdl_API::get_renderer() const {
-	return *m_renderer;
+SDL_Renderer* Sdl_API::get_renderer() const {
+	return m_renderer;
 }
 
-inline SDL_Window& Sdl_API::get_window() const {
-	return *m_window;
+SDL_Window* Sdl_API::get_window() const {
+	return m_window;
 }
 
 void Sdl_API::render()
 {
+	std::cout << "here" << std::endl;
 	SDL_RenderClear(m_renderer);
-	SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-
+	//SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+	
+	texture_component->render();
 	SDL_RenderPresent(m_renderer);
 }
 
@@ -103,6 +106,7 @@ void Sdl_API::handle_events()
 		{
 		case SDL_QUIT:
 			terminate();
+			break;
 		}
 	}
 }

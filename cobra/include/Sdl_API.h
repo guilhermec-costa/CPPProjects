@@ -4,10 +4,11 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_events.h>
 #include "cobra_events.h"
+#include "components/texture_component.h"
 
 #define COBRA_SUBSYSTEMS (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER)
 
-class Sdl_API: public IGame {
+class Sdl_API : public IGame {
 public:
 	Sdl_API();
 	void render() override;
@@ -18,8 +19,9 @@ public:
 	void setup_renderer(SDL_RendererFlags);
 	void init_subsystems();
 	bool check_integrity() const;
-	SDL_Renderer& get_renderer() const;
-	SDL_Window& get_window() const;
+	SDL_Renderer* get_renderer() const;
+	SDL_Window* get_window() const;
+	Texture_Component* texture_component;
 private:
 	void init_event_handlers();
 private:

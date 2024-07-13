@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="include\cobra_events.h" />
     <ClCompile Include="src\asset_manager.cpp" />
+    <ClCompile Include="src\components\texture_component.cpp" />
     <ClCompile Include="src\event_handlers.cpp" />
     <ClCompile Include="src\game_metadata.cpp" />
     <ClCompile Include="src\logger.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="include\game.h" />
     <ClInclude Include="include\logger.h" />
     <ClInclude Include="include\sdl_api.h" />
+    <ClInclude Include="include\components\texture_component.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
