@@ -13,33 +13,51 @@ typedef struct RGBA {
 	Uint32 format() const;
 } RGBA;
 
-struct Dimensions {
-	unsigned int w;
-	unsigned int h;
+typedef struct Cobra_Rect
+{
+	Cobra_Rect(
+		int x, int y,
+		int w, int h
+	);
+
+	typedef struct Dimensions
+	{
+		int w;
+		int h;
+		void set(int w, int h);
+	} Dimensions;
+
+	typedef struct Position
+	{
+		int x;
+		int y;
+		void set(int xpos, int ypos);
+	} Position;
+
+	Dimensions m_dimensions;
+	Position m_position;
+	SDL_Rect* get_generated_SDL_rect() const;
+private:
+	SDL_Rect* m_SDL_rect;
+	void generate_SDL_rect();
 };
 
-struct Position {
-	unsigned int x;
-	unsigned int y;
-};
 
 class Texture_Component {
 public:
 	Texture_Component(SDL_Renderer*, const char*, RGBA);
 	void render();
 	SDL_Renderer* get_renderer() const;
-	//SDL_Texture* get_texture() const;
-	//Uint32 get_width() const;
-	//Uint32 get_height() const;
-	//void set_width();
-	//void set_height();
+	SDL_Texture* get_texture() const;
+	Cobra_Rect& get_src_fraction_rect() const;
+	Cobra_Rect& get_render_target_rect() const;
+	void set_src_fraction_rect(Cobra_Rect*);
+	void set_render_target_rect(Cobra_Rect*);
 private:
-	SDL_Rect* m_src_fraction_rect;
-	SDL_Rect* m_render_target_rect;
+	Cobra_Rect* m_src_fraction_rect;
+	Cobra_Rect* m_render_target_rect;
 	SDL_Renderer* m_renderer;
 	SDL_Texture* m_texture;
 	RGBA bg_mask;
-	Dimensions m_dimensions;
-	Position m_position;
 };
 

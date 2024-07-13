@@ -19,6 +19,8 @@ int main(int argc, char* args[])
 			"C:\\Users\\guico\\source\\repos\\cpp-fundamentals\\cobra\\assets\\foods.png",
 			{ 0xFF, 0, 0xF4, 0xFF }
 		);
+		sdlAPI->texture_component->set_src_fraction_rect(new Cobra_Rect(0, 0, 266, 300));
+		sdlAPI->texture_component->set_render_target_rect(new Cobra_Rect(10, 10, 266, 300));
 		while (sdlAPI->get_metadata().get_game_state() == Game_State::RUNNING)
 		{
 			sdlAPI->handle_events();

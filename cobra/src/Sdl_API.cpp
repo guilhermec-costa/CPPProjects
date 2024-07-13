@@ -82,7 +82,7 @@ void Sdl_API::render()
 {
 	std::cout << "here" << std::endl;
 	SDL_RenderClear(m_renderer);
-	//SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+	//SDL_SetRenderDrawColor(m_renderer, 0, 255, 255, SDL_ALPHA_OPAQUE);
 	
 	texture_component->render();
 	SDL_RenderPresent(m_renderer);
