@@ -79,22 +79,31 @@ SDL_Window* Sdl_API::get_window() const {
 	return m_window;
 }
 
-void Sdl_API::add_entity(const Game_Entity* entity)
+void Sdl_API::add_entities(const std::vector<const Game_Entity*>& entities)
 {
-	if (entity == nullptr)
+	for (auto entity : entities)
 	{
-		std::string message;
-		message = "Entity was not initialized";
-		Logger::s_get_instance().log_err(message);
+		if (entity == nullptr)
+		{
+			std::string message;
+			message = "Entity was not initialized";
+			Logger::s_get_instance().log_err(message);
+		}
+		m_entities.push_back(entity);
 	}
-	m_entities.push_back(entity);
 }
 
 void Sdl_API::render()
 {
 	SDL_RenderClear(m_renderer);
-	SDL_SetRenderDrawColor(m_renderer, 0, 255, 255, SDL_ALPHA_OPAQUE);
-	this->m_entities[0]->get_texture_component()->render();
+	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+	for (auto e : m_entities)
+	{
+		if (e->is_visible())
+		{
+			e->render();
+		}
+	}
 	SDL_RenderPresent(m_renderer);
 }
 

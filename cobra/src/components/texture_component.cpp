@@ -67,13 +67,13 @@ void Texture_Component::render()
 }
 
 
-Cobra_Rect& Texture_Component::get_src_fraction_rect() const
+Cobra_Rect* Texture_Component::get_src_fraction_rect() const
 {
-	return *m_src_fraction_rect;
+	return m_src_fraction_rect;
 }
-Cobra_Rect& Texture_Component::get_render_target_rect() const
+Cobra_Rect* Texture_Component::get_render_target_rect() const
 {
-	return *m_render_target_rect;
+	return m_render_target_rect;
 }
 
 void Texture_Component::set_src_fraction_rect(Cobra_Rect* const src_rect)

@@ -22,7 +22,7 @@ public:
 	void setup_renderer(SDL_RendererFlags);
 	void init_subsystems();
 	bool check_integrity() const;
-	void add_entity(const Game_Entity*);
+	void add_entities(const std::vector<const Game_Entity*>&);
 	SDL_Renderer* get_renderer() const;
 	SDL_Window* get_window() const;
 	Texture_Component* texture_component;

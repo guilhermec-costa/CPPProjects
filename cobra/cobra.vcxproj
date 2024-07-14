@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="include\cobra_events.h" />
     <ClCompile Include="src\asset_manager.cpp" />
+    <ClCompile Include="src\components\collider2d.cpp" />
     <ClCompile Include="src\components\texture_component.cpp" />
     <ClCompile Include="src\event_handlers.cpp" />
     <ClCompile Include="src\game_entity.cpp" />
@@ -158,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\asset_manager.h" />
+    <ClInclude Include="include\components\collider2d.h" />
     <ClInclude Include="include\game_entity.h" />
     <ClInclude Include="include\game_metadata.h" />
     <ClInclude Include="include\game.h" />

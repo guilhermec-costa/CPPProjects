@@ -49,8 +49,8 @@ public:
 	void render();
 	SDL_Renderer* get_renderer() const;
 	SDL_Texture* get_texture() const;
-	Cobra_Rect& get_src_fraction_rect() const;
-	Cobra_Rect& get_render_target_rect() const;
+	Cobra_Rect* get_src_fraction_rect() const;
+	Cobra_Rect* get_render_target_rect() const;
 	void set_src_fraction_rect(Cobra_Rect*);
 	void set_render_target_rect(Cobra_Rect*);
 private:
