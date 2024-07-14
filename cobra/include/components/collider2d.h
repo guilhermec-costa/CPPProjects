@@ -5,11 +5,14 @@
 
 class Collider2D {
 public:
-	Collider2D(SDL_Renderer*, Cobra_Rect*);
+	Collider2D(Cobra_Rect*);
 	~Collider2D();
 	bool is_colliding(const SDL_Rect*) const;
-	void render() const;
+	void render(SDL_Renderer*) const;
+	void place_outline(RGBA color);
+	bool m_outlined;
 public:
 	Cobra_Rect* m_dst_rect;
-	SDL_Renderer* m_renderer;
+private:
+	RGBA* m_outline_color;
 };

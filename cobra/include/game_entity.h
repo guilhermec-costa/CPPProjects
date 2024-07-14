@@ -3,9 +3,16 @@
 #include "components/collider2d.h"
 #include <SDL2/SDL_render.h>
 
-typedef enum Visibility {
+typedef enum Visibility 
+{
 	NOT_VISIBLE,
 	VISIBLE,
+};
+
+typedef enum Status
+{
+	NOT_ACTIVE,
+	ACTIVE,
 };
 
 class Game_Entity {
@@ -22,8 +29,10 @@ public:
 	Collider2D* get_collider_component() const;
 public:
 	Visibility m_visibility;
+	Status get_status() const;
 private:
 	Texture_Component* m_texture_component;
 	Collider2D* m_collider_component;
 	SDL_Renderer* m_renderer;
+	Status m_status;
 };

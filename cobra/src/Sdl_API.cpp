@@ -104,6 +104,7 @@ void Sdl_API::render()
 			e->render();
 		}
 	}
+	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderPresent(m_renderer);
 }
 
@@ -126,6 +127,10 @@ void Sdl_API::handle_events()
 		case SDL_QUIT:
 			terminate();
 			break;
+		}
+		if (m_event_src->button.button == SDL_BUTTON_LEFT && m_event_src->type == SDL_MOUSEBUTTONDOWN)
+		{
+			std::cout << "left clicked" << std::endl;
 		}
 	}
 }
