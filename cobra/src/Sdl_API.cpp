@@ -110,7 +110,6 @@ void Sdl_API::render()
 
 void Sdl_API::terminate()
 {
-	m_events.quit_event();
 	get_metadata().set_game_state(Game_State::TERMINATED);
 }
 
@@ -137,11 +136,4 @@ void Sdl_API::handle_events()
 
 bool Sdl_API::check_integrity() const {
 	return m_integrity;
-}
-
-Sdl_API::~Sdl_API()
-{
-
-	for (const Game_Entity* e : m_entities)
-		delete e;
 }

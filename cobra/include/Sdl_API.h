@@ -13,7 +13,6 @@
 class Sdl_API : public IGame {
 public:
 	Sdl_API();
-	~Sdl_API();
 	void render() override;
 	void update() override;
 	void terminate() override;

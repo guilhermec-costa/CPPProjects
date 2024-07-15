@@ -37,15 +37,17 @@ typedef struct Cobra_Rect
 	Dimensions m_dimensions;
 	Position m_position;
 	SDL_Rect* get_generated_SDL_rect() const;
+	void generate_SDL_rect();
 private:
 	SDL_Rect* m_SDL_rect;
-	void generate_SDL_rect();
+protected:
 };
 
 
 class Texture_Component {
 public:
 	Texture_Component(SDL_Renderer*, const char*, RGBA);
+	~Texture_Component();
 	void render();
 	SDL_Renderer* get_renderer() const;
 	SDL_Texture* get_texture() const;
@@ -53,6 +55,8 @@ public:
 	Cobra_Rect* get_render_target_rect() const;
 	void set_src_fraction_rect(Cobra_Rect*);
 	void set_render_target_rect(Cobra_Rect*);
+	void scale(float proportion);
+	void rotate(double angle);
 private:
 	Cobra_Rect* m_src_fraction_rect;
 	Cobra_Rect* m_render_target_rect;

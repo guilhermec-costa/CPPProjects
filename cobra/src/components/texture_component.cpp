@@ -18,7 +18,7 @@ Uint32 RGBA::format() const
 
 Cobra_Rect::Cobra_Rect(
 	int x = 0, int y = 0,
-	int w = 32, int h = 32
+	int w = 0, int h = 0
 )
 {
 	this->m_position.set(x, y);
@@ -40,6 +40,13 @@ void Cobra_Rect::Position::set(int xpos, int ypos)
 
 void Cobra_Rect::generate_SDL_rect()
 {
+	if (m_position.x == NULL && m_position.y == NULL &&
+		m_dimensions.w == NULL && m_dimensions.h == NULL
+		)
+	{
+		m_SDL_rect = NULL;
+		return;
+	}
 	m_SDL_rect = new SDL_Rect{
 		this->m_position.x,
 		this->m_position.y,
@@ -78,14 +85,25 @@ Cobra_Rect* Texture_Component::get_render_target_rect() const
 
 void Texture_Component::set_src_fraction_rect(Cobra_Rect* const src_rect)
 {
-	*m_src_fraction_rect = *src_rect;
-	delete src_rect;
+	if (src_rect != nullptr)
+	{
+		*m_src_fraction_rect = *src_rect;
+	}
+	else {
+		m_src_fraction_rect = new Cobra_Rect();
+	}
 };
 
 void Texture_Component::set_render_target_rect(Cobra_Rect* const dst_rect)
 {
-	*m_render_target_rect = *dst_rect;
-	delete dst_rect;
+	if (dst_rect != nullptr)
+	{
+		*m_render_target_rect = *dst_rect;
+	}
+	else
+	{
+		m_render_target_rect = new Cobra_Rect();
+	}
 }
 
 inline SDL_Renderer* Texture_Component::get_renderer() const
@@ -95,4 +113,31 @@ inline SDL_Renderer* Texture_Component::get_renderer() const
 
 inline SDL_Texture* Texture_Component::get_texture() const {
 	return m_texture;
+}
+
+void Texture_Component::scale(float scale_in)
+{
+	Cobra_Rect* dst_rect = get_render_target_rect();
+	if (scale_in > 0.0f) {
+		dst_rect->m_dimensions.set((int)(dst_rect->m_dimensions.w * (1 + scale_in)), (int)(dst_rect->m_dimensions.h * (1 + scale_in)));
+	}
+	else {
+		dst_rect->m_dimensions.set((int)(dst_rect->m_dimensions.w * (1 + scale_in)), (int)(dst_rect->m_dimensions.h * (1 + scale_in)));
+	}
+	set_render_target_rect(dst_rect);
+	dst_rect->generate_SDL_rect();
+}
+
+void Texture_Component::rotate(double angle)
+{
+	const SDL_Rect* src_rect = get_src_fraction_rect()->get_generated_SDL_rect();
+	const SDL_Rect* dst_rect = get_render_target_rect()->get_generated_SDL_rect();
+	SDL_RenderCopyEx(m_renderer, this->get_texture(), src_rect, dst_rect, angle, NULL, SDL_FLIP_HORIZONTAL);
+}
+
+Texture_Component::~Texture_Component()
+{
+	delete m_src_fraction_rect;
+	delete m_render_target_rect;
+	delete m_texture;
 }
