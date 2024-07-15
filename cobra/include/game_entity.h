@@ -2,6 +2,7 @@
 #include "components/texture_component.h"
 #include "components/collider2d.h"
 #include <SDL2/SDL_render.h>
+#include "vector"
 
 typedef enum Visibility 
 {
@@ -26,13 +27,13 @@ public:
 	void set_visibility(Visibility visibility);
 	Visibility is_visible() const;
 	Texture_Component* get_texture_component() const;
-	Collider2D* get_collider_component() const;
+	Collider2D* get_collider(const unsigned int index) const;
 public:
 	Visibility m_visibility;
 	Status get_status() const;
 private:
 	Texture_Component* m_texture_component;
-	Collider2D* m_collider_component;
+	std::vector<Collider2D*> m_colliders;
 	SDL_Renderer* m_renderer;
 	Status m_status;
 };

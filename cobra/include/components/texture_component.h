@@ -40,7 +40,6 @@ typedef struct Cobra_Rect
 	void generate_SDL_rect();
 private:
 	SDL_Rect* m_SDL_rect;
-protected:
 };
 
 
