@@ -18,7 +18,7 @@ Grid::Grid(SDL_Renderer* renderer, const unsigned int x, const unsigned int y,
 			y_counter += 32;
 		}
 		Collider2D* test_collider = new Collider2D(new Cobra_Rect(x_counter, y_counter, 32, 32));
-		test_collider->place_outline({ 0xA6, 0xA6, 0xA6, SDL_ALPHA_OPAQUE });
+		test_collider->place_outline({ 0x3D, 0x3D, 0x3D, 0 });
 		m_colliders.push_back(test_collider);
 	}
 };

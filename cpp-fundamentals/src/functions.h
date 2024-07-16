@@ -48,6 +48,7 @@ void smart_pointers();
 void copy();
 void vectors();
 void local_static();
+void multiple_returns();
 
 class GoingToBeInherited {
 private:

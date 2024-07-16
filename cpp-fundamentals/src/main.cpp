@@ -21,6 +21,10 @@
 #include "sdlAPI/sdlapi.h"
 #include <SDL2/SDL_filesystem.h>
 #include "particle/particle_main.h"
+#include <array>
+#include <tuple>
+#include <functional>
+#include <utility>
 
 // build process:
 // preprocessing -> the compiler runs the preprocessor
@@ -217,6 +221,7 @@ int main() {
 	/* copy(); */
 	/* vectors(); */
 	//local_static();
+	multiple_returns();
 	return 0;
 }
 
@@ -1070,7 +1075,7 @@ struct Vertex {
 	}
 };
 
-ostream& operator<<(ostream& stream, const Vertex& vtx) {
+static ostream& operator<<(ostream& stream, const Vertex& vtx) {
 	stream << vtx.x << ", " << vtx.y << ", " << vtx.z;
 	return stream;
 }
@@ -1107,7 +1112,7 @@ void vectors() {
 	vertices.clear();
 }
 
-void Function()
+static void Function()
 {
 	// it is going to be initialize once, only at the first call
 	// on the subsequent calls, it is going to use that one initialized static variable
@@ -1146,3 +1151,86 @@ void local_static()
 	std::cout << &Singleton::get() << std::endl;
 }
 
+// struct way
+
+struct StructWay {
+	std::string string;
+	int integer;
+};
+
+// return type via struct
+// prefer this way
+static StructWay get_struct_way()
+{
+	return { "churros", 5 };
+}
+
+// basically, no return type. Only change the arguments passed via reference
+static void via_reference(std::string& outString, int& outInteger)
+{
+	outString = "churros";
+	outInteger = 5;
+}
+
+// basically, no return type. Only change the arguments passed via pointer
+static void via_pointer(std::string* outString, int* outInteger)
+{
+	*outString = "churros";
+	*outInteger = 5;
+}
+
+// multiple return types, but the same type
+static std::string* return_array()
+{
+	return new std::string[2]{ "churros", "augusto" };
+}
+
+// multiple return types, but the same type
+static std::array<std::string, 2> return_std_array()
+{
+	// allocated on the stack
+	std::array <std::string, 2> results;
+	results[0] = "churros";
+	results[1] = "augusto";
+	return results;
+}
+
+// multiple return types, but the same type
+static std::vector<std::string> return_std_vector()
+{
+	// allocated on the heap
+	std::vector <std::string> results;
+	results.push_back("churros");
+	results.push_back("augusto");
+	return results;
+}
+
+// return via tuple
+static std::tuple<std::string, std::string, int> return_tuple()
+{
+	return std::make_tuple("churros", "augusto", 5);
+}
+
+void multiple_returns()
+{
+	int x = 0, y = 0;
+	StructWay tuple = { "churros", 5 };
+	std::string string;
+	int integer = 0;
+
+	std::string name;
+	int* z = new int;
+	via_pointer(&name, z);
+	std::cout << z << std::endl;
+
+	std::string* string_array = return_array();
+	std::cout << string_array[0] << std::endl;
+
+	std::array < std::string, 2> array = return_std_array();
+	std::vector< std::string> vector = return_std_vector();
+	std::cout << array[1] << std::endl;
+	std::cout << vector[1] << std::endl;
+
+	auto tuple_return = return_tuple();
+	std::cout << std::get<2>(tuple_return) << std::endl;
+}
