@@ -47,6 +47,7 @@ void Sdl_API::setup_window(const char* title, int x, int y, int w, int h)
 {
 	if (x == NULL) x = SDL_WINDOWPOS_CENTERED;
 	if (y == NULL) y = SDL_WINDOWPOS_CENTERED;
+	m_window_dimensions = { w, h };
 	m_window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, SDL_WINDOW_SHOWN);
 	if (m_window == nullptr) {
 		m_integrity = NOT_HEALTH;
@@ -55,6 +56,10 @@ void Sdl_API::setup_window(const char* title, int x, int y, int w, int h)
 		message.append(SDL_GetError());
 		Logger::s_get_instance().log_err(message);
 	}
+}
+
+Vector2 Sdl_API::get_win_dimensions() const {
+	return m_window_dimensions;
 }
 
 void Sdl_API::setup_renderer(SDL_RendererFlags flags)

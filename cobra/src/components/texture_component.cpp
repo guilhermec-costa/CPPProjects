@@ -1,4 +1,5 @@
 #include "components/texture_component.h"
+#include "components/grid.h"
 #include "asset_manager.h"
 #include <SDL2/SDL_pixels.h>
 #include "iostream"

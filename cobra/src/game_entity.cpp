@@ -16,12 +16,32 @@ void Game_Entity::add_collider2D(Cobra_Rect* rect)
 	m_colliders.push_back(new Collider2D(rect));
 }
 
+void Game_Entity::add_grid(Grid* grid)
+{
+	m_grids.push_back(grid);
+}
+
 void Game_Entity::render() const
 {
-	get_texture_component()->render();
+	Texture_Component* texture_component = get_texture_component();
+	if (texture_component != nullptr) {
+		get_texture_component()->render();
+	}
+
 	for (const Collider2D* collider : m_colliders)
 	{
+		if (collider != nullptr)
+		{
 			collider->render(m_renderer);
+		}
+	}
+
+	for (const Grid* grid : m_grids)
+	{
+		if (grid != nullptr)
+		{
+			grid->render(m_renderer);
+		}
 	}
 }
 
