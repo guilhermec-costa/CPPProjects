@@ -1,9 +1,10 @@
 #include "game_entity.h"
 #include <iostream>
 
-Game_Entity::Game_Entity(SDL_Renderer* renderer)
+Game_Entity::Game_Entity(SDL_Window* window, SDL_Renderer* renderer)
 	: m_texture_component(nullptr), m_renderer(renderer),
-	m_visibility(Visibility::VISIBLE), m_status(NOT_ACTIVE)
+	m_visibility(Visibility::VISIBLE), m_status(NOT_ACTIVE),
+	m_window(window)
 {}
 
 void Game_Entity::add_texture_component(const char* path, RGBA rgba)
@@ -43,6 +44,9 @@ void Game_Entity::render() const
 			grid->render(m_renderer);
 		}
 	}
+	if (m_grids.size() > 0) {
+		m_grids[0]->paint(m_renderer, m_grids[0]->get_rectangle(4), { 255, 255, 0, 255 });
+	}
 }
 
 Texture_Component* Game_Entity::get_texture_component() const
@@ -78,4 +82,9 @@ Collider2D* Game_Entity::get_collider(const unsigned int index) const
 Status Game_Entity::get_status() const
 {
 	return m_status;
+}
+
+void Game_Entity::associate_window(SDL_Window* window)
+{
+	m_window = window;
 }

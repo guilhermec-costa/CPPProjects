@@ -20,8 +20,9 @@ typedef enum Status
 class Game_Entity {
 
 public:
-	Game_Entity(SDL_Renderer*);
+	Game_Entity(SDL_Window* window, SDL_Renderer* renderer);
 	~Game_Entity();
+	void associate_window(SDL_Window* window);
 	void add_texture_component(const char*, RGBA color);
 	void add_collider2D(Cobra_Rect* rect);
 	void add_grid(Grid* grid);
@@ -39,4 +40,5 @@ private:
 	std::vector<Grid*> m_grids;
 	SDL_Renderer* m_renderer;
 	Status m_status;
+	SDL_Window* m_window;
 };

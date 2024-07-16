@@ -28,8 +28,18 @@ void Collider2D::render(SDL_Renderer* renderer) const
 	SDL_RenderDrawRect(renderer, m_dst_rect->get_generated_SDL_rect());
 }
 
+void Collider2D::render(SDL_Surface* surface, const SDL_Rect* rect, RGBA color) const
+{
+	SDL_FillRect(surface, rect, color.format());
+}
+
 void Collider2D::place_outline(RGBA color)
 {
 	m_outlined = true;
 	*m_outline_color = color;
+}
+
+Cobra_Rect* Collider2D::get_dst_rect() const
+{
+	return m_dst_rect;
 }
