@@ -1,6 +1,8 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include "entitites/texture_entity.h"
+#include "entitites/snake_entity.h"
 #include "Logger.h"
 #include "Sdl_API.h"
 #include "cobra_events.h"
@@ -16,17 +18,17 @@ int main(int argc, char* args[])
 		game->setup_renderer(SDL_RENDERER_ACCELERATED);
 		Grid* grid = new Grid(0, 0, game->get_win_dimensions().x, game->get_win_dimensions().y, 40, 40);
 
-		Game_Entity* snake_entity = new Game_Entity(game->get_window(), game->get_renderer());
+		Game_Entity* snake_entity = new Snake_Entity(game->get_window(), game->get_renderer());
 		Vector2 window_dimension = game->get_win_dimensions();
 		snake_entity ->add_grid(grid);
-
-		Game_Entity* yellow_apple = new Game_Entity(game->get_window(), game->get_renderer());
+		
+		Game_Entity* yellow_apple = new Texture_Entity(game->get_window(), game->get_renderer());
 		yellow_apple->add_texture_component("C:\\Users\\guico\\source\\repos\\cpp-fundamentals\\cobra\\assets\\yellow_apple.png", { 0xFF, 0, 0xF4, 0xFF });
 		yellow_apple->get_texture_component()->set_src_fraction_rect(NULL);
 		yellow_apple->get_texture_component()->set_render_target_rect(new Cobra_Rect(100, 40, 64, 64));
 		yellow_apple->add_collider2D(yellow_apple->get_texture_component()->get_render_target_rect());
 
-		Game_Entity* red_apple = new Game_Entity(game->get_window(), game->get_renderer());
+		Game_Entity* red_apple = new Texture_Entity(game->get_window(), game->get_renderer());
 		red_apple->add_texture_component("C:\\Users\\guico\\source\\repos\\cpp-fundamentals\\cobra\\assets\\red_apple.png", { 0xFF, 0, 0xF4, 0xFF });
 		red_apple->get_texture_component()->set_src_fraction_rect(NULL);
 		red_apple->get_texture_component()->set_render_target_rect(new Cobra_Rect(400, 100, 64, 64));
@@ -34,7 +36,7 @@ int main(int argc, char* args[])
 		//red_apple->get_collider(0)->place_outline({ 255, 255 , 255, SDL_ALPHA_OPAQUE });
 		//red_apple->get_texture_component()->scale(-.5f);
 
-		Game_Entity* green_apple = new Game_Entity(game->get_window(), game->get_renderer());
+		Game_Entity* green_apple = new Texture_Entity(game->get_window(), game->get_renderer());
 		green_apple->add_texture_component("C:\\Users\\guico\\source\\repos\\cpp-fundamentals\\cobra\\assets\\green_apple.png", { 0xFF, 0, 0xF4, 0xFF });
 		green_apple->get_texture_component()->set_src_fraction_rect(NULL);
 		green_apple->get_texture_component()->set_render_target_rect(new Cobra_Rect(698, 160, 64, 64));

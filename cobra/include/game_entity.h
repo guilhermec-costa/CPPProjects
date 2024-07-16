@@ -26,7 +26,7 @@ public:
 	void add_texture_component(const char*, RGBA color);
 	void add_collider2D(Cobra_Rect* rect);
 	void add_grid(Grid* grid);
-	void render() const;
+	virtual void render() const = 0;
 	void set_visibility(Visibility visibility);
 	Visibility is_visible() const;
 	Texture_Component* get_texture_component() const;
@@ -34,7 +34,7 @@ public:
 public:
 	Visibility m_visibility;
 	Status get_status() const;
-private:
+protected:
 	Texture_Component* m_texture_component;
 	std::vector<Collider2D*> m_colliders;
 	std::vector<Grid*> m_grids;
