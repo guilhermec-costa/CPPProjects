@@ -3,11 +3,11 @@
 constexpr int HEALTH = 1;
 constexpr int NOT_HEALTH = 0;
 
-typedef enum {
-	RUNNING,
-	PAUSED,
-	TERMINATED
-} Game_State;
+enum Game_State {
+	RUNNING = 0,
+	PAUSED = 1,
+	TERMINATED = 2
+} ;
 
 struct Game_Metadata {
 private:

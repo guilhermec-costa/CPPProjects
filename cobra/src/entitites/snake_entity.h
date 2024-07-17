@@ -13,6 +13,7 @@ class Snake_Entity : public Game_Entity
 public:
 	Snake_Entity(SDL_Window* window, SDL_Renderer* renderer, const unsigned length)
 		: Game_Entity(window, renderer), m_length(length), m_direction(Snake_Direction::DOWN) {};
+	~Snake_Entity();
 	void render() const override;
 	void update();
 	void add_grid(Grid* grid);
@@ -23,6 +24,10 @@ public:
 	{
 		return m_direction;
 	};
+	inline int get_length() const
+	{
+		return m_length;
+	}
 private:
 	std::vector<Grid*> m_grids;
 	unsigned int m_length;

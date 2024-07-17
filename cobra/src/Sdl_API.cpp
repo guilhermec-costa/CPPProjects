@@ -7,12 +7,11 @@
 #include "components/texture_component.h"
 #include "logger.h"
 
-
 Sdl_API::Sdl_API()
 	: m_window(nullptr), m_event_src(new SDL_Event()), m_snake(nullptr)
 {
 	init_subsystems();
-	get_metadata().set_game_state(Game_State::RUNNING);
+	get_metadata()->set_game_state(Game_State::RUNNING);
 	init_event_handlers();
 	setup_renderer(SDL_RENDERER_ACCELERATED);
 	m_integrity = HEALTH;
@@ -58,10 +57,6 @@ void Sdl_API::setup_window(const char* title, int x, int y, int w, int h)
 	}
 }
 
-Vector2 Sdl_API::get_win_dimensions() const {
-	return m_window_dimensions;
-}
-
 void Sdl_API::setup_renderer(SDL_RendererFlags flags)
 {
 	if (flags == NULL) flags = SDL_RENDERER_PRESENTVSYNC;
@@ -76,17 +71,9 @@ void Sdl_API::setup_renderer(SDL_RendererFlags flags)
 	}
 }
 
-SDL_Renderer* Sdl_API::get_renderer() const {
-	return m_renderer;
-}
-
-SDL_Window* Sdl_API::get_window() const {
-	return m_window;
-}
-
 void Sdl_API::add_entities(const std::vector<const Game_Entity*>& entities)
 {
-	for (auto entity : entities)
+	for (auto& entity : entities)
 	{
 		if (entity == nullptr)
 		{
@@ -100,9 +87,10 @@ void Sdl_API::add_entities(const std::vector<const Game_Entity*>& entities)
 
 void Sdl_API::render()
 {
+	int frame_start_time = SDL_GetTicks();
 	SDL_RenderClear(m_renderer);
 	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-	for (auto e : m_entities)
+	for (auto& e : m_entities)
 	{
 		if (e->is_visible())
 		{
@@ -111,15 +99,18 @@ void Sdl_API::render()
 	}
 	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderPresent(m_renderer);
+
+	int _elapsed = SDL_GetTicks() - frame_start_time;
+	if (_elapsed < m_ms_between_frames) SDL_Delay(m_ms_between_frames - _elapsed);
 }
 
-void Sdl_API::terminate()
-{
-	get_metadata().set_game_state(Game_State::TERMINATED);
-}
 
 void Sdl_API::update()
 {
+	if (get_metadata()->get_game_state() == Game_State::RUNNING)
+	{
+		m_snake->update();
+	}
 }
 
 void Sdl_API::handle_events()
@@ -135,32 +126,45 @@ void Sdl_API::handle_events()
 			switch (m_event_src->key.keysym.sym)
 			{
 			case SDLK_UP:
-				std::cout << "up" << std::endl;
 				if (!(m_snake->get_direction() == Snake_Direction::DOWN))
 					m_snake->set_direction(UP);
 				break;
 			case SDLK_DOWN:
-				std::cout << "down" << std::endl;
 				if (!(m_snake->get_direction() == Snake_Direction::UP))
 					m_snake->set_direction(DOWN);
 				break;
 			case SDLK_LEFT:
-				std::cout << "left" << std::endl;
 				if (!(m_snake->get_direction() == Snake_Direction::RIGHT))
 					m_snake->set_direction(LEFT);
 				break;
 			case SDLK_RIGHT:
-				std::cout << "right" << std::endl;
 				if (!(m_snake->get_direction() == Snake_Direction::LEFT))
 					m_snake->set_direction(RIGHT);
+				break;
+			case SDLK_KP_ENTER:
+				m_snake->set_length(m_snake->get_length() + 1);
+				break;
+			case SDLK_ESCAPE:
+				std::cout << "escape pressed" << std::endl;
+				Game_Metadata* metadata = get_metadata();
+				if (metadata->get_game_state() == Game_State::RUNNING)
+				{
+					std::cout << "game paused" << std::endl;
+					metadata->set_game_state(Game_State::PAUSED);
+				}
+				else
+				{
+					metadata->set_game_state(Game_State::RUNNING);
+				}
 				break;
 			}
 		}
 		}
 	}
-	m_snake->update();
 }
 
-bool Sdl_API::check_integrity() const {
-	return m_integrity;
-}
+SDL_Renderer* Sdl_API::get_renderer() const { return m_renderer; }
+SDL_Window* Sdl_API::get_window() const { return m_window; }
+void Sdl_API::terminate() { get_metadata()->set_game_state(Game_State::TERMINATED); }
+bool Sdl_API::check_integrity() const { return m_integrity; }
+Vector2 Sdl_API::get_win_dimensions() const { return m_window_dimensions; }

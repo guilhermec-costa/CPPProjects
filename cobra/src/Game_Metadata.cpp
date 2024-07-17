@@ -1,4 +1,5 @@
 #include "Game_Metadata.h"
+#include <iostream>
 
 Game_Metadata::Game_Metadata()
 	: m_state(Game_State::RUNNING)

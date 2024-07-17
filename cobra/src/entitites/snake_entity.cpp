@@ -7,7 +7,7 @@ void Snake_Entity::render() const
 		get_texture_component()->render();
 	}
 
-	for (const Collider2D* collider : m_colliders)
+	for (auto& collider: m_colliders)
 	{
 		if (collider != nullptr)
 		{
@@ -15,13 +15,6 @@ void Snake_Entity::render() const
 		}
 	}
 
-	for (const Grid* grid : m_grids)
-	{
-		if (grid != nullptr)
-		{
-			grid->render(m_renderer);
-		}
-	}
 
 	if (!m_grids.empty()) {
 		Grid* main_grid = m_grids[0];
@@ -33,6 +26,14 @@ void Snake_Entity::render() const
 			else {
 				main_grid->paint(m_renderer, rect, { 0, 255, 0, 255 });
 			}
+		}
+	}
+
+	for (auto& grid: m_grids)
+	{
+		if (grid != nullptr)
+		{
+			grid->render(m_renderer);
 		}
 	}
 }
@@ -63,6 +64,8 @@ void Snake_Entity::update()
 	Grid* main_grid = get_grid(0);
 	int cell_width = main_grid->m_cell_width;
 	int cell_height = main_grid->m_cell_height;
+
+	// move each snake rect to the previous snake rect
 	for (int i = m_length; i > 0; --i)
 	{
 		const SDL_Rect* prev_rect = main_grid->get_rectangle(i - 1);
@@ -88,8 +91,16 @@ void Snake_Entity::update()
 		snake_head_rect->x += cell_width;
 		break;
 	}
-	if (snake_head_rect->x < 0) snake_head_rect->x = 0;
+	if (snake_head_rect->x < 0) snake_head_rect->x = 200;
 	if (snake_head_rect->y < 0) snake_head_rect->y = 0;
 	if (snake_head_rect->x >= main_grid->m_width) snake_head_rect->x = main_grid->m_width - cell_width;
 	if (snake_head_rect->y >= main_grid->m_height) snake_head_rect->y = main_grid->m_height - cell_height;
+}
+
+Snake_Entity::~Snake_Entity()
+{
+	for (auto& grid : m_grids)
+	{
+		delete grid;
+	}
 }
