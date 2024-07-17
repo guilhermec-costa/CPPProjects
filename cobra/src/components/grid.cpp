@@ -26,9 +26,7 @@ Grid::Grid(const unsigned int x, const unsigned int y,
 Grid::~Grid()
 {
 	for (const Collider2D* collider : m_colliders)
-	{
 		delete collider;
-	}
 }
 
 std::ostream& operator<<(std::ostream& stream, const Grid& grid)
@@ -40,9 +38,7 @@ std::ostream& operator<<(std::ostream& stream, const Grid& grid)
 void Grid::render(SDL_Renderer* renderer) const
 {
 	for (const Collider2D* collider : m_colliders)
-	{
 		collider->render(renderer);
-	}
 }
 
 void Grid::paint(SDL_Renderer* renderer, const SDL_Rect* rect, RGBA color) const
@@ -51,8 +47,4 @@ void Grid::paint(SDL_Renderer* renderer, const SDL_Rect* rect, RGBA color) const
 	SDL_RenderFillRect(renderer, rect);
 }
 
-SDL_Rect* Grid::get_rectangle(const unsigned int index) const
-{
-	Collider2D* collider = m_colliders[index];
-	return collider->get_dst_rect()->get_generated_SDL_rect();
-}
+SDL_Rect* Grid::get_rectangle(const unsigned int index) const { return m_colliders[index]->get_dst_rect()->get_generated_SDL_rect(); }

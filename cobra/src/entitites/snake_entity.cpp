@@ -38,26 +38,6 @@ void Snake_Entity::render() const
 	}
 }
 
-void Snake_Entity::add_grid(Grid* grid)
-{
-	m_grids.push_back(grid);
-}
-
-Grid* Snake_Entity::get_grid(const unsigned int index) const
-{
-	return m_grids[index];
-}
-
-void Snake_Entity::set_length(const unsigned int length)
-{
-	m_length = length;
-}
-
-void Snake_Entity::set_direction(const Snake_Direction direction)
-{
-	m_direction = direction;
-}
-
 void Snake_Entity::update()
 {
 	if (m_grids.empty()) return;
@@ -91,10 +71,6 @@ void Snake_Entity::update()
 		snake_head_rect->x += cell_width;
 		break;
 	}
-	if (snake_head_rect->x < 0) snake_head_rect->x = 200;
-	if (snake_head_rect->y < 0) snake_head_rect->y = 0;
-	if (snake_head_rect->x >= main_grid->m_width) snake_head_rect->x = main_grid->m_width - cell_width;
-	if (snake_head_rect->y >= main_grid->m_height) snake_head_rect->y = main_grid->m_height - cell_height;
 }
 
 Snake_Entity::~Snake_Entity()
@@ -104,3 +80,8 @@ Snake_Entity::~Snake_Entity()
 		delete grid;
 	}
 }
+
+void Snake_Entity::add_grid(Grid* grid) { m_grids.push_back(grid); }
+void Snake_Entity::set_length(const unsigned int length) { m_length = length; }
+void Snake_Entity::set_direction(const Snake_Direction direction) { m_direction = direction; }
+Grid* Snake_Entity::get_grid(const unsigned int index) const { return m_grids[index]; }

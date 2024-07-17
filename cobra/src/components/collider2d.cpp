@@ -35,7 +35,4 @@ void Collider2D::place_outline(RGBA color)
 	*m_outline_color = color;
 }
 
-Cobra_Rect* Collider2D::get_dst_rect() const
-{
-	return m_dst_rect;
-}
+Cobra_Rect* Collider2D::get_dst_rect() const { return m_dst_rect; }

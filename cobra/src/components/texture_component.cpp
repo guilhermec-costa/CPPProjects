@@ -26,6 +26,12 @@ Cobra_Rect::Cobra_Rect(
 	this->m_dimensions.set(w, h);
 	this->generate_SDL_rect();
 }
+Texture_Component::~Texture_Component()
+{
+	delete m_src_fraction_rect;
+	delete m_render_target_rect;
+	delete m_texture;
+}
 
 void Cobra_Rect::Dimensions::set(int w, int h)
 {
@@ -56,10 +62,6 @@ void Cobra_Rect::generate_SDL_rect()
 	};
 }
 
-inline SDL_Rect* Cobra_Rect::get_generated_SDL_rect() const
-{
-	return m_SDL_rect;
-}
 
 Texture_Component::Texture_Component(SDL_Renderer* renderer, const char* path, RGBA mask)
 	: bg_mask(mask), m_src_fraction_rect(new Cobra_Rect()), m_render_target_rect(new Cobra_Rect()), m_renderer(renderer)
@@ -72,16 +74,6 @@ Texture_Component::Texture_Component(SDL_Renderer* renderer, const char* path, R
 void Texture_Component::render()
 {
 	SDL_RenderCopy(m_renderer, m_texture, m_src_fraction_rect->get_generated_SDL_rect(), m_render_target_rect->get_generated_SDL_rect());
-}
-
-
-Cobra_Rect* Texture_Component::get_src_fraction_rect() const
-{
-	return m_src_fraction_rect;
-}
-Cobra_Rect* Texture_Component::get_render_target_rect() const
-{
-	return m_render_target_rect;
 }
 
 void Texture_Component::set_src_fraction_rect(Cobra_Rect* const src_rect)
@@ -107,15 +99,6 @@ void Texture_Component::set_render_target_rect(Cobra_Rect* const dst_rect)
 	}
 }
 
-inline SDL_Renderer* Texture_Component::get_renderer() const
-{
-	return m_renderer;
-}
-
-inline SDL_Texture* Texture_Component::get_texture() const {
-	return m_texture;
-}
-
 void Texture_Component::scale(float scale_in)
 {
 	Cobra_Rect* dst_rect = get_render_target_rect();
@@ -136,9 +119,8 @@ void Texture_Component::rotate(double angle)
 	SDL_RenderCopyEx(m_renderer, this->get_texture(), src_rect, dst_rect, angle, NULL, SDL_FLIP_HORIZONTAL);
 }
 
-Texture_Component::~Texture_Component()
-{
-	delete m_src_fraction_rect;
-	delete m_render_target_rect;
-	delete m_texture;
-}
+Cobra_Rect* Texture_Component::get_src_fraction_rect() const { return m_src_fraction_rect; }
+Cobra_Rect* Texture_Component::get_render_target_rect() const { return m_render_target_rect; }
+SDL_Rect* Cobra_Rect::get_generated_SDL_rect() const { return m_SDL_rect; }
+inline SDL_Renderer* Texture_Component::get_renderer() const { return m_renderer; }
+inline SDL_Texture* Texture_Component::get_texture() const { return m_texture; }
