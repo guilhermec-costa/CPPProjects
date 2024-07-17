@@ -1,6 +1,7 @@
 #pragma once
 #include "game.h"
 #include <SDL2/SDL_video.h>
+#include "snake_entity.h"
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_events.h>
 #include "cobra_events.h"
@@ -26,11 +27,15 @@ public:
 	Vector2 get_win_dimensions() const;
 	void setup_renderer(SDL_RendererFlags);
 	void init_subsystems();
+	inline void set_active_snake(Snake_Entity* snake) {
+		m_snake = snake;
+	}
 	bool check_integrity() const;
 	void add_entities(const std::vector<const Game_Entity*>&);
 	SDL_Renderer* get_renderer() const;
 	SDL_Window* get_window() const;
 	Texture_Component* texture_component;
+	Snake_Entity* m_snake;
 private:
 	void init_event_handlers();
 private:

@@ -9,7 +9,7 @@
 
 
 Sdl_API::Sdl_API()
-	: m_window(nullptr), m_event_src(new SDL_Event())
+	: m_window(nullptr), m_event_src(new SDL_Event()), m_snake(nullptr)
 {
 	init_subsystems();
 	get_metadata().set_game_state(Game_State::RUNNING);
@@ -131,12 +131,34 @@ void Sdl_API::handle_events()
 		case SDL_QUIT:
 			terminate();
 			break;
+		case SDL_KEYDOWN: {
+			switch (m_event_src->key.keysym.sym)
+			{
+			case SDLK_UP:
+				std::cout << "up" << std::endl;
+				if (!(m_snake->get_direction() == Snake_Direction::DOWN))
+					m_snake->set_direction(UP);
+				break;
+			case SDLK_DOWN:
+				std::cout << "down" << std::endl;
+				if (!(m_snake->get_direction() == Snake_Direction::UP))
+					m_snake->set_direction(DOWN);
+				break;
+			case SDLK_LEFT:
+				std::cout << "left" << std::endl;
+				if (!(m_snake->get_direction() == Snake_Direction::RIGHT))
+					m_snake->set_direction(LEFT);
+				break;
+			case SDLK_RIGHT:
+				std::cout << "right" << std::endl;
+				if (!(m_snake->get_direction() == Snake_Direction::LEFT))
+					m_snake->set_direction(RIGHT);
+				break;
+			}
 		}
-		if (m_event_src->button.button == SDL_BUTTON_LEFT && m_event_src->type == SDL_MOUSEBUTTONDOWN)
-		{
-			std::cout << "left clicked" << std::endl;
 		}
 	}
+	m_snake->update();
 }
 
 bool Sdl_API::check_integrity() const {

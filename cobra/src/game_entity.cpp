@@ -17,11 +17,6 @@ void Game_Entity::add_collider2D(Cobra_Rect* rect)
 	m_colliders.push_back(new Collider2D(rect));
 }
 
-void Game_Entity::add_grid(Grid* grid)
-{
-	m_grids.push_back(grid);
-}
-
 Texture_Component* Game_Entity::get_texture_component() const
 {
 	return m_texture_component;

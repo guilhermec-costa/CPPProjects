@@ -25,7 +25,6 @@ public:
 	void associate_window(SDL_Window* window);
 	void add_texture_component(const char*, RGBA color);
 	void add_collider2D(Cobra_Rect* rect);
-	void add_grid(Grid* grid);
 	virtual void render() const = 0;
 	void set_visibility(Visibility visibility);
 	Visibility is_visible() const;
@@ -37,7 +36,6 @@ public:
 protected:
 	Texture_Component* m_texture_component;
 	std::vector<Collider2D*> m_colliders;
-	std::vector<Grid*> m_grids;
 	SDL_Renderer* m_renderer;
 	Status m_status;
 	SDL_Window* m_window;

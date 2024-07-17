@@ -17,10 +17,12 @@ public:
 	void paint(SDL_Renderer* renderer, const SDL_Rect* rect, RGBA color) const;
 	unsigned int m_width;
 	unsigned int m_height;
+	unsigned int m_cell_width;
+	unsigned int m_cell_height;
 	unsigned int m_x;
 	unsigned int m_y;
 	unsigned int m_cell_units;
-	const SDL_Rect* get_rectangle(const unsigned int index) const;
+	SDL_Rect* get_rectangle(const unsigned int index) const;
 private:
 	std::vector<Collider2D*> m_colliders;
 };

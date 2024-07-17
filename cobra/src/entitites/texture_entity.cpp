@@ -15,12 +15,4 @@ void Texture_Entity::render() const
 			collider->render(m_renderer);
 		}
 	}
-
-	for (const Grid* grid : m_grids)
-	{
-		if (grid != nullptr)
-		{
-			grid->render(m_renderer);
-		}
-	}
 }
