@@ -145,11 +145,9 @@ void Sdl_API::handle_events()
 				m_snake->set_length(m_snake->get_length() + 1);
 				break;
 			case SDLK_ESCAPE:
-				std::cout << "escape pressed" << std::endl;
 				Game_Metadata* metadata = get_metadata();
 				if (metadata->get_game_state() == Game_State::RUNNING)
 				{
-					std::cout << "game paused" << std::endl;
 					metadata->set_game_state(Game_State::PAUSED);
 				}
 				else

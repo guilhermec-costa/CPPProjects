@@ -3,7 +3,7 @@
 
 Grid::Grid(const unsigned int x, const unsigned int y,
 	const unsigned int width, const unsigned int height,
-	const unsigned int cell_width, const unsigned int cell_height
+	const unsigned int cell_width, const unsigned int cell_height, RGBA outlined_color
 ) : m_x(x), m_y(x), m_width(width), m_height(height), m_cell_width(cell_width), m_cell_height(cell_height)
 {
 	int m_grid_area = width * height;
@@ -18,7 +18,7 @@ Grid::Grid(const unsigned int x, const unsigned int y,
 			y_counter += cell_height;
 		}
 		Collider2D* test_collider = new Collider2D(new Cobra_Rect(x_counter, y_counter, cell_width, cell_height));
-		test_collider->place_outline({ 0x1a, 0x1a, 0x1a, 0xff });
+		test_collider->place_outline(outlined_color);
 		m_colliders.push_back(test_collider);
 	}
 };
@@ -37,7 +37,7 @@ std::ostream& operator<<(std::ostream& stream, const Grid& grid)
 
 void Grid::render(SDL_Renderer* renderer) const
 {
-	for (const Collider2D* collider : m_colliders)
+	for (auto& collider: m_colliders)
 		collider->render(renderer);
 }
 
@@ -48,3 +48,4 @@ void Grid::paint(SDL_Renderer* renderer, const SDL_Rect* rect, RGBA color) const
 }
 
 SDL_Rect* Grid::get_rectangle(const unsigned int index) const { return m_colliders[index]->get_dst_rect()->get_generated_SDL_rect(); }
+Collider2D* Grid::get_collider2D(const unsigned int index) const { return m_colliders[index]; }

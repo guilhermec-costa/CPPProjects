@@ -10,7 +10,7 @@ class Grid {
 public:
 	Grid(const unsigned int x, const unsigned int y,
 		const unsigned int width, const unsigned int height,
-		const unsigned int cell_width, const unsigned int cell_height
+		const unsigned int cell_width, const unsigned int cell_height, RGBA outline_color
 	);
 	~Grid();
 	void render(SDL_Renderer* renderer) const;
@@ -22,7 +22,9 @@ public:
 	unsigned int m_x;
 	unsigned int m_y;
 	unsigned int m_cell_units;
+	int m_last_time_frame_updated;
 	SDL_Rect* get_rectangle(const unsigned int index) const;
+	Collider2D* get_collider2D(const unsigned int index) const;
 private:
 	std::vector<Collider2D*> m_colliders;
 };

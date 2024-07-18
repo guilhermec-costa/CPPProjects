@@ -26,6 +26,7 @@ Cobra_Rect::Cobra_Rect(
 	this->m_dimensions.set(w, h);
 	this->generate_SDL_rect();
 }
+
 Texture_Component::~Texture_Component()
 {
 	delete m_src_fraction_rect;
@@ -61,7 +62,6 @@ void Cobra_Rect::generate_SDL_rect()
 		this->m_dimensions.h
 	};
 }
-
 
 Texture_Component::Texture_Component(SDL_Renderer* renderer, const char* path, RGBA mask)
 	: bg_mask(mask), m_src_fraction_rect(new Cobra_Rect()), m_render_target_rect(new Cobra_Rect()), m_renderer(renderer)

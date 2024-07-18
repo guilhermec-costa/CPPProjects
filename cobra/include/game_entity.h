@@ -33,10 +33,10 @@ public:
 public:
 	Visibility m_visibility;
 	Status get_status() const;
+	SDL_Window* m_window;
+	SDL_Renderer* m_renderer;
 protected:
 	Texture_Component* m_texture_component;
 	std::vector<Collider2D*> m_colliders;
-	SDL_Renderer* m_renderer;
 	Status m_status;
-	SDL_Window* m_window;
 };
