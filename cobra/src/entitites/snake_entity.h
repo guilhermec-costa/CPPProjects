@@ -58,5 +58,7 @@ private:
 	Texture_Entity* m_apple;
 	unsigned int apples_eaten;
 	bool m_snake_started;
+	bool is_expanding;
+	int animation_progress;
 	std::deque<SDL_Rect> _m_rq;
 };

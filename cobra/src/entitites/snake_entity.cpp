@@ -19,7 +19,7 @@ void Snake_Entity::check_food_collision(SDL_Rect* food)
 {
 	if (head_rect->is_colliding(food)) {
 		apples_eaten++;
-		m_length += 1.5;
+		m_length += 2;
 		SDL_Rect* apple_rect = m_apple->get_collider(0)->get_dst_rect()->get_generated_SDL_rect();
 		apple_rect->x = (rand() % (int)(800 - apple_rect->w * 1.5)) + 1;
 		apple_rect->y = (rand() % (int)(600 - apple_rect->y * 1.5)) + 1;
@@ -32,6 +32,19 @@ void Snake_Entity::update()
 	adjust_snake();
 	check_food_collision(m_apple->get_texture_component()->get_render_target_rect()->get_generated_SDL_rect());
 	collide_itself();
+	if (is_expanding) {
+		const int max_animation_frames = 10;
+		const int expansion_amount = 1;
+		if (animation_progress < max_animation_frames) {
+			for (auto& segment : _m_rq) {
+				segment.h += (animation_progress < max_animation_frames / 2) ? expansion_amount : -expansion_amount;
+			}
+			animation_progress++;
+		}
+		else {
+			is_expanding = false;
+		}
+	}
 	switch (m_direction)
 	{
 	case UP:
@@ -92,10 +105,8 @@ void Snake_Entity::belly_effect()
 {
 	if (_m_rq.size() > 0)
 	{
-		for (size_t i = 0; i < _m_rq.size(); ++i)
-		{
-			_m_rq[i].h += 30;
-		}
+		is_expanding = true;
+		animation_progress = 0;
 	}
 }
 
