@@ -1,44 +1,53 @@
 #include "components/grid.h"
 #include "iostream"
 
-Grid::Grid(const unsigned int x, const unsigned int y,
-	const unsigned int width, const unsigned int height,
+Grid::Grid(SDL_Renderer* renderer, const unsigned int n_cells,
 	const unsigned int cell_width, const unsigned int cell_height, RGBA outlined_color
-) : m_x(x), m_y(x), m_width(width), m_height(height), m_cell_width(cell_width), m_cell_height(cell_height)
+) : m_cell_width(cell_width), m_cell_height(cell_height), m_outline_color(outlined_color)
 {
-	int m_grid_area = width * height;
-	int cell_area = cell_width * cell_height;
-	m_cell_units = m_grid_area / cell_area;
-
-	int x_counter = 0, y_counter = 0;
-	for (int i = 0; i <= m_grid_area / sizeof(int); i++, x_counter += cell_width)
+	m_buffer = new Uint32[cell_width * cell_height];
+	root_rect = new SDL_Rect{ 0, 0, 25, 25 };
+	for (int i = 0; i <= n_cells; i++)
 	{
-		if (x_counter >= width) {
-			x_counter = 0;
-			y_counter += cell_height;
-		}
-		Collider2D* test_collider = new Collider2D(new Cobra_Rect(x_counter, y_counter, cell_width, cell_height));
-		test_collider->place_outline(outlined_color);
-		m_colliders.push_back(test_collider);
+		SDL_Texture* texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, cell_width, cell_height);
+		m_textures.push_back(texture);
 	}
 };
 
 Grid::~Grid()
 {
-	for (const Collider2D* collider : m_colliders)
-		delete collider;
+	for (const SDL_Texture* texture : m_textures)
+		delete texture;
+
+	delete[] m_buffer;
 }
 
-std::ostream& operator<<(std::ostream& stream, const Grid& grid)
+void Grid::render(SDL_Renderer* renderer)
 {
-	stream << grid.m_cell_units;
-	return stream;
-}
+	SDL_Rect rect = { 0, 0, m_cell_width, m_cell_height };
+	for (int y = 0; y < m_cell_height; y++) {
+		for (int x = 0; x < m_cell_width; x++) {
+			if (x == 0 || x == m_cell_width - 1 || y == 0 || y == m_cell_height - 1) {
+				m_buffer[(y * m_cell_width) + x] = m_outline_color.format();
+			}
+			else
+			{
+				m_buffer[(y * m_cell_width) + x] = 0;
+			}
+		}
+	}
 
-void Grid::render(SDL_Renderer* renderer) const
-{
-	for (auto& collider: m_colliders)
-		collider->render(renderer);
+	for (auto& texture : m_textures) {
+		SDL_UpdateTexture(texture, NULL, m_buffer, m_cell_width * sizeof(Uint32));
+		SDL_RenderCopy(renderer, texture, NULL, &rect);
+		if (rect.x < 800 - 25) {
+			rect.x += 25;
+		}
+		else {
+			rect.x = 0;
+			rect.y += 25;
+		}
+	}
 }
 
 void Grid::paint(SDL_Renderer* renderer, const SDL_Rect* rect, RGBA color) const
@@ -47,5 +56,3 @@ void Grid::paint(SDL_Renderer* renderer, const SDL_Rect* rect, RGBA color) const
 	SDL_RenderFillRect(renderer, rect);
 }
 
-SDL_Rect* Grid::get_rectangle(const unsigned int index) const { return m_colliders[index]->get_dst_rect()->get_generated_SDL_rect(); }
-Collider2D* Grid::get_collider2D(const unsigned int index) const { return m_colliders[index]; }

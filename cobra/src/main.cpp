@@ -22,6 +22,10 @@ int main(int argc, char* args[])
 		Snake_Entity* snake_entity = new Snake_Entity(game->get_window(), game->get_renderer(), new Collider2D(new Cobra_Rect{100, 100, 28, 28}), 5);
 		snake_entity->set_bounds({ 0, game->get_win_dimensions().x, 0, game->get_win_dimensions().y });
 		game->set_active_snake(snake_entity);
+		
+		const unsigned int cells = (game->get_win_dimensions().x * game->get_win_dimensions().y ) / pow(25, 2);
+		Grid* grid = new Grid(game->get_renderer(), cells , 25 ,25, { 0x1e, 0x1e, 0x1e, SDL_ALPHA_OPAQUE });
+		game->add_grid(grid);
 
 		Texture_Entity* red_apple = new Texture_Entity(game->get_window(), game->get_renderer());
 		red_apple->add_texture_component("C:\\Users\\guico\\source\\repos\\cpp-fundamentals\\cobra\\assets\\red_apple.png", { 0xFF, 0, 0xF4, 0xFF });

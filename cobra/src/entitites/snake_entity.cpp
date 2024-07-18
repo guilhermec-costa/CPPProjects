@@ -18,12 +18,12 @@ void Snake_Entity::render() const
 void Snake_Entity::check_food_collision(SDL_Rect* food)
 {
 	if (head_rect->is_colliding(food)) {
+		belly_effect();
 		apples_eaten++;
 		m_length += 2;
 		SDL_Rect* apple_rect = m_apple->get_collider(0)->get_dst_rect()->get_generated_SDL_rect();
 		apple_rect->x = (rand() % (int)(800 - apple_rect->w * 1.5)) + 1;
 		apple_rect->y = (rand() % (int)(600 - apple_rect->y * 1.5)) + 1;
-		belly_effect();
 	}
 }
 

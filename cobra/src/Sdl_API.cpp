@@ -90,6 +90,7 @@ void Sdl_API::render()
 	int frame_start_time = SDL_GetTicks();
 	SDL_RenderClear(m_renderer);
 	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+	m_bg_grid->render(m_renderer);
 	for (auto& e : m_entities)
 	{
 		if (e->is_visible())
@@ -97,7 +98,7 @@ void Sdl_API::render()
 			e->render();
 		}
 	}
-
+	
 	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderPresent(m_renderer);
 
