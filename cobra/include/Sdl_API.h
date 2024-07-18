@@ -24,6 +24,7 @@ public:
 	void terminate() override;
 	void handle_events() override;
 	void setup_window(const char* title, int x, int y, int w, int h);
+	inline void add_grid(Grid* grid) { m_bg_grid = grid; };
 	Vector2 get_win_dimensions() const;
 	void setup_renderer(SDL_RendererFlags);
 	void init_subsystems();
@@ -45,4 +46,5 @@ private:
 	Vector2 m_window_dimensions;
 	std::vector<const Game_Entity*> m_entities;
 	Cobra_EVENTS m_events;
+	Grid* m_bg_grid;
 };

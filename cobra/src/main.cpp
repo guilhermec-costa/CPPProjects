@@ -15,11 +15,11 @@ int main(int argc, char* args[])
 
 	if (game->check_integrity())
 	{
-		game->setup_window("COBRA", NULL, NULL, 1360, 768);
+		game->setup_window("COBRA", NULL, NULL, 800, 600);
 		game->setup_renderer(SDL_RENDERER_ACCELERATED);
 		game->set_max_framerate(60);
 
-		Snake_Entity* snake_entity = new Snake_Entity(game->get_window(), game->get_renderer(), new Collider2D(new Cobra_Rect{100, 100, 32, 32}), 5);
+		Snake_Entity* snake_entity = new Snake_Entity(game->get_window(), game->get_renderer(), new Collider2D(new Cobra_Rect{100, 100, 28, 28}), 5);
 		snake_entity->set_bounds({ 0, game->get_win_dimensions().x, 0, game->get_win_dimensions().y });
 		game->set_active_snake(snake_entity);
 
