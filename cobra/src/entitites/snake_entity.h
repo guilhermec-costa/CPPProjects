@@ -1,7 +1,9 @@
 #pragma once
 #include "game_entity.h"
 #include "texture_entity.h"
+#include <SDL2/SDL_ttf.h>
 #include <deque>
+#include "components/dynamic_text.h"
 
 enum Snake_Direction {
 	UP = 'U',
@@ -20,9 +22,7 @@ typedef struct Bounds {
 class Snake_Entity : public Game_Entity
 {
 public:
-	Snake_Entity(SDL_Window* window, SDL_Renderer* renderer, Collider2D* head_rect, const unsigned length)
-		: Game_Entity(window, renderer), m_length(length), m_direction(Snake_Direction::DOWN), head_rect(head_rect), m_apple(nullptr),
-		m_is_game_over(false), m_bounds({}), apples_eaten(0) {};
+	Snake_Entity(SDL_Window* window, SDL_Renderer* renderer, Collider2D* head_rect, const unsigned length);
 	~Snake_Entity();
 	void render() const override;
 	bool m_is_game_over;
@@ -35,7 +35,7 @@ public:
 		m_apple = rect;
 	};
 	void game_over();
-	inline void set_snake_start(bool state) { m_snake_started = true;  }
+	inline void set_snake_start(bool state) { m_snake_started = true; }
 	inline bool get_snake_state() const { return m_snake_started; }
 	void set_length(const unsigned int length);
 	void set_direction(const Snake_Direction direction);
@@ -61,4 +61,5 @@ private:
 	bool is_expanding;
 	int animation_progress;
 	std::deque<SDL_Rect> _m_rq;
+	Dynamic_Text* score_text;
 };

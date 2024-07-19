@@ -20,7 +20,7 @@ int main(int argc, char* args[])
 		game->set_max_framerate(60);
 
 		Snake_Entity* snake_entity = new Snake_Entity(game->get_window(), game->get_renderer(), 
-			new Collider2D(new Cobra_Rect{SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 28, 28}), 5);
+			new Collider2D(new Cobra_Rect{SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 25, 25}), 1);
 		snake_entity->set_bounds({ 0, game->get_win_dimensions().x, 0, game->get_win_dimensions().y });
 		game->set_active_snake(snake_entity);
 		

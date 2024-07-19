@@ -149,6 +149,7 @@
     <ClCompile Include="include\cobra_events.h" />
     <ClCompile Include="src\asset_manager.cpp" />
     <ClCompile Include="src\components\collider2d.cpp" />
+    <ClCompile Include="src\components\dynamic_text.cpp" />
     <ClCompile Include="src\components\grid.cpp" />
     <ClCompile Include="src\components\texture_component.cpp" />
     <ClCompile Include="src\entitites\snake_entity.cpp" />
@@ -163,6 +164,7 @@
   <ItemGroup>
     <ClInclude Include="include\asset_manager.h" />
     <ClInclude Include="include\components\collider2d.h" />
+    <ClInclude Include="include\components\dynamic_text.h" />
     <ClInclude Include="include\components\grid.h" />
     <ClInclude Include="include\game_entity.h" />
     <ClInclude Include="include\game_metadata.h" />

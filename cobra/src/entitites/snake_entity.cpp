@@ -1,9 +1,20 @@
 #include "snake_entity.h"
+#include "logger.h"
 #include <algorithm>
 #include <iterator>
+#include <sstream>
+
+Snake_Entity::Snake_Entity(SDL_Window* window, SDL_Renderer* renderer, Collider2D* head_rect, const unsigned length)
+	: Game_Entity(window, renderer), m_length(length), m_direction(Snake_Direction::DOWN), head_rect(head_rect), m_apple(nullptr),
+	m_is_game_over(false), m_bounds({}), apples_eaten(0)
+{
+	score_text = new Dynamic_Text(renderer);
+	score_text->update("Score 0", { 255, 255, 255, 255 });
+};
 
 void Snake_Entity::render() const
 {
+	score_text->render();
 	if (_m_rq.size() > 0) {
 
 		int width = _m_rq[0].w, height = _m_rq[0].h;
@@ -11,7 +22,7 @@ void Snake_Entity::render() const
 		for (auto it = _m_rq.begin(); it != _m_rq.end(); ++it)
 		{
 			for (int i = 0; i < width * height; i++) {
-				if(it == _m_rq.begin()) buffer[i] = 0xFF0000FF;
+				if (it == _m_rq.begin()) buffer[i] = 0xFF0000FF;
 				else buffer[i] = 0x00FF00FF;
 			}
 			SDL_Texture* texture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, width, height);
@@ -27,20 +38,23 @@ void Snake_Entity::render() const
 void Snake_Entity::check_food_collision(SDL_Rect* food)
 {
 	if (head_rect->is_colliding(food)) {
-		belly_effect();
+		//belly_effect();
 		apples_eaten++;
-		m_length += 2.5;
+		m_length += 2;
 		SDL_Rect* apple_rect = m_apple->get_collider(0)->get_dst_rect()->get_generated_SDL_rect();
 		apple_rect->x = (rand() % (int)(800 - apple_rect->w * 1.5)) + 1;
 		apple_rect->y = (rand() % (int)(600 - apple_rect->y * 1.5)) + 1;
+		std::stringstream ss;
+		ss << "Score " << apples_eaten;
+		score_text->update(ss.str(), { 255, 0, 0, 255 });
 	}
 }
 
 void Snake_Entity::update()
 {
-	adjust_snake();
-	check_food_collision(m_apple->get_texture_component()->get_render_target_rect()->get_generated_SDL_rect());
 	collide_itself();
+	check_food_collision(m_apple->get_texture_component()->get_render_target_rect()->get_generated_SDL_rect());
+	adjust_snake();
 	if (is_expanding) {
 		int body_counter = 0;
 		const int max_animation_frames = 15;
@@ -66,18 +80,19 @@ void Snake_Entity::update()
 	switch (m_direction)
 	{
 	case UP:
-		head_rect->get_dst_rect()->get_generated_SDL_rect()->y -= 10;
+		head_rect->get_dst_rect()->get_generated_SDL_rect()->y -= 7;
 		break;
 	case DOWN:
-		head_rect->get_dst_rect()->get_generated_SDL_rect()->y += 10;
+		head_rect->get_dst_rect()->get_generated_SDL_rect()->y += 7;
 		break;
 	case LEFT:
-		head_rect->get_dst_rect()->get_generated_SDL_rect()->x -= 10;
+		head_rect->get_dst_rect()->get_generated_SDL_rect()->x -= 7;
 		break;
 	case RIGHT:
-		head_rect->get_dst_rect()->get_generated_SDL_rect()->x += 10;
+		head_rect->get_dst_rect()->get_generated_SDL_rect()->x += 7;
 		break;
 	}
+
 	_m_rq.push_front(*head_rect->get_dst_rect()->get_generated_SDL_rect());
 	while (_m_rq.size() > m_length)
 	{
@@ -91,9 +106,27 @@ void Snake_Entity::collide_itself()
 	{
 		SDL_Rect* _head_rect = head_rect->get_dst_rect()->get_generated_SDL_rect();
 		for (auto it = std::next(_m_rq.begin()); it != _m_rq.end(); ++it) {
-			if (_head_rect->x == it->x &&
-				_head_rect->y == it->y) {
-				game_over();
+			switch (m_direction)
+			{
+			case Snake_Direction::UP:
+			case Snake_Direction::LEFT:
+				if (_head_rect->x == it->x &&
+					_head_rect->y == it->y) {
+					game_over();
+					break;
+				}
+			case Snake_Direction::DOWN:
+				if ((_head_rect->x) == it->x && (_head_rect->y + _head_rect->h) == it->y)
+				{
+					game_over();
+					break;
+				}
+			case Snake_Direction::RIGHT:
+				if ((_head_rect->x + _head_rect->w) == it->x && _head_rect->y == it->y)
+				{
+					game_over();
+					break;
+				}
 			}
 		}
 	}

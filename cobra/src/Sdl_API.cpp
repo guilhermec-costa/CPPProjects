@@ -3,9 +3,12 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
+#include <algorithm>
+#include <sstream>
 #include "asset_manager.h"
 #include "components/texture_component.h"
 #include "logger.h"
+#include "components/dynamic_text.h"
 
 Sdl_API::Sdl_API()
 	: m_window(nullptr), m_event_src(new SDL_Event()), m_snake(nullptr)
@@ -98,7 +101,10 @@ void Sdl_API::render()
 			e->render();
 		}
 	}
-	
+	//std::for_each(m_texts.begin(), m_texts.end(), [&](auto& t)
+	//	{
+	//		t.render();
+	//	});
 	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderPresent(m_renderer);
 
@@ -109,9 +115,10 @@ void Sdl_API::render()
 
 void Sdl_API::update()
 {
-	if (!m_snake->m_is_game_over 
+	if (!m_snake->m_is_game_over
 		&& get_metadata()->get_game_state() == Game_State::RUNNING
-		&& m_snake->get_snake_state()) {
+		&& m_snake->get_snake_state())
+	{
 		m_snake->update();
 	}
 }
@@ -166,9 +173,11 @@ void Sdl_API::handle_events()
 
 SDL_Renderer* Sdl_API::get_renderer() const { return m_renderer; }
 SDL_Window* Sdl_API::get_window() const { return m_window; }
-void Sdl_API::terminate() { 
+void Sdl_API::terminate() {
 	TTF_Quit();
-	get_metadata()->set_game_state(Game_State::TERMINATED); 
+	get_metadata()->set_game_state(Game_State::TERMINATED);
 }
 bool Sdl_API::check_integrity() const { return m_integrity; }
 Vector2 Sdl_API::get_win_dimensions() const { return m_window_dimensions; }
+
+

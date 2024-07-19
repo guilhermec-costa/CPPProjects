@@ -4,9 +4,11 @@
 #include "snake_entity.h"
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_events.h>
+#include <SDL2/SDL_ttf.h>
 #include "cobra_events.h"
 #include "game_entity.h"
 #include "vector"
+#include <unordered_map>
 #include "components/texture_component.h"
 
 #define COBRA_SUBSYSTEMS (SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER)
@@ -24,6 +26,7 @@ public:
 	void terminate() override;
 	void handle_events() override;
 	void setup_window(const char* title, int x, int y, int w, int h);
+	//void add_text_component(const char* text, SDL_Color color, std::string identifier);
 	inline void add_grid(Grid* grid) { m_bg_grid = grid; };
 	Vector2 get_win_dimensions() const;
 	void setup_renderer(SDL_RendererFlags);
@@ -45,6 +48,7 @@ private:
 	SDL_Event* m_event_src;
 	Vector2 m_window_dimensions;
 	std::vector<const Game_Entity*> m_entities;
+	std::unordered_map<std::string, SDL_Texture*> m_texts;
 	Cobra_EVENTS m_events;
 	Grid* m_bg_grid;
 };
