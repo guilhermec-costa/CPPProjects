@@ -166,6 +166,9 @@ void Sdl_API::handle_events()
 
 SDL_Renderer* Sdl_API::get_renderer() const { return m_renderer; }
 SDL_Window* Sdl_API::get_window() const { return m_window; }
-void Sdl_API::terminate() { get_metadata()->set_game_state(Game_State::TERMINATED); }
+void Sdl_API::terminate() { 
+	TTF_Quit();
+	get_metadata()->set_game_state(Game_State::TERMINATED); 
+}
 bool Sdl_API::check_integrity() const { return m_integrity; }
 Vector2 Sdl_API::get_win_dimensions() const { return m_window_dimensions; }
