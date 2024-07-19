@@ -4,7 +4,7 @@
 Game_Entity::Game_Entity(SDL_Window* window, SDL_Renderer* renderer)
 	: m_texture_component(nullptr), m_renderer(renderer),
 	m_visibility(Visibility::VISIBLE), m_status(NOT_ACTIVE),
-	m_window(window)
+	m_window(window), m_type(Entity_Type::GENERAL)
 {}
 
 Game_Entity::~Game_Entity()

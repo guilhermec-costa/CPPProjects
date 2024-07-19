@@ -5,34 +5,44 @@
 #include <sstream>
 
 Snake_Entity::Snake_Entity(SDL_Window* window, SDL_Renderer* renderer, Collider2D* head_rect, const unsigned length)
-	: Game_Entity(window, renderer), m_length(length), m_direction(Snake_Direction::DOWN), head_rect(head_rect), m_apple(nullptr),
-	m_is_game_over(false), m_bounds({}), apples_eaten(0)
+	: Game_Entity(window, renderer), m_length(length), 
+	m_direction(Snake_Direction::DOWN), head_rect(head_rect), m_apple(nullptr),
+	m_is_game_over(false), m_bounds({}), apples_eaten(0), m_initial_length(length), 
+	m_initial_x(head_rect->get_dst_rect()->m_position.x), m_initial_y(head_rect->get_dst_rect()->m_position.y)
 {
+	set_entity_type(Entity_Type::SNAKE);
 	score_text = new Dynamic_Text(renderer);
 	score_text->update("Score 0", { 255, 255, 255, 255 });
+
+	game_over_text = new Dynamic_Text(renderer);
+	game_over_text->update("Game Over!", { 255, 255, 255, 255 });
 };
 
 void Snake_Entity::render() const
 {
-	score_text->render();
-	if (_m_rq.size() > 0) {
+	if (get_snake_moving()) {
+		score_text->render({ 650, 550, 130, 32 });
+		if (_m_rq.size() > 0) {
 
-		int width = _m_rq[0].w, height = _m_rq[0].h;
-		Uint32* buffer = new Uint32[width * height];
-		for (auto it = _m_rq.begin(); it != _m_rq.end(); ++it)
-		{
-			for (int i = 0; i < width * height; i++) {
-				if (it == _m_rq.begin()) buffer[i] = 0xFF0000FF;
-				else buffer[i] = 0x00FF00FF;
+			int width = _m_rq[0].w, height = _m_rq[0].h;
+			Uint32* buffer = new Uint32[width * height];
+			for (auto it = _m_rq.begin(); it != _m_rq.end(); ++it)
+			{
+				for (int i = 0; i < width * height; i++) {
+					if (it == _m_rq.begin()) buffer[i] = 0xFF0000FF;
+					else buffer[i] = 0x00FF00FF;
+				}
+				SDL_Texture* texture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, width, height);
+				SDL_UpdateTexture(texture, NULL, buffer, sizeof(Uint32) * width);
+				SDL_RenderCopy(m_renderer, texture, NULL, &(*it));
+				SDL_DestroyTexture(texture);
 			}
-			SDL_Texture* texture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, width, height);
-			SDL_UpdateTexture(texture, NULL, buffer, sizeof(Uint32) * width);
-			SDL_RenderCopy(m_renderer, texture, NULL, &(*it));
-			SDL_DestroyTexture(texture);
-		}
 
-		delete[] buffer;
+			delete[] buffer;
+		}
 	}
+	if(m_is_game_over)
+		game_over_text->render({ 100, 175, 600, 250});
 }
 
 void Snake_Entity::check_food_collision(SDL_Rect* food)
@@ -40,13 +50,13 @@ void Snake_Entity::check_food_collision(SDL_Rect* food)
 	if (head_rect->is_colliding(food)) {
 		//belly_effect();
 		apples_eaten++;
-		m_length += 2;
+		m_length += 20;
 		SDL_Rect* apple_rect = m_apple->get_collider(0)->get_dst_rect()->get_generated_SDL_rect();
 		apple_rect->x = (rand() % (int)(800 - apple_rect->w * 1.5)) + 1;
 		apple_rect->y = (rand() % (int)(600 - apple_rect->y * 1.5)) + 1;
 		std::stringstream ss;
 		ss << "Score " << apples_eaten;
-		score_text->update(ss.str(), { 255, 0, 0, 255 });
+		score_text->update(ss.str(), { 255, 255, 255, 255 });
 	}
 }
 
@@ -100,34 +110,30 @@ void Snake_Entity::update()
 	}
 }
 
+void Snake_Entity::restart()
+{
+	SDL_RenderClear(m_renderer);
+	SDL_Rect* _head_rect = head_rect->get_dst_rect()->get_generated_SDL_rect();
+	_head_rect->x = m_initial_x;
+	_head_rect->y = m_initial_y;
+	if (_m_rq.size() > 1) {
+		_m_rq.erase(_m_rq.begin(), _m_rq.end());
+	}
+	m_is_game_over = false;
+	m_direction = Snake_Direction::DOWN;
+	apples_eaten = 0;
+	std::stringstream ss;
+	ss << "Score " << apples_eaten;
+	score_text->update(ss.str(), { 255, 255, 255, 255 });
+}
+
 void Snake_Entity::collide_itself()
 {
 	if (_m_rq.size() > 0)
 	{
 		SDL_Rect* _head_rect = head_rect->get_dst_rect()->get_generated_SDL_rect();
 		for (auto it = std::next(_m_rq.begin()); it != _m_rq.end(); ++it) {
-			switch (m_direction)
-			{
-			case Snake_Direction::UP:
-			case Snake_Direction::LEFT:
-				if (_head_rect->x == it->x &&
-					_head_rect->y == it->y) {
-					game_over();
-					break;
-				}
-			case Snake_Direction::DOWN:
-				if ((_head_rect->x) == it->x && (_head_rect->y + _head_rect->h) == it->y)
-				{
-					game_over();
-					break;
-				}
-			case Snake_Direction::RIGHT:
-				if ((_head_rect->x + _head_rect->w) == it->x && _head_rect->y == it->y)
-				{
-					game_over();
-					break;
-				}
-			}
+			if (_head_rect->x == it->x && _head_rect->y == it->y) game_over();
 		}
 	}
 }
@@ -164,7 +170,9 @@ void Snake_Entity::belly_effect()
 void Snake_Entity::game_over()
 {
 	std::cout << "game over" << std::endl;
+	m_length = m_initial_length;
 	m_is_game_over = true;
+	set_snake_moving(false);
 }
 
 Snake_Entity::~Snake_Entity()

@@ -28,6 +28,7 @@ public:
 	bool m_is_game_over;
 	void update();
 	void adjust_snake();
+	void restart();
 	void check_food_collision(SDL_Rect* apple);
 	void collide_itself();
 	void belly_effect();
@@ -35,8 +36,8 @@ public:
 		m_apple = rect;
 	};
 	void game_over();
-	inline void set_snake_start(bool state) { m_snake_started = true; }
-	inline bool get_snake_state() const { return m_snake_started; }
+	inline void set_snake_moving(bool state) { m_snake_moving = state; }
+	inline bool get_snake_moving() const { return m_snake_moving; }
 	void set_length(const unsigned int length);
 	void set_direction(const Snake_Direction direction);
 	inline void set_bounds(const Bounds bounds) { 
@@ -51,15 +52,15 @@ public:
 		return m_length;
 	}
 private:
-	unsigned int m_length;
+	unsigned int m_length, m_initial_length, m_initial_x, m_initial_y;
 	Snake_Direction m_direction;
 	Bounds m_bounds;
 	Collider2D* head_rect;
 	Texture_Entity* m_apple;
 	unsigned int apples_eaten;
-	bool m_snake_started;
-	bool is_expanding;
+	bool m_snake_moving, is_expanding;
 	int animation_progress;
 	std::deque<SDL_Rect> _m_rq;
 	Dynamic_Text* score_text;
+	Dynamic_Text* game_over_text;
 };

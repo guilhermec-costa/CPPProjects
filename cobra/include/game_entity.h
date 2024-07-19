@@ -17,6 +17,12 @@ typedef enum Status
 	ACTIVE,
 };
 
+typedef enum Entity_Type {
+	SNAKE,
+	APPLE,
+	GENERAL
+};
+
 class Game_Entity {
 
 public:
@@ -30,6 +36,14 @@ public:
 	Visibility is_visible() const;
 	Texture_Component* get_texture_component() const;
 	Collider2D* get_collider(const unsigned int index) const;
+	inline Entity_Type get_entity_type() const
+	{
+		return m_type;
+	};
+	inline void set_entity_type(const Entity_Type& const type)
+	{
+		m_type = type;
+	}
 public:
 	Visibility m_visibility;
 	Status get_status() const;
@@ -39,4 +53,5 @@ protected:
 	Texture_Component* m_texture_component;
 	std::vector<Collider2D*> m_colliders;
 	Status m_status;
+	Entity_Type m_type;
 };

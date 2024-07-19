@@ -16,14 +16,12 @@ Dynamic_Text::Dynamic_Text(SDL_Renderer* renderer)
 
 void Dynamic_Text::update(const std::string& content, SDL_Color color)
 {
-	std::cout << content << std::endl;
 	SDL_Surface* score_sfc = TTF_RenderText_Solid(m_font, content.c_str(), color);
 	m_content_texture = SDL_CreateTextureFromSurface(m_renderer, score_sfc);
 	SDL_FreeSurface(score_sfc);
 }
 
-void Dynamic_Text::render() const
+void Dynamic_Text::render(const SDL_Rect& r) const
 {
-	SDL_Rect r = { 650, 550, 130, 32 };
 	SDL_RenderCopy(m_renderer, m_content_texture, NULL, &r);
 }

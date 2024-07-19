@@ -101,10 +101,6 @@ void Sdl_API::render()
 			e->render();
 		}
 	}
-	//std::for_each(m_texts.begin(), m_texts.end(), [&](auto& t)
-	//	{
-	//		t.render();
-	//	});
 	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderPresent(m_renderer);
 
@@ -115,12 +111,8 @@ void Sdl_API::render()
 
 void Sdl_API::update()
 {
-	if (!m_snake->m_is_game_over
-		&& get_metadata()->get_game_state() == Game_State::RUNNING
-		&& m_snake->get_snake_state())
-	{
+	if (!m_snake->m_is_game_over && m_snake->get_snake_moving() && get_metadata()->get_game_state() == Game_State::RUNNING)
 		m_snake->update();
-	}
 }
 
 void Sdl_API::handle_events()
@@ -152,7 +144,10 @@ void Sdl_API::handle_events()
 					m_snake->set_direction(RIGHT);
 				break;
 			case SDLK_KP_ENTER:
-				m_snake->set_snake_start(true);
+				m_snake->set_snake_moving(true);
+				if (m_snake->m_is_game_over) {
+					m_snake->restart();
+				}
 				break;
 			case SDLK_ESCAPE:
 				Game_Metadata* metadata = get_metadata();
