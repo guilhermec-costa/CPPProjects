@@ -57,6 +57,9 @@
     <ClCompile Include="src\components\dynamic_text.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Audio_Manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\logger.h">
@@ -93,6 +96,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\components\dynamic_text.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\components\Audio_Manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

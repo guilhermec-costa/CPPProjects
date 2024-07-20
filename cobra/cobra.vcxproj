@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="include\cobra_events.h" />
     <ClCompile Include="src\asset_manager.cpp" />
+    <ClCompile Include="src\Audio_Manager.cpp" />
     <ClCompile Include="src\components\collider2d.cpp" />
     <ClCompile Include="src\components\dynamic_text.cpp" />
     <ClCompile Include="src\components\grid.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="include\components\collider2d.h" />
     <ClInclude Include="include\components\dynamic_text.h" />
     <ClInclude Include="include\components\grid.h" />
+    <ClInclude Include="include\components\Audio_Manager.h" />
     <ClInclude Include="include\game_entity.h" />
     <ClInclude Include="include\game_metadata.h" />
     <ClInclude Include="include\game.h" />

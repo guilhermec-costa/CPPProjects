@@ -155,7 +155,7 @@ int Entity::s_member = 10;
 
 int main() {
 	/* Log("hello world"); */
-	//sdlAPI::run();
+	sdlAPI::run();
 	//gmcc::run();
 	/* preprocessor_statements(); */
 	/* CALL(5); */

@@ -4,6 +4,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <deque>
 #include "components/dynamic_text.h"
+#include "components/Audio_Manager.h"
 
 enum Snake_Direction {
 	UP = 'U',
@@ -63,4 +64,6 @@ private:
 	std::deque<SDL_Rect> _m_rq;
 	Dynamic_Text* score_text;
 	Dynamic_Text* game_over_text;
+	Cobra_Audio* m_apple_eaten_audio;
+	int m_last_time_updated;
 };
