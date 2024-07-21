@@ -14,11 +14,15 @@ enum Snake_Direction {
 };
 
 typedef struct Bounds {
-	int X_MIN;
-	int X_MAX;
-	int Y_MIN;
-	int Y_MAX;
-};
+    int X_MIN;
+    int X_MAX;
+    int Y_MIN;
+    int Y_MAX;
+
+    // Construtor
+    Bounds(int xmin, int xmax, int ymin, int ymax) 
+        : X_MIN(xmin), X_MAX(xmax), Y_MIN(ymin), Y_MAX(ymax) {}
+} Bounds;
 
 class Snake_Entity : public Game_Entity
 {

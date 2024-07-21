@@ -40,7 +40,7 @@ public:
 	{
 		return m_type;
 	};
-	inline void set_entity_type(const Entity_Type& const type)
+	inline void set_entity_type(const Entity_Type& type)
 	{
 		m_type = type;
 	}

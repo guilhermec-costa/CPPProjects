@@ -1,13 +1,18 @@
+#define SDL_MAIN_HANDLED
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include "entitites/texture_entity.h"
 #include "entitites/snake_entity.h"
 #include "Logger.h"
+#include <SDL2/SDL_image.h>
+#include <cmath>
 #include "Sdl_API.h"
 #include "cobra_events.h"
 #include "game_entity.h"
+#include <memory>
 
+SDL_Window* menu_window = nullptr;
 int main(int argc, char* args[])
 {
 	std::unique_ptr<Sdl_API> game = std::make_unique<Sdl_API>();
@@ -15,13 +20,22 @@ int main(int argc, char* args[])
 
 	if (game->check_integrity())
 	{
+
+		// init SDL process
 		game->setup_window("COBRA", NULL, NULL, 800, 600);
+		SDL_Surface* window_icon_sfc = IMG_Load("C:\\Users\\guico\\source\\repos\\cpp-fundamentals\\cobra\\assets\\red_apple.png");
+		SDL_SetColorKey(window_icon_sfc, SDL_TRUE, SDL_MapRGBA(window_icon_sfc->format, 0xFF, 0, 0xF4, 0xFF));
+		SDL_SetWindowIcon(game->get_window(), window_icon_sfc);
+		SDL_FreeSurface(window_icon_sfc);
+
 		game->setup_renderer(SDL_RENDERER_ACCELERATED);
 		game->set_max_framerate(60);
+		//menu_window = SDL_CreateWindow("menu window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 40, 40, SDL_WINDOW_SHOWN);
 
 		Snake_Entity* snake_entity = new Snake_Entity(game->get_window(), game->get_renderer(), 
 			new Collider2D(new Cobra_Rect{SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 25, 25}), 5);
-		snake_entity->set_bounds({ 0, game->get_win_dimensions().x, 0, game->get_win_dimensions().y });
+		Bounds snake_bounds = { 0, 800, 0, 600};
+		snake_entity->set_bounds(snake_bounds);
 		game->set_active_snake(snake_entity);
 		
 		const unsigned int cells = (game->get_win_dimensions().x * game->get_win_dimensions().y ) / pow(25, 2);
@@ -46,5 +60,6 @@ int main(int argc, char* args[])
 			game->render();
 		}
 	}
+	SDL_DestroyWindow(menu_window);
 	return 0;
 }

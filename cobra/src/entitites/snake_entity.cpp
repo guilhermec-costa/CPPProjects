@@ -7,7 +7,7 @@
 Snake_Entity::Snake_Entity(SDL_Window* window, SDL_Renderer* renderer, Collider2D* head_rect, const unsigned length)
 	: Game_Entity(window, renderer), m_length(length),
 	m_direction(Snake_Direction::DOWN), head_rect(head_rect), m_apple(nullptr),
-	m_is_game_over(false), m_bounds({}), apples_eaten(0), m_initial_length(length),
+	m_is_game_over(false), m_bounds(Bounds {0, 0, 0, 0}), apples_eaten(0), m_initial_length(length),
 	m_initial_x(head_rect->get_dst_rect()->m_position.x), m_initial_y(head_rect->get_dst_rect()->m_position.y)
 {
 	set_entity_type(Entity_Type::SNAKE);
@@ -52,7 +52,7 @@ void Snake_Entity::render() const
 		}
 	}
 	if (m_is_game_over)
-		game_over_text->render({ 100, 175, 600, 250 });
+		game_over_text->render({ 100, 175, 600, 150 });
 }
 
 void Snake_Entity::check_food_collision(SDL_Rect* food)
@@ -61,7 +61,7 @@ void Snake_Entity::check_food_collision(SDL_Rect* food)
 		//belly_effect();
 		m_apple_eaten_audio->play_sound();
 		apples_eaten++;
-		m_length += 4;
+		m_length += 15;
 		SDL_Rect* apple_rect = m_apple->get_collider(0)->get_dst_rect()->get_generated_SDL_rect();
 		apple_rect->x = (rand() % (int)(800 - apple_rect->w * 1.5)) + 1;
 		apple_rect->y = (rand() % (int)(600 - apple_rect->y * 1.5)) + 1;
