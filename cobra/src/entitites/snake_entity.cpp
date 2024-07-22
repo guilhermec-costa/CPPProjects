@@ -13,7 +13,7 @@ Snake_Entity::Snake_Entity(SDL_Window* window, SDL_Renderer* renderer, Collider2
 	set_entity_type(Entity_Type::SNAKE);
 	score_text = new Dynamic_Text(renderer);
 	score_text->update("Score 0", { 255, 255, 255, 255 });
-
+	slider_velocity = new float(1.0f);
 	game_over_text = new Dynamic_Text(renderer);
 	game_over_text->update("Game Over!", { 255, 255, 255, 255 });
 	m_apple_eaten_audio = new Cobra_Audio("C:\\Users\\guico\\source\\repos\\cpp-fundamentals\\cobra\\assets\\eat.wav");
@@ -101,16 +101,16 @@ void Snake_Entity::update()
 	switch (m_direction)
 	{
 	case UP:
-		head_rect->get_dst_rect()->get_generated_SDL_rect()->y -= 7;
+		head_rect->get_dst_rect()->get_generated_SDL_rect()->y -= 7 * (*slider_velocity);
 		break;
 	case DOWN:
-		head_rect->get_dst_rect()->get_generated_SDL_rect()->y += 7;
+		head_rect->get_dst_rect()->get_generated_SDL_rect()->y += 7 * (*slider_velocity);
 		break;
 	case LEFT:
-		head_rect->get_dst_rect()->get_generated_SDL_rect()->x -= 7;
+		head_rect->get_dst_rect()->get_generated_SDL_rect()->x -= 7 * (*slider_velocity);
 		break;
 	case RIGHT:
-		head_rect->get_dst_rect()->get_generated_SDL_rect()->x += 7;
+		head_rect->get_dst_rect()->get_generated_SDL_rect()->x += 7 * (*slider_velocity);
 		break;
 	}
 

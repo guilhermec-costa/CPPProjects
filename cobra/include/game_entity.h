@@ -5,19 +5,19 @@
 #include <SDL2/SDL_render.h>
 #include "vector"
 
-typedef enum Visibility 
+enum Visibility 
 {
 	NOT_VISIBLE,
 	VISIBLE,
 };
 
-typedef enum Status
+enum Status
 {
 	NOT_ACTIVE,
 	ACTIVE,
 };
 
-typedef enum Entity_Type {
+enum Entity_Type {
 	SNAKE,
 	APPLE,
 	GENERAL

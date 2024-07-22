@@ -100,8 +100,12 @@ void Sdl_API::render()
 	ImGui::Begin("test imgui");
 	
 	ImGui::Text("Hello world!");
+
+	ImGui::SliderFloat("velocity", m_snake->get_slider_velocity(), 0.0f, 2.0f);
+
 	ImGui::End();
 	ImGui::Render();
+
 
 	int frame_start_time = SDL_GetTicks();
 	SDL_RenderClear(m_renderer);

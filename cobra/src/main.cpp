@@ -24,7 +24,6 @@ int main(int argc, char* args[])
 
 	if (game->check_integrity())
 	{
-
 		// init SDL process
 		game->setup_window("COBRA", NULL, NULL, 800, 600);
 		SDL_Surface* window_icon_sfc = IMG_Load("C:\\Users\\guico\\source\\repos\\cpp-fundamentals\\cobra\\assets\\red_apple.png");
@@ -56,6 +55,7 @@ int main(int argc, char* args[])
 		const std::vector<const Game_Entity*> entities = { red_apple, snake_entity };
 		game->add_entities(entities);
 
+		// init imgui
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -71,6 +71,7 @@ int main(int argc, char* args[])
 			game->render();
 		}
 	}
+
 	ImGui_ImplSDLRenderer2_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();

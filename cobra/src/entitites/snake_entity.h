@@ -56,6 +56,7 @@ public:
 	{
 		return m_length;
 	}
+	inline float* get_slider_velocity() const { return slider_velocity; }
 private:
 	unsigned int m_length, m_initial_length, m_initial_x, m_initial_y;
 	Snake_Direction m_direction;
@@ -70,4 +71,5 @@ private:
 	Dynamic_Text* game_over_text;
 	Cobra_Audio* m_apple_eaten_audio;
 	int m_last_time_updated;
+	float* slider_velocity;
 };

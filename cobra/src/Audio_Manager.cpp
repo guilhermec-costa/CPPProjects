@@ -1,4 +1,3 @@
-#pragma once
 #include "components/Audio_Manager.h"
 #include "logger.h"
 #include <string>
