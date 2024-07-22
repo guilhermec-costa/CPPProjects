@@ -9,6 +9,9 @@
 #include "components/texture_component.h"
 #include "logger.h"
 #include "components/dynamic_text.h"
+#include "imgui.h"
+#include <imgui_impl_sdlrenderer2.h>
+#include <imgui_impl_sdl2.h>
 
 Sdl_API::Sdl_API()
 	: m_window(nullptr), m_event_src(new SDL_Event()), m_snake(nullptr)
@@ -90,11 +93,21 @@ void Sdl_API::add_entities(const std::vector<const Game_Entity*>& entities)
 
 void Sdl_API::render()
 {
+
+	ImGui_ImplSDLRenderer2_NewFrame();
+	ImGui_ImplSDL2_NewFrame();
+	ImGui::NewFrame();
+	ImGui::Begin("test imgui");
+	
+	ImGui::Text("Hello world!");
+	ImGui::End();
+	ImGui::Render();
+
 	int frame_start_time = SDL_GetTicks();
 	SDL_RenderClear(m_renderer);
 	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	m_bg_grid->render(m_renderer);
-	for (auto& e : m_entities)
+	for (const auto& e : m_entities)
 	{
 		if (e->is_visible())
 		{
@@ -102,6 +115,8 @@ void Sdl_API::render()
 		}
 	}
 	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+
+	ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), get_renderer());
 	SDL_RenderPresent(m_renderer);
 
 	int _elapsed = SDL_GetTicks() - frame_start_time;
@@ -119,6 +134,7 @@ void Sdl_API::handle_events()
 {
 	while (SDL_PollEvent(m_event_src))
 	{
+		ImGui_ImplSDL2_ProcessEvent(m_event_src);
 		switch (m_event_src->type)
 		{
 		case SDL_QUIT:

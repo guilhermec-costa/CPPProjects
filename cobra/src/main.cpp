@@ -1,4 +1,3 @@
-#define SDL_MAIN_HANDLED
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
@@ -10,7 +9,12 @@
 #include "Sdl_API.h"
 #include "cobra_events.h"
 #include "game_entity.h"
+#include "imgui.h"
+#include <imgui_impl_sdlrenderer2.h>
+#include <imgui_impl_sdl2.h>
 #include <memory>
+
+#undef main SDL_main
 
 SDL_Window* menu_window = nullptr;
 int main(int argc, char* args[])
@@ -52,6 +56,13 @@ int main(int argc, char* args[])
 		const std::vector<const Game_Entity*> entities = { red_apple, snake_entity };
 		game->add_entities(entities);
 
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+		ImGui_ImplSDL2_InitForSDLRenderer(game->get_window(), game->get_renderer());
+		ImGui_ImplSDLRenderer2_Init(game->get_renderer());
+
 		while (game->get_metadata()->get_game_state() == Game_State::RUNNING ||
 			game->get_metadata()->get_game_state() == Game_State::PAUSED)
 		{
@@ -60,6 +71,9 @@ int main(int argc, char* args[])
 			game->render();
 		}
 	}
+	ImGui_ImplSDLRenderer2_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
 	SDL_DestroyWindow(menu_window);
 	return 0;
 }
