@@ -49,6 +49,10 @@ void copy();
 void vectors();
 void local_static();
 void multiple_returns();
+void cherno_arrays();
+void cherno_strings();
+void templates();
+void stack_vs_heap();
 
 class GoingToBeInherited {
 private:
