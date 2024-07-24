@@ -233,7 +233,8 @@ int main()
 	//  cherno_arrays();
 	// cherno_strings();
 	//templates();
-	stack_vs_heap();
+	//stack_vs_heap();
+	macros();
 	cin.get();
 	return 0;
 }
@@ -1393,6 +1394,7 @@ void print(float i)
 
 // it only gets generated when it is called
 // generates code based on the typename
+// at compile time
 template <typename T>
 void TPrint(T _x)
 {
@@ -1434,13 +1436,30 @@ void templates()
 /*
 	stack vs heap ( both contained inside RAM, both contained inside the same physical memory location)
 
+	when a program boots, a physical amount of ram is reserved to run the program
+
 	-> exists to store and output data
 	-> they diff in variable lifecycles and the way the memory is allocated
 
 	stack: pre defined size
 		-> every defined variable, is stored on top of each other
-		-> the stack pointer just move the necessary bytes to store the next variable
+		-> the stack pointer just move the necessary amount of bytes to store the next variable, and its address is returned
+		-> the allocation is extremally fast
+		-> the deallocation is also fast, given that it is the same operation as the allocation, 
+		but it only moves the stack pointer backwards
+		-> one cpu instruction
+
 	heap: it can grow
+		-> "new" keyword: heap allocate memory
+		-> it is not allocated stacklly
+		-> it has to be deallocated mannually with the "delete" keyword ( heavy as well )
+		-> freelist: keeps track of which blocks of memory are free to dynamic allocation ( heap memory )
+		-> the new keyword checks the freelist via the malloc function and looks for a block of memory that is big enough to store the data
+		-> returns a pointer to the beggining of the block
+		-> malloc is a heavy function. It is much more slower than allocating on the stack
+		-> it is a WHOLE THING. It is pretty more complex than allocate on the stack. More overhead.
+
+	the perfomance difference is the allocation
  */
 
 void stack_vs_heap()
@@ -1451,4 +1470,64 @@ void stack_vs_heap()
 	{
 		arr[i] = i * 2;
 	}
+
+	int* x = new int(5); // calls malloc
+	delete x;
+}
+
+// MACROS
+// preprocessor statement
+
+#define DOG "churros"
+#define INPUT cin.get()
+#define OPEN_CURLY {
+#define show(message) std::cout << message << std::endl;
+// the symbol DOG is replaced by "churros" every where it is used
+
+
+class Interface
+{
+	public:
+	virtual void show_something(std::string something) = 0;
+};
+
+class Impl: public Interface
+{
+public:
+	void show_something(std::string something) override
+	{
+		std::cout << something << std::endl;
+	}
+};
+
+
+// conditional code generation
+// it is awsome to filter which code should be include at compilation process
+#if DEBUG == 1
+#define env "DEBUG"
+#else
+#define env "RELEASE"
+#endif
+
+// multiline macro
+#define whole_macro void print_message(std::string message) \
+{\
+	std::cout << message << std::endl;\
+}
+
+whole_macro
+
+void macros()
+OPEN_CURLY
+	std::cout << "macros" << std::endl;
+	show(env);
+	INPUT; // it is going to replace with "cin.get()"
+
+	#ifdef TEST
+		std::cout << "test flag defined" << std::endl;
+	#endif
+
+	Impl impl;
+	impl.show_something("churros augusto");
+	print_message("Hello churros");
 }

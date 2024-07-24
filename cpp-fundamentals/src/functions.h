@@ -53,6 +53,7 @@ void cherno_arrays();
 void cherno_strings();
 void templates();
 void stack_vs_heap();
+void macros();
 
 class GoingToBeInherited {
 private:
