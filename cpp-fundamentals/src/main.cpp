@@ -26,6 +26,8 @@
 #include <functional>
 #include <utility>
 
+int non_static_global_number = 7;
+
 // build process:
 // preprocessing -> the compiler runs the preprocessor
 // compilation(translation) proccess(.o) -> Compiler: converts .cpp files
@@ -98,7 +100,11 @@
 
 #define CALL(y) std::cout << y << std::endl;
 
+// external linkage
+// the linker will look for the definition of this variables inside others translation units
 extern int variable_from_translation_unit1;
+extern int global_number;
+
 void function() {}
 int GoingToBeInherited::n_members = 0;
 
@@ -232,9 +238,12 @@ int main()
 	// multiple_returns();
 	//  cherno_arrays();
 	// cherno_strings();
-	//templates();
-	//stack_vs_heap();
-	macros();
+	// templates();
+	// stack_vs_heap();
+	// macros();
+	//std::cout << non_static_global_number << std::endl;
+	//auto_keyword();
+	std_array();
 	cin.get();
 	return 0;
 }
@@ -1406,6 +1415,7 @@ class Array
 {
 private:
 	T m_array[N];
+
 public:
 	int get_size() const { return N; }
 };
@@ -1427,7 +1437,7 @@ void templates()
 	TPrint<float>(y);
 	TPrint<const char *>(text);
 
-	Array<int,5> arr1;
+	Array<int, 5> arr1;
 	Array<float, 7> arr2;
 	std::cout << sizeof(arr1) << std::endl;
 	std::cout << sizeof(arr2) << std::endl;
@@ -1445,7 +1455,7 @@ void templates()
 		-> every defined variable, is stored on top of each other
 		-> the stack pointer just move the necessary amount of bytes to store the next variable, and its address is returned
 		-> the allocation is extremally fast
-		-> the deallocation is also fast, given that it is the same operation as the allocation, 
+		-> the deallocation is also fast, given that it is the same operation as the allocation,
 		but it only moves the stack pointer backwards
 		-> one cpu instruction
 
@@ -1466,12 +1476,12 @@ void stack_vs_heap()
 {
 	int value = 5;
 	int arr[5];
-	for(int i=0; i<=4; i++)
+	for (int i = 0; i <= 4; i++)
 	{
 		arr[i] = i * 2;
 	}
 
-	int* x = new int(5); // calls malloc
+	int *x = new int(5); // calls malloc
 	delete x;
 }
 
@@ -1484,14 +1494,13 @@ void stack_vs_heap()
 #define show(message) std::cout << message << std::endl;
 // the symbol DOG is replaced by "churros" every where it is used
 
-
 class Interface
 {
-	public:
+public:
 	virtual void show_something(std::string something) = 0;
 };
 
-class Impl: public Interface
+class Impl : public Interface
 {
 public:
 	void show_something(std::string something) override
@@ -1500,6 +1509,10 @@ public:
 	}
 };
 
+struct Equals_Overloading
+{
+	float x, y, z;
+};
 
 // conditional code generation
 // it is awsome to filter which code should be include at compilation process
@@ -1510,24 +1523,78 @@ public:
 #endif
 
 // multiline macro
-#define whole_macro void print_message(std::string message) \
-{\
-	std::cout << message << std::endl;\
+#define whole_macro                         \
+	void print_message(std::string message) \
+	{                                       \
+		std::cout << message << std::endl;  \
+	}
+
+	whole_macro
+
+	void
+	macros()
+		OPEN_CURLY
+	std::cout
+	<< "macros" << std::endl;
+show(env);
+INPUT; // it is going to replace with "cin.get()"
+
+#ifdef TEST
+std::cout << "test flag defined" << std::endl;
+#endif
+
+Impl impl;
+impl.show_something("churros augusto");
+print_message("Hello churros");
 }
 
-whole_macro
+void auto_keyword()
+{
+	std::vector<std::string> names;
+	names.push_back("churros");
+	names.push_back("shoyou");
 
-void macros()
-OPEN_CURLY
-	std::cout << "macros" << std::endl;
-	show(env);
-	INPUT; // it is going to replace with "cin.get()"
+	for (std::vector<std::string>::iterator it = names.begin();
+		 it != names.end(); ++it)
+	{
+		std::cout << *it << std::endl;
+	}
 
-	#ifdef TEST
-		std::cout << "test flag defined" << std::endl;
-	#endif
+	// same with auto
+	for (auto it = names.begin();
+		 it != names.end(); ++it)
+	{
+		std::cout << *it << std::endl;
+	}
+}
 
-	Impl impl;
-	impl.show_something("churros augusto");
-	print_message("Hello churros");
+template <typename T, size_t s>
+void print_array(std::array<T, s>& array)
+{
+	for(auto it=array.begin(); it != array.end(); ++it)
+	{
+		*it = 0;
+		std::cout << *it << std::endl;
+	}
+}
+
+// for static arrays
+// just use it. Basically the same, with more features
+void std_array()
+{
+	// stored on the stack
+	std::array<int, 5> numbers;
+	std::vector<std::string> names = std::vector<std::string>({ "hello" });
+	print_array<int, 5>(numbers);
+	std::cout << names[0] << std::endl;
+}
+
+void function_pointers()
+{
+
+}
+
+void lambdas()
+{
+
 }

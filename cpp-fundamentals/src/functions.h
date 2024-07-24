@@ -54,6 +54,12 @@ void cherno_strings();
 void templates();
 void stack_vs_heap();
 void macros();
+void auto_keyword();
+void std_array();
+void function_pointers();
+void lambdas();
+
+static void static_function();
 
 class GoingToBeInherited {
 private:
