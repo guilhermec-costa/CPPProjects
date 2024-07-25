@@ -25,6 +25,7 @@
 #include <tuple>
 #include <functional>
 #include <utility>
+#include <algorithm>
 
 int non_static_global_number = 7;
 
@@ -243,7 +244,9 @@ int main()
 	// macros();
 	//std::cout << non_static_global_number << std::endl;
 	//auto_keyword();
-	std_array();
+	//std_array();
+	//function_pointers();
+	lambdas();
 	cin.get();
 	return 0;
 }
@@ -1587,14 +1590,102 @@ void std_array()
 	std::vector<std::string> names = std::vector<std::string>({ "hello" });
 	print_array<int, 5>(numbers);
 	std::cout << names[0] << std::endl;
+};
+
+void _ext_fn(char l)
+{
+	std::cout << l << std::endl;
+};
+
+void fn(std::string x) { std::cout << x << std::endl; }
+void for_each(std::vector<std::string>& r_elements, void(*cb)(std::string)) 
+{
+	for(auto& i : r_elements) cb(i);
 }
 
 void function_pointers()
 {
+	// with typedef, it is possible to type a anonymous function
+	// to that functions can be stored inside variables with that type
+	// alias for the function name
+	typedef void(*_fn_type)(char);
+	// the variable is actually typed with a anonymous type
+	_fn_type func = _ext_fn;
 
+	// with anonymous type
+	// it is not a type. It's just a variable so to speak, that can contains others functions
+	// with the same signature
+	void(*_fn)(char);
+	// there is no type
+	_fn = _ext_fn;
+
+	auto fn_auto = _ext_fn;
+
+	_fn('x');
+	func('y');
+	fn_auto('z');
+
+
+	std::vector<std::string> dogs = std::vector<std::string>({
+		"churros", "shoyou", "gui"
+	});
+	for_each(dogs, fn);
 }
 
+template<typename _Ty>
+void operate(const _Ty e, const std::function<void(_Ty)>& cb)
+{
+	cb(e);
+}
+
+// it is a different way of writing a function pointer
+// they are anonymous functions
 void lambdas()
 {
+	std::vector<std::string> dogs = std::vector<std::string>({
+		"churros", "shoyou", "gui"
+	});
 
+	typedef void(*function)(void);
+	function x = []() { return; };
+	x();
+	
+	for_each(dogs, [](std::string _e) {
+		std::cout <<  _e << std::endl;
+	});
+
+
+	int a = 5;
+	int b = 7;
+	std::cout << "addresses outside lambda: " << std::endl;
+	std::cout << "a: " << &a << std::endl;
+	std::cout << "b: " << &b << std::endl;
+	std::cout << "addresses inside lambda: " << std::endl;
+
+	// []: capture
+	// [=]: captures all variables by value
+	// [&]: captures all variables by reference
+	// (): parameters
+	// {}: body
+	auto lambda = [a, &b](int value) { 
+		std::cout << "a: " << &a << std::endl; 
+		std::cout << "b: " << &b << std::endl;	
+	};
+	lambda(5);
+
+
+	int n = 10;
+	// n is passed by reference
+	// mutable: makes it possible to change variables passed by value
+	operate<typeof(n)>(n, [&](typeof(n) e) mutable {
+		n = 5;
+		std::cout << e << std::endl;
+	});
+
+
+	std::array<const char*, 5> names = { "chur", "sho", "gui", "churros" };
+	auto it = std::find_if(names.begin(), names.end(), [&](const char* name) -> bool { 
+		return strlen(name) > 5;
+	});
+	std::cout << *it << std::endl;
 }
