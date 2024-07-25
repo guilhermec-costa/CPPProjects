@@ -10,4 +10,11 @@ public:
 };
 
 } // namespace gmcc
+
+namespace Solution {
+  void exec();
+  void plan();
+  void end();
+}
+
 #endif

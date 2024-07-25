@@ -26,6 +26,7 @@
 #include <functional>
 #include <utility>
 #include <algorithm>
+using namespace std;
 
 int non_static_global_number = 7;
 
@@ -246,7 +247,10 @@ int main()
 	//auto_keyword();
 	//std_array();
 	//function_pointers();
-	lambdas();
+	//lambdas();
+	//namespace_std();
+	//reverse_string();
+	Namespaces::namespaces();
 	cin.get();
 	return 0;
 }
@@ -1688,4 +1692,105 @@ void lambdas()
 		return strlen(name) > 5;
 	});
 	std::cout << *it << std::endl;
+}
+
+namespace apple
+{
+	void print(const std::string& text)
+	{
+		std::cout << text << std::endl;
+	}
+}
+
+namespace orange
+{
+	void print(const char* text)
+	{
+		std::string tmp = text;
+		std::reverse(tmp.begin(), tmp.end());
+		std::cout << tmp << std::endl;
+	}
+}
+
+// dont use "using namespace" in header files. EVER
+void namespace_std()
+{
+	using std::cout;
+	using std::endl;
+
+	using MY_INT = int;
+	#define MY_INT2 = int;
+	typedef int MY_INT3;
+
+	orange::print("Hello world");
+}
+
+void reverse_string()
+{
+	using std::cout;
+	using std::endl;
+	char string[] = "churros\0";
+	char* begin_ptr = string;
+	char* end_ptr = &string[strlen(string) - 1];
+
+	while(begin_ptr < end_ptr)
+	{
+		auto tmp = *begin_ptr;
+		*begin_ptr = *end_ptr;
+		*end_ptr = tmp;
+		begin_ptr++;
+		end_ptr--;
+	}
+	cout << string << endl;
+}
+
+// in C libraries, it is common to see symbols prepended with the library name, given that, in C, there is no namespace 
+
+// it is not like Namespace::symbol, it is like namespace_symbol, in C
+// in c++, it is like Namespace::symbol
+
+
+// their primary purpose is to avoid name collisions between symbols. Only
+// it makes it possible to have multiple symbols with the same name, wrapping them inside different namespaces
+// warning: try to use them in small scopes
+
+namespace image {
+	// without namespace: image_load
+	const char* load(const std::string& imagepath) 
+	{
+		return "loading resource";
+	}
+}
+
+namespace audio {
+	// without namespace: audio_load
+	void load(const std::string& audiopath)
+	{
+		using std::cout; using std::endl;
+		cout << "loading audio" << endl;
+		return;
+	}
+}
+
+namespace Namespaces {
+
+void namespaces()
+{
+	// if no "using namespace x" is declared, 
+	// like "using namespace image" or "using namespace audio"
+	image::load("image");
+	audio::load("audio");
+
+
+	// using namespace::symbol
+	using image::load;
+	load("imagepath");
+
+	// namespace alias
+	// useful for nested namespaces
+	namespace standard = std;
+
+	
+}
+
 }

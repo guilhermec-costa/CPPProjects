@@ -58,8 +58,13 @@ void auto_keyword();
 void std_array();
 void function_pointers();
 void lambdas();
-
+void namespace_std();
+namespace Namespaces {
+  void namespaces();
+};
+void reverse_string();
 static void static_function();
+void threads();
 
 class GoingToBeInherited {
 private:
