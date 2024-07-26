@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Arquivos de Origem">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Arquivos de Cabeçalho">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Arquivos de Recurso">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Cat.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Log.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Machine.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NS.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pointers.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\static.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdlAPI\animated_sprite.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdlAPI\Collider2D.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdlAPI\Game.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdlAPI\Game_Entity.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdlAPI\ISound.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdlAPI\sdlapi.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdlAPI\resource_manager.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdlAPI\TextComponent.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdlAPI\texture_handler.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdlAPI\Textured_Rectangle.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sdlAPI\resource_managers\base_resource_manager.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\particle\particle_main.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\particle\particle.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\particle\particle_orchestrator.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\particle\window.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Cat.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\functions.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Machine.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NS.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pointers.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sdlAPI\animated_sprite.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sdlAPI\Collider2D.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sdlAPI\Game.hpp">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sdlAPI\Game_Entity.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sdlAPI\ISound.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sdlAPI\resource_manager.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sdlAPI\TextComponent.hpp">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sdlAPI\texture_handler.hpp">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sdlAPI\Textured_Rectangle.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sdlAPI\resource_managers\base_resource_manager.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\particle\particle_main.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\particle\particle.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\particle\particle_orchestrator.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\particle\window.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sdlAPI\sdlapi.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\sdlAPI\assets\fonts\Daydream 1.0 Personal License.txt" />
+    <Text Include="src\sdlAPI\assets\fonts\OFL.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="src\sdlAPI\assets\fonts\Daydream.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-Black.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-BlackItalic.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-Bold.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-BoldItalic.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-Hairline.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-HairlineItalic.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-Italic.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-Light.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-LightItalic.ttf" />
+    <Font Include="src\sdlAPI\assets\fonts\Lato-Regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\sdlAPI\assets\fonts\lato.zip" />
+    <None Include="src\sdlAPI\assets\images\naked_man_therehe.xcf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="src\sdlAPI\assets\images\archer.bmp">
+      <Filter>Arquivos de Recurso</Filter>
+    </Image>
+    <Image Include="src\sdlAPI\assets\images\archer.jpg">
+      <Filter>Arquivos de Recurso</Filter>
+    </Image>
+    <Image Include="src\sdlAPI\assets\images\fighter.png">
+      <Filter>Arquivos de Recurso</Filter>
+    </Image>
+    <Image Include="src\sdlAPI\assets\images\kong.png">
+      <Filter>Arquivos de Recurso</Filter>
+    </Image>
+    <Image Include="src\sdlAPI\assets\images\player.bmp">
+      <Filter>Arquivos de Recurso</Filter>
+    </Image>
+    <Image Include="src\sdlAPI\assets\images\player.png">
+      <Filter>Arquivos de Recurso</Filter>
+    </Image>
+    <Image Include="src\sdlAPI\assets\images\player_spritesheet.bmp">
+      <Filter>Arquivos de Recurso</Filter>
+    </Image>
+    <Image Include="src\sdlAPI\assets\images\player_spritesheet.png">
+      <Filter>Arquivos de Recurso</Filter>
+    </Image>
+    <Image Include="src\sdlAPI\assets\images\sheet.png">
+      <Filter>Arquivos de Recurso</Filter>
+    </Image>
+    <Image Include="src\sdlAPI\assets\images\tilemap.png">
+      <Filter>Arquivos de Recurso</Filter>
+    </Image>
+    <Image Include="src\sdlAPI\assets\images\warror_sprite.jpg">
+      <Filter>Arquivos de Recurso</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="src\sdlAPI\assets\sounds\collide.wav">
+      <Filter>Arquivos de Recurso</Filter>
+    </Media>
+    <Media Include="src\sdlAPI\assets\sounds\notification.wav">
+      <Filter>Arquivos de Recurso</Filter>
+    </Media>
+  </ItemGroup>
+</Project>
