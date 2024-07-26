@@ -27,6 +27,7 @@
 #include <utility>
 #include <algorithm>
 #include <thread>
+#include <chrono>
 
 using namespace std;
 
@@ -253,7 +254,8 @@ int main()
 	//namespace_std();
 	//reverse_string();
 	//Namespaces::namespaces();
-	threads();
+	//threads();
+	timing();
 	cin.get();
 	return 0;
 }
@@ -1836,4 +1838,40 @@ void threads()
 
 	// this line will not run until the "worker" thread finish, since it was joined
 	std::cin.get();
+}
+
+// instrumentation: modify source code to contain profiling tools
+struct Timer {
+	typedef std::chrono::_V2::system_clock::time_point time;
+	time _s, _e;
+
+	Timer(const time& _t1, const time& _t2)
+	{
+		_s = _t1;
+		_e = _t2;
+	}
+	// implement duration at the destructor
+
+	inline void init() { _s = std::chrono::high_resolution_clock::now(); }
+	inline void end() { _e = std::chrono::high_resolution_clock::now(); }
+
+	template<typename _Ty>
+	inline _Ty get_duration() 
+	{ 
+		return std::chrono::duration<_Ty>(_e - _s).count() * 1000.0f;
+	}
+};
+
+void timing()
+{
+
+	using namespace std::literals::chrono_literals;
+	Timer::time _start, _end;
+	Timer timer(_start, _end);
+	timer.init();
+	for(int i=0; i<100; i++) 
+		std::cout << i << "\n";
+
+	timer.end();
+	std::cout << timer.get_duration<float>() << "ms" << std::endl;
 }

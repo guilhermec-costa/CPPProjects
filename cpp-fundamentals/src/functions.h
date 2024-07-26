@@ -65,6 +65,7 @@ namespace Namespaces {
 void reverse_string();
 static void static_function();
 void threads();
+void timing();
 
 class GoingToBeInherited {
 private:

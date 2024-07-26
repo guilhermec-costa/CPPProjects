@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/guico/source/repos/cpp-fundamentals/cpp-fundamentals/src",
-      "program": "c:/Users/guico/source/repos/cpp-fundamentals/cpp-fundamentals/src/build/Debug/outDebug",
+      "cwd": "c:/Users/guico/source/repos/cpp-fundamentals/cpp-fundamentals",
+      "program": "c:/Users/guico/source/repos/cpp-fundamentals/cpp-fundamentals/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
