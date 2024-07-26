@@ -1,3 +1,0 @@
-namespace sdlgame {
-int main();
-}

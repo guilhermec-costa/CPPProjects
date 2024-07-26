@@ -1,3 +1,0 @@
-namespace sdlAPI {
-int main();
-}
