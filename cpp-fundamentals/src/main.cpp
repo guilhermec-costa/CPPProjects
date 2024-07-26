@@ -26,6 +26,8 @@
 #include <functional>
 #include <utility>
 #include <algorithm>
+#include <thread>
+
 using namespace std;
 
 int non_static_global_number = 7;
@@ -172,7 +174,7 @@ int main()
 {
 	/* Log("hello world"); */
 	// sdlAPI::run();
-	// gmcc::run();
+	//gmcc::run();
 	/* preprocessor_statements(); */
 	/* CALL(5); */
 	// a not valid pointer. It is fine. It has the memory address of 0. It is either
@@ -250,7 +252,8 @@ int main()
 	//lambdas();
 	//namespace_std();
 	//reverse_string();
-	Namespaces::namespaces();
+	//Namespaces::namespaces();
+	threads();
 	cin.get();
 	return 0;
 }
@@ -1793,4 +1796,44 @@ void namespaces()
 	
 }
 
+}
+
+static bool s_finished = false;
+// paralallesism
+void threads()
+{
+	using namespace std::literals::chrono_literals;
+	// imediatelly invokes a callable(routine) in another thread of execution
+	// and the current thread continues running
+	std::cout << "started thread id=" << std::this_thread::get_id() << "\n";
+	std::thread worker([]() {
+		while(!s_finished)
+		{
+			// risk of 100% cpu usage for the thread
+			std::cout << "worker working...\n";
+
+			// sleeps the current thread for a specif time
+			std::this_thread::sleep_for(1s);
+			std::cout << "started thread id=" << std::this_thread::get_id() << "\n";
+		}
+	});
+
+	// this line blocks the current thread, which is the main thread, until press enter
+	// while the above defined thread is running
+	std::cin.get();
+
+	// this line makes the callable return, since it will change the state of the variable that the callable rely on
+	s_finished = true;
+
+	// wait for the thread to complete
+	// instruction to block the current thread, and then wait for this other thread to complete its job
+	// blocks the main thread, and waits for the "worker" thread finish
+	worker.join();
+
+	// there is the main thread
+	// -> worker thread: does its work
+	// join*: stop the main thread worker, and then wait for other worker finish its own job
+
+	// this line will not run until the "worker" thread finish, since it was joined
+	std::cin.get();
 }
