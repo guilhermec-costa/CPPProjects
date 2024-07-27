@@ -257,7 +257,9 @@ int main()
 	//threads();
 	//timing();
 	//multidimensional_arrays();
-	sorting();
+	//sorting();
+	//type_punning();
+	unions();
 	cin.get();
 	return 0;
 }
@@ -1614,6 +1616,8 @@ void for_each(std::vector<std::string>& r_elements, void(*cb)(std::string))
 	for(auto& i : r_elements) cb(i);
 }
 
+void func_i(int a) {}
+
 void function_pointers()
 {
 	// with typedef, it is possible to type a anonymous function
@@ -1641,6 +1645,11 @@ void function_pointers()
 		"churros", "shoyou", "gui"
 	});
 	for_each(dogs, fn);
+
+	typedef void(*x_func)(int);
+	x_func func_x = [](int a) {
+		std::cout << a << std::endl;
+	};
 }
 
 template<typename _Ty>
@@ -1987,4 +1996,141 @@ void sorting()
 	{
 		std::cout << *it << "\n";
 	}
+}
+
+struct SEntity {
+	int x, y;
+
+	// there's no memory copy here
+	int* get_positions()
+	{
+		return &x;
+	}
+};
+
+// get around the type system
+void type_punning()
+{
+	// it is like, just fuck type system, i have pointer powers
+	SEntity e = { 5, 8 };
+	int _y_i = *((int*)&e + 1);
+	int* _y_c = (int*)((char*)&e + 4);
+	std::cout << _y_i << std::endl;
+	std::cout << *_y_c << std::endl;
+
+	int* positions = e.get_positions();
+	std::cout << "x: " << positions[0] << ", y: " << positions[1] << std::endl;
+
+
+	std::cout << "----------------" << std::endl;
+
+	// what places a integer pointer at the beggining of the memory that holds this struct instance
+	int* position = (int*)&e;
+
+
+	int a = 50;
+	int c = 20;
+	// implicit conversion
+	// convert a int pointer to a double pointer, and then derefenced it
+	double b = *(double*)&a;
+
+	std::cout << position[0] << std::endl;
+	std::cout << position[1] << std::endl;
+}
+
+// 16 bytes of memory needs to be allocated
+struct _16bytes {
+	float x, y, a, b;
+};
+
+struct _16bytesV2 {
+	float x, y, a, b;
+	_16bytesV2(float x, float y, float a, float b)
+		: x(x), y(y), a(a), b(b) {}
+};
+
+
+// this way, creates a unnamed struct, and already creates a instance of that and assigning it to "teste"
+struct
+{
+	int a;
+} teste;
+
+// this way, creates a type named "test_type", that is representation is a struct with integer member
+typedef struct
+{
+	int a;
+} test_type;
+
+
+struct __Vector2 
+{
+	float x, y;
+};
+
+struct Vector4
+{
+	union {
+		struct 
+		{
+			float x, y, z, w;
+		};
+		// occupies the same space as the above struct
+		struct 
+		{
+			__Vector2 a, b;
+			// a is the same memory as x and y
+			// b is the same memory as z and w
+		};
+	};
+};
+
+
+// this union is at least 32 bytes ( string size )
+union test_union
+{
+	// x, y and s are three different members, but they represent the same memory address
+	// changing the value of x, for example, will change the other values as well
+	float x;
+	int y;
+	std::string s;
+};
+
+// it is like a class/struct type
+// but it can hold only one member of its at a time
+// it is very useful when you need multiple ways of addressing the same data
+void unions()
+{
+	// creates a temporary object, and then copies it into "q" variable
+	// aggregate initialization. More perfomance
+	// it only works because there no explicit default constructor
+	_16bytes w = { 1, 2, 3, 4};
+	_16bytesV2 w2 = { 1, 2, 3, 4};
+	_16bytesV2 w3( 1, 2, 3, 4 );
+
+	struct Union {
+		// four different ways to evaluate the same memory address
+		union {
+			float x;
+			int y;
+		};
+	};
+
+	Union u;
+	u.x = 2.0f;
+	std::cout << u.x << ", " << u.y << std::endl;
+	std::cout << (int)2.0f << std::endl;
+
+	Vector4 vector = { 1.0f, 2.0f, 3.0f, 4.0f };
+	vector.w = 200; // this will change vector.b.x
+	vector.z = 500; // and this will change vector.b.y
+	// because they both represent the same memory address
+	std::cout << vector.b.x << std::endl;
+	std::cout << vector.b.y << std::endl;
+
+	// all of them represent the same memory address
+	// changing one, change the other, inside the bytes of the largest data member
+	std::cout << &u << std::endl;
+	std::cout << &u.x << std::endl;
+	std::cout << &u.y << std::endl;
 }

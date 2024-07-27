@@ -68,6 +68,8 @@ void threads();
 void timing();
 void multidimensional_arrays();
 void sorting();
+void type_punning();
+void unions();
 
 class GoingToBeInherited {
 private:
