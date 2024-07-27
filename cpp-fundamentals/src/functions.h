@@ -66,6 +66,8 @@ void reverse_string();
 static void static_function();
 void threads();
 void timing();
+void multidimensional_arrays();
+void sorting();
 
 class GoingToBeInherited {
 private:

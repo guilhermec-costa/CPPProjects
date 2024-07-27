@@ -255,7 +255,9 @@ int main()
 	//reverse_string();
 	//Namespaces::namespaces();
 	//threads();
-	timing();
+	//timing();
+	//multidimensional_arrays();
+	sorting();
 	cin.get();
 	return 0;
 }
@@ -1874,4 +1876,115 @@ void timing()
 
 	timer.end();
 	std::cout << timer.get_duration<float>() << "ms" << std::endl;
+}
+
+// buffer in the memory, that contains consecutive pointers, and each pointer points to the beginning of an array in memory
+void multidimensional_arrays()
+{
+	int _1Da[5] = { 1, 2, 3, 4, 5 };
+	int _2Da[2][5] = {
+		{1, 2, 3, 4, 5},
+		{1, 2, 3, 4, 5}
+	};
+	int _3Da[2][2][2] = {
+		{
+			{1, 2}, {1, 2}
+		},
+		{
+			{1, 2}, {1, 2}
+		}
+	};
+
+	// pointer to an integer at the first position of the array
+	// allocating 50 4-bytes chunks of memory - 200 bytes allocated here
+	int* array = new int[50];
+
+	// 50 pointers to a pointer to a integer
+	// each element of "a2d" is a pointer to a integer pointer
+	// initially, a2d, or a2d[0] points to the first integer pointer memory location
+	int** a2d = new int*[5];
+	// this leads to memory fragmentation
+	// arrays stored in random places in memory. Waste of perfomance when iterating over them
+	// different dimensions leads to different locations in memory
+
+	// so, single dimension array are much faster, because there's no memory fragmentation
+	for(int i=0; i<5; i++)
+	{ 			// this returns a pointer to a memory address, 
+				// with 50 consecutive chunks of integers, which is 200 bytes
+		a2d[i] = new int[5];
+	}
+	a2d[1][0] = 5;
+	std::cout << a2d[1][0] << std::endl; // this access the first element from the first pointer to a integer from the total of 5
+	std::cout << a2d[0] << std::endl; // this access the first pointer to a integer from the total of 5
+
+	//delete[] a2d; don't do this.
+	for(int i=0; i<5; i++)
+		delete[] a2d[i];
+	delete a2d;
+
+	int** _2Darray = new int*[5];
+	for(int i=0; i<5; i++)
+		_2Darray[i] = new int[5];
+
+	for(int y=0; y<5; y++)
+	{
+		for(int x=0; x<5; x++)
+		{
+			_2Darray[x][y] = 2;
+		}
+	}
+
+	// same thing, but this is extremelly faster then a multidimensional array
+	int* _1Darray = new int[5 * 5];
+	for(int y=0; y<5; y++)
+	{
+		for(int x=0; x<5; x++)
+		{
+			_1Darray[y*5 + x] = 2;
+		}
+	}
+}
+
+void sorting()
+{
+	std::vector<int> ns = { 3, 5, 1, 4, 2 };
+	std::sort(ns.begin(), ns.end());
+	for(auto it=ns.begin(); it < ns.end(); it++)
+	{
+		std::cout << *it << "\n";
+	}
+
+	std::cout << "----------------" << std::endl;
+
+	std::sort(ns.begin(), ns.end(), std::greater<int>());
+	for(auto it=ns.begin(); it < ns.end(); it++)
+	{
+		std::cout << *it << "\n";
+	}
+
+	std::cout << "----------------" << std::endl;
+
+	std::sort(ns.begin(), ns.end(), [](int a, int b) {
+		return a < b;
+	});
+	for(auto it=ns.begin(); it < ns.end(); it++)
+	{
+		std::cout << *it << "\n";
+	}
+
+	std::cout << "----------------" << std::endl;
+
+	std::sort(ns.begin(), ns.end(), [](int a, int b) {
+		// returns true to order a before b
+		// returns false to order b before a
+		if(a == 1) return false;
+		if(b == 1) return true;
+
+		return a < b;
+	});
+
+	for(auto it=ns.begin(); it < ns.end(); it++)
+	{
+		std::cout << *it << "\n";
+	}
 }
