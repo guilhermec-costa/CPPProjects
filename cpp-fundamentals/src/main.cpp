@@ -259,7 +259,9 @@ int main()
 	//multidimensional_arrays();
 	//sorting();
 	//type_punning();
-	unions();
+	//unions();
+	//virtual_destructors();
+	casting();
 	cin.get();
 	return 0;
 }
@@ -2009,6 +2011,9 @@ struct SEntity {
 };
 
 // get around the type system
+// it is not casting. There is no conversion/casting in type punning 
+// It is a reinterpretation of a pointer type to another pointer type
+// interpret existing memory as another type ( reintepret cast )
 void type_punning()
 {
 	// it is like, just fuck type system, i have pointer powers
@@ -2134,3 +2139,106 @@ void unions()
 	std::cout << &u.x << std::endl;
 	std::cout << &u.y << std::endl;
 }
+
+class Base_Class
+{
+public:
+	Base_Class()
+	{
+		std::cout << "instance created base" << std::endl;
+	}
+
+	// the "virtual" keyword in base classes destructors, means that
+	// in derived classes, the derived class's destructor should also be called
+
+
+	// always declare a destructor as virtual if you are allowing this class to be extended by other classes
+	virtual ~Base_Class()
+	{
+		std::cout << "instance destroyed base" << std::endl;
+	}
+};
+
+class Derived : public Base_Class 
+{
+private:
+	int* m_array;
+public:
+	Derived(): m_array(new int[5])
+	{
+		std::cout << "instance created derived" << std::endl;
+	}
+
+	~Derived()
+	{
+		std::cout << "instance destroyed derived" << std::endl;
+		delete[] m_array;
+	}
+};
+
+
+
+void virtual_destructors()
+{
+	Base_Class* base = new Base_Class();
+	delete base;
+	std::cout << "--------------------" << std::endl;
+
+	Derived* derived = new Derived();
+	delete derived;
+	std::cout << "--------------------" << std::endl;
+
+	// with polymorphism
+
+	// this way, when it is deleted, only call the base class destructor if no virtual destructor is defined
+	// not having virtual destructor, can potentially lead to memory leaks,
+	// if the derived class had any heap allocation. So, in the case
+	// of only call the base destructor, it will not free that memory allocated in the derived class
+	Base_Class* poly = new Derived();
+	delete poly;
+}
+
+// type casting in c++
+// c-style casting can achieve the same things
+// cast in english words. Easy to search for
+void casting()
+{
+	int a = 5;
+	// implicit conversion, with no data loss ( upcasting )
+	double b = a;
+
+	// implicit conversion, with data loss ( downcasting )
+	double y = 7.5045;
+	int z = y;
+	std::cout << z << std::endl;
+
+	double x = 7.25;
+	// explicit casting ( c-style casting )
+	int p = (int)x;
+
+	// for primitive type casting mostly. No runtime check
+	double q = static_cast<double>(p);
+
+	// for user-defined type casting mostly. Runtime check. returns null if the conversion was not possible
+	Base_Class* base = new Base_Class();
+	Derived* derived = dynamic_cast<Derived*>(base);
+	// will return a nullptr, because of the dynamic cast check
+	std::cout << "conversion from base class to derived class: " << derived << std::endl;
+
+	Derived* derived2 = new Derived();
+	Base_Class* base2 = dynamic_cast<Base_Class*>(derived2);
+	// will return a valid pointer, because of the dynamic cast check
+	std::cout << "conversion from derived class to base class " << base2 << std::endl;
+}
+
+// safety in c++
+// -> reduces memory leaks, crashes, access violations
+
+// two problems with heap allocation:
+// 1. memory leaks
+// 2. ownership. Who is the owner of that memory?
+//	-> a lot of different routines requiring access to a pointer. Who, at the end of the day, manages the memory which that pointer holds?
+
+// it is a matter of just automating a single line of code: "delete" pointer
+// forgetting to write this line down, can lead to several problems related to security 
+// use smart pointers. They solve the problem of memory leaks and ownership automatically

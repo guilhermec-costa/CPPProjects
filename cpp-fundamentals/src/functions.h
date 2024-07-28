@@ -70,6 +70,8 @@ void multidimensional_arrays();
 void sorting();
 void type_punning();
 void unions();
+void virtual_destructors();
+void casting();
 
 class GoingToBeInherited {
 private:
