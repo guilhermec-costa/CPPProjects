@@ -28,6 +28,7 @@
 #include <algorithm>
 #include <thread>
 #include <chrono>
+#include "miostream.h"
 
 using namespace std;
 
@@ -261,7 +262,10 @@ int main()
 	//type_punning();
 	//unions();
 	//virtual_destructors();
-	casting();
+	//casting();
+	//precompiled_headers();
+	//dynamic_casting();
+	structured_bindings();
 	cin.get();
 	return 0;
 }
@@ -1316,7 +1320,7 @@ static void via_pointer(std::string *outString, int *outInteger)
 	*outInteger = 5;
 }
 
-// multiple return types, but the same type
+// multiple return, but the same type
 static std::string *return_array()
 {
 	return new std::string[2]{"churros", "augusto"};
@@ -1332,7 +1336,7 @@ static std::array<std::string, 2> return_std_array()
 	return results;
 }
 
-// multiple return types, but the same type
+// multiple return, but the same type
 static std::vector<std::string> return_std_vector()
 {
 	// allocated on the heap
@@ -2242,3 +2246,94 @@ void casting()
 // it is a matter of just automating a single line of code: "delete" pointer
 // forgetting to write this line down, can lead to several problems related to security 
 // use smart pointers. They solve the problem of memory leaks and ownership automatically
+
+// -----------------------------------------------------------------------------------------------------------------------------------------
+
+// PCH: pre compiled header
+// -> it is a binary version of a header file that includes a bunch of other header files
+// cons:
+	// -> should mostly include headers that are not potentially changing, because if not, it will probably slows down the compilation time instead
+	//  -> can lead to less readble code, by not being clear about which header files are being used in a cpp file
+// -> should include header files that are included in multiple cpp files
+// it is vitally used for code that is not mine. windows.h for example, vector for example
+
+// convert header file in a compiled format
+// on include statements, the compiler reads all the header file and then copies it into the cpp file.
+// -> for this to happen, there's a whole process of parse and tokenizing the content of the header file. This takes time
+// -> doing this at every compilation, depending on the size of the project, can become very unproductive and a time consuming task
+// optmization to avoid multiple recompilation of header files after changes in cpp files
+
+// the solution is: tell the compiler about a bunch of header files, and ask for it to compile them once and store the result in a binary file
+// the result is: way faster compilation times
+void precompiled_headers() { }
+
+// it is evaluted at runtime 
+// it is used for casts along the inheritance hierarchy
+// cast base type to derived type is tricky
+// so, dynamic_casting is pretty useful to valite if a casting is valid, because it will return a nullptr if it is not valid
+
+class _Entity {
+public:
+	// creates vtable, so dynamic cast is possible
+	virtual void print() {}
+};
+class _Player: public _Entity {};
+class Enemy: public _Entity {};
+
+// RTTI: runtime type information
+// adds overhead of course
+// this is how dynamic cast knows if the casting can be perfomerd or not
+// dynamic cast takes time as well, at runtime
+// works because metainformation about the type at runtime
+void dynamic_casting()
+{
+	_Player* p1 = new _Player(); // no conversion
+	_Entity* e1 = p1; // implicit and safe conversion
+	// player has everything the a entity has, and can have even more
+
+	// e1 could be an enemy. So the conversion will no work
+	// but, with dynamic cast, it will return a invalid pointer if the casting was not successfull
+	// if the cast is successfull, than it will return a valid pointer
+	_Player* p2 = dynamic_cast<_Player*>(e1);
+	Enemy* enemy2 = dynamic_cast<Enemy*>(e1);
+	if(!enemy2) std::cout << "invalid cast" << std::endl;
+	std::cout << p2 << std::endl;
+	std::cout << enemy2 << std::endl;
+}
+
+// never measure code perfomance in debug mode
+// always in release mode
+// debug mode does a whole lot of extra safety stuff
+void benchmarking()
+{
+	int value = 0;
+	for(int i=0; i<100000; i++)
+		value += 2;
+
+	std::cout << value << std::endl;
+	__debugbreak();
+}
+
+std::tuple<int, bool> get_tuple()
+{
+	return std::make_tuple<int, bool>(5, true);
+	// or return { 5, true }
+}
+
+std::tuple<std::string, int> make_person()
+{
+	return { "churros", 9 };
+}
+//  deal with multiple return values
+void structured_bindings()
+{
+	int number = std::get<0>(get_tuple());
+	std::cout << number << std::endl;
+
+	std::string n; int a;
+	// kind of destructures the tuple returned by make person
+	std::tie(n, a) = make_person();
+	// only c++ 17>
+	auto[name, age] = make_person();
+	std::cout << name << " " << std::endl;
+}

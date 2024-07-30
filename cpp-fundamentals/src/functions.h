@@ -72,6 +72,9 @@ void type_punning();
 void unions();
 void virtual_destructors();
 void casting();
+void precompiled_headers();
+void dynamic_casting();
+void structured_bindings();
 
 class GoingToBeInherited {
 private:
