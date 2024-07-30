@@ -75,6 +75,9 @@ void casting();
 void precompiled_headers();
 void dynamic_casting();
 void structured_bindings();
+void str_literals();
+void optional_data();
+void multiple_types();
 
 class GoingToBeInherited {
 private:

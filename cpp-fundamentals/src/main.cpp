@@ -29,6 +29,9 @@
 #include <thread>
 #include <chrono>
 #include "miostream.h"
+#include <fstream>
+#include <optional>
+#include <variant>
 
 using namespace std;
 
@@ -265,7 +268,10 @@ int main()
 	//casting();
 	//precompiled_headers();
 	//dynamic_casting();
-	structured_bindings();
+	//structured_bindings();
+	//str_literals();
+	//optional_data();
+	multiple_types();
 	cin.get();
 	return 0;
 }
@@ -2336,4 +2342,126 @@ void structured_bindings()
 	// only c++ 17>
 	auto[name, age] = make_person();
 	std::cout << name << " " << std::endl;
+}
+
+void str_literals()
+{
+	const char x[] = "hello world"; // constains a null termination character
+	const char y[] = "hello world";0; // same thing
+	const char z[] = "hello world\0"; // same thing
+	const char c[] = "churr\0os"; // 9 characters
+
+	char* name = "churros";
+	// this is a undefined behavior. c++ standard doesn't define what should happen in this case
+	// compiler can generate invalid code, or even not compile
+	// 
+	// string literals are stores in a read-only section of memory
+	// so, in this way, taking a pointer and change value of that string is not a "valid" operation
+	
+	// the string is stored in a CONST SEGMENT in the binary
+	// so, string literals are imutable, can not be changed
+	// name[2] = 'h';
+
+	char name2[] = "churros";
+	// this is possible
+	// it is a string literal as well. So, it is defined in read-only section
+	// but, under the hood, a variable is created, to which the content of name is copied to
+	name2[2] = 'a';
+	// then, character a is appended to this new variable. And this new variable is returned
+	std::cout << name2 << std::endl;
+
+	const char* str_ptr = u8"hello";
+
+	// white character
+	// the string is made up by white characters
+	const wchar_t* name3 = L"churros";
+	std::cout << *name3 << std::endl;
+	// 2 bytes per character
+	std::cout << sizeof(name3[0]) << std::endl;
+
+	const char16_t letter = u'a';
+	std::cout << sizeof(letter) << std::endl;
+
+	// 4 bytes characters
+	const char32_t letter2 = U'a';
+	std::cout << sizeof(letter2) << std::endl;
+
+	// wchar_t != char16_t
+	std::string name4 = u8"Churros"s + "Augusto";
+	std::string name5 = std::string("Churros") + "Augusto";
+	std::wstring name6 = L"churros"s + L"augusto";
+	std::u32string name7 = U"churros"s + U"augusto";
+	std::cout << name4 << std::endl;
+	std::cout << name5 << std::endl;
+
+	const char* text = R"(
+	hello1
+	hello2
+	hello3
+	hello4
+	)";
+	std::cout << text << std::endl;
+}
+
+std::optional<std::string> read_file_as_str(const std::string& filepath)
+{
+	std::ifstream stream(filepath);
+	if(stream)
+	{
+		std::string result;
+		stream >> result;
+		// read file
+		stream.close();
+		return result;
+	}
+	// empty std optional
+	return {};
+}
+
+void optional_data()
+{
+	std::optional<std::string> data = read_file_as_str("src/data.txt");
+	std::string value = data.value_or("no data present");
+	std::cout << value << "\n";
+	if(data.has_value()) 
+	{
+		std::cout << "file read successfully\n";
+	} 
+	else
+	{
+		std::cout << "file could not be opened\n";
+	}
+}
+
+void multiple_types()
+{
+	struct Vector2 {
+		float x, y;
+	} vector;
+
+	// can store multiple variable types
+	// it is the sizeof of all the types sumed
+	std::variant<std::string, Vector2> var = vector;
+	std::cout << std::get<Vector2>(var).x << "\n";
+	std::cout << std::get<Vector2>(var).y << "\n";
+	std::cout << "current datatype index: " << var.index() << "\n";
+	var = "churros augusto";
+	std::cout << "current datatype index: " << var.index() << "\n";
+	if( auto value = std::get_if<std::string>(&var))
+	{
+		std::string& x = *value;
+		std::cout << &x << "\n";
+		std::cout << value << "\n";
+	}
+
+	std::cout << "sizeof variant string|Vector2 : " << sizeof(var) << "\n";
+
+	union Types
+	{
+		std::string string;
+		Vector2 vec2;
+	};
+
+	std::cout << sizeof(Types) << std::endl;
+	std::cout << sizeof(var) << std::endl;
 }
