@@ -78,6 +78,8 @@ void structured_bindings();
 void str_literals();
 void optional_data();
 void multiple_types();
+void any_data();
+void faster_strings();
 
 class GoingToBeInherited {
 private:

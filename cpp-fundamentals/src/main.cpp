@@ -32,6 +32,8 @@
 #include <fstream>
 #include <optional>
 #include <variant>
+#include <any>
+#include <future>
 
 using namespace std;
 
@@ -271,7 +273,9 @@ int main()
 	//structured_bindings();
 	//str_literals();
 	//optional_data();
-	multiple_types();
+	//multiple_types();
+	//any_data();
+	faster_strings();
 	cin.get();
 	return 0;
 }
@@ -2441,6 +2445,7 @@ void multiple_types()
 
 	// can store multiple variable types
 	// it is the sizeof of all the types sumed
+	// it is a type-safe union
 	std::variant<std::string, Vector2> var = vector;
 	std::cout << std::get<Vector2>(var).x << "\n";
 	std::cout << std::get<Vector2>(var).y << "\n";
@@ -2464,4 +2469,54 @@ void multiple_types()
 
 	std::cout << sizeof(Types) << std::endl;
 	std::cout << sizeof(var) << std::endl;
+}
+
+// variant is more perfomatic and type safer
+// does not allocate memory on the heap
+void any_data()
+{
+	std::any data;
+	data = 2;
+	data = "churros";
+	data = std::string("churros");
+	std::string str = std::any_cast<std::string>(data);
+	std::cout << str << "\n";
+}
+
+static uint32_t n_allocs = 0;
+#define NEW_OVERLOAD 1
+#if NEW_OVERLOAD
+	// tracking memory allocation
+	void* operator new(size_t size)
+	{
+		std::cout << "here" << std::endl;
+		n_allocs++;
+		std::cout << "allocating " << size << std::endl;
+		return malloc(size);
+	}
+#endif
+
+void print_name(const std::string& name)
+{
+	std::cout << name << std::endl;
+}
+
+// it is slow because there is dynamic memory allocation
+void faster_strings()
+{
+	const char* p = "guilherme costa";
+	// substr creates new string
+	// std::string first = p.substr(0, 5);
+	// std::string last = p.substr(5, 8);
+	// std::cout << "allocations: " << n_allocs << std::endl;
+
+	// string view
+	// a pointer to existing memory
+	// a window view to part of a string
+	// there's no extra allocation
+
+	std::string_view first_name_view(p, 9);
+	std::string_view last_name_view(p + 10, 5);
+	std::cout << first_name_view << std::endl;
+	std::cout << last_name_view << std::endl;
 }
