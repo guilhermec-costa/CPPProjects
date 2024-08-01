@@ -275,7 +275,8 @@ int main()
 	//optional_data();
 	//multiple_types();
 	//any_data();
-	faster_strings();
+	//faster_strings();
+	singletons();
 	cin.get();
 	return 0;
 }
@@ -2519,4 +2520,79 @@ void faster_strings()
 	std::string_view last_name_view(p + 10, 5);
 	std::cout << first_name_view << std::endl;
 	std::cout << last_name_view << std::endl;
+}
+
+// normally, it is a class that only have a single instance on the program
+// its forms of allocating a new instance are private
+// in c++, are just a way to organize a bunch of "global" variables and static functions into a organized blob
+// a singleton supports all class features
+
+// are super useful when funcionality is needed upon a set of data the is globally used
+// it is possible to realize when a class does not need multiple instances. Only one, so static funcionalities can be used globally
+// examples:
+// 	-> random number generator
+// -> renderer
+
+class Random
+{
+	private:
+		Random() {};
+		Random(const Random&) = delete;
+		Random& operator=(const Random&) = delete;
+		// defined in static memory. Once initialized, it will always be retrived by reference next times
+		static Random s_instance;
+		float m_float_generator = 0.5f;
+		float float_gen_intern()
+		{
+			return m_float_generator;
+		}
+	public:
+		static Random& get()
+		{
+			return s_instance;
+		}
+
+		float _float() { return m_float_generator; }
+		// static function accessing non-static function 
+		static float _s_float() { get().float_gen_intern(); }
+};
+
+Random Random::s_instance;
+
+void singletons()
+{
+	class Singleton
+	{
+		private:
+			Singleton() {};
+			Singleton(const Singleton&) = delete;
+			Singleton& operator=(const Singleton&) = delete;
+			float m_member = 0.0f;
+		public:
+			static Singleton& get()
+			{
+				// memory initialized at static memory
+				// initialized once, and nevermore
+				static Singleton s_instance;
+				return s_instance;
+			}
+			int get_int()
+			{
+				int x = 5;
+				return x;
+			}
+	};
+
+	std::cout << &Singleton::get() << std::endl;
+	// since copy constructor is inaccessible, it is needed to get the instance an reference
+	Singleton& instance = Singleton::get();
+	std::cout << &instance << std::endl;
+	int x = instance.get_int();
+	std::cout << x << "\n";
+	float _f = Random::get()._float();
+	std::cout << &Random::get() << "\n";
+	std::cout << &Random::get() << "\n";
+	std::cout << "generated float: " << _f << "\n";
+	float _f2 = Random::_s_float();
+	std::cout << _f2 << "\n";
 }

@@ -80,6 +80,8 @@ void optional_data();
 void multiple_types();
 void any_data();
 void faster_strings();
+void singletons();
+void small_string_optmization();
 
 class GoingToBeInherited {
 private:
