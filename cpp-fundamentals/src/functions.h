@@ -82,6 +82,10 @@ void any_data();
 void faster_strings();
 void singletons();
 void small_string_optmization();
+void rvalues_lvalues();
+void jonas_gostoso();
+void argument_evaluation_order();
+void move_semantics();
 
 class GoingToBeInherited {
 private:

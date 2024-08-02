@@ -35,6 +35,9 @@
 #include <any>
 #include <future>
 
+
+
+void __function();
 using namespace std;
 
 int non_static_global_number = 7;
@@ -276,7 +279,13 @@ int main()
 	//multiple_types();
 	//any_data();
 	//faster_strings();
-	singletons();
+	//singletons();
+	//small_string_optmization();
+	//rvalues_lvalues();
+	//jonas_gostoso();
+	//__function();
+	//argument_evaluation_order();
+	move_semantics();
 	cin.get();
 	return 0;
 }
@@ -2485,17 +2494,6 @@ void any_data()
 }
 
 static uint32_t n_allocs = 0;
-#define NEW_OVERLOAD 1
-#if NEW_OVERLOAD
-	// tracking memory allocation
-	void* operator new(size_t size)
-	{
-		std::cout << "here" << std::endl;
-		n_allocs++;
-		std::cout << "allocating " << size << std::endl;
-		return malloc(size);
-	}
-#endif
 
 void print_name(const std::string& name)
 {
@@ -2595,4 +2593,226 @@ void singletons()
 	std::cout << "generated float: " << _f << "\n";
 	float _f2 = Random::_s_float();
 	std::cout << _f2 << "\n";
+}
+
+// small strings don't necessarily have to be heap-allocated
+// 15 characters or less it will not allocate on the heap, it will be allocated in a stack buffer
+// but it definitely relies on the c++ standard library implementation of the current compiler
+void small_string_optmization() { }
+
+int get_value()
+{
+	return 10;
+}
+
+int& s_get_value()
+{
+	static int x = 5;
+	return x;
+}
+
+void set_value(int value)
+{}
+
+void ref_set_value(const int& value)
+{}
+
+
+void _print_name(std::string& name)
+{
+	std::cout << name << std::endl;
+}
+
+// compatile with lvalues and rvalues
+void _print_name2(const std::string& name)
+{
+	std::cout << name << "\n";
+}
+
+void _print_rvalue(std::string&& _rvalue_reference)
+{
+	// &&: indicates a rvalue
+	std::cout << _rvalue_reference << "\n";
+}
+
+void rvalues_lvalues()
+{
+	int x = 69; 
+	// x: variable with location in memory, is the lvalue (left of the equals sign)
+	// 69: value with no memory location, is the rvalue (right of the equals sign). it is TEMPORARY
+	// rvalues are not assignable. It is not possible to assign a value to a rvalue
+	int a = x; // lvalue can be assigned to another lvalue
+	int i = get_value(); // lvalue equals right value
+	//get_value() = 10; get_values does not return a modifiable lvalue
+	s_get_value() = 7; // this will work, because it return a modifiable lvalue
+
+	set_value(i); // valid
+	set_value(10); // valid
+
+	ref_set_value(i); // valid
+	// ref_set_value(10); // not valid
+
+	// int& m = 10; // not valid
+	const int& m = 10; // valid
+	// const lvalues references can be assiged to rvalues 
+	ref_set_value(m);
+
+
+	std::string firstname = "churros";
+	std::string lastname = "augusto";
+	std::string fullname = firstname + lastname;
+
+	_print_name(fullname);
+	// _print_name(firstname + lastname); will not work, because firstname + lastname constitutes a rvalue
+	// but, since const lvalues references accepts rvalues, a function that takes a const lvalue reference, accepts
+	// this string concatenation
+	_print_name2(firstname + lastname);
+
+
+	// there are rvalue reference as well
+	// they can only accept rvalue assignments.
+	std::string rvalue1 = "churros";
+	std::string rvalue2 = "augusto";
+	_print_rvalue(rvalue1 + rvalue2);
+	_print_rvalue("churros");
+	_print_rvalue("augusto");
+	//_print_rvalue("augusto"); this will not work, since the function only accepts rvalues references
+}
+
+// tracking memory allocation
+void* operator new(size_t size)
+{
+	n_allocs++;
+	std::cout << "allocating " << size << std::endl;
+	return malloc(size);
+}
+
+void jonas_gostoso()
+{
+	std::cout << "hummm" << std::endl;
+	int* i = new int;
+	*i = 5;
+	int fuckit = 5;
+	delete i;
+}
+
+void c_function() {
+	std::cout << "c function" << std::endl;
+}
+
+void __function()
+{
+	using std::string;
+	const string name = "jonas";
+	std::cout << &name << std::endl;
+	int b = 10;
+	std::function fn = [b](const string& name, int& a) {
+		std::cout << &name << std::endl;
+		std::cout << name << std::endl;
+		std::cout << b << std::endl;
+	};
+
+	typedef void(*fucking)(void);
+	fucking funcao = c_function;
+	funcao();
+}
+
+void _fn(int a, int b)
+{
+	std::cout << a << " + " << b << " = " << a + b << std::endl;
+}
+void argument_evaluation_order()
+{
+	int value = 0;
+	// undefined behavior
+	// it is compiler dependent
+	_fn(value++, value++); // but, this evaluation is not synchronous. Can be made at any time, asynchronous
+	// here it is two
+	std::cout << value << std::endl;
+}
+
+
+class StringCp
+{
+	public:
+	 	StringCp() = default;
+		StringCp(const char* string)
+		{
+			printf("Created\n");
+			m_size = strlen(string);
+			m_data = new char[m_size];
+			memcpy(m_data, string, m_size);
+		}
+		StringCp(const StringCp& other)
+		{
+			printf("Copied\n");
+			m_size = other.m_size;
+			// to copy a string, it is needed top allocate memory
+			m_data = new char[m_size];
+			memcpy(m_data, other.m_data, m_size);
+		}
+
+		// move constructor
+		// receives a rvalue reference, a temporary value
+		StringCp(StringCp&& other) noexcept
+		{
+			printf("Moved\n");
+			// there is no memory allocation
+			m_size = other.m_size;
+			m_data = other.m_data;
+
+			other.m_size = 0;
+			other.m_data = nullptr;
+		}
+
+		~StringCp()
+		{
+			printf("Destroyed\n");
+			delete m_data;
+		}
+		
+		void print()
+		{
+			for(uint32_t l=0; l<m_size; ++l)
+			{
+				printf("%c", m_data[l]);
+			}
+			printf("\n");
+		}
+	private:
+		char* m_data;
+		uint32_t m_size;
+};
+
+class __Entity
+{
+	public:
+		__Entity(const StringCp& name)
+			: m_name(StringCp(name))
+		{
+		}
+
+		__Entity(StringCp&& name)
+			: m_name(std::move(name))
+		{}
+		
+		void print_name() 
+		{
+			m_name.print();
+		}
+	private:
+		StringCp m_name;
+
+};
+
+// is rvalue reference dependent
+// moving object instead of copying it
+void move_semantics()
+{
+	// the idea is: create an instance of StringCp here
+	// and, in the moment of the assignment to the field "m_name" in the entity,
+	// instead of calling the StringCp copy contructor, just move the instance created to the space where "m_name" is located
+	__Entity entity("churros"); 
+	// passing an rvalue, will automatically call a constructor that accepts a rvalue referenece
+	entity.print_name();
 }
